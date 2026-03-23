@@ -182,18 +182,50 @@ nav {
 .perf-val.bad { color: var(--red-dark); }
 .no-data { font-size: 10px; color: var(--text-faint); padding: 0.5rem 0.75rem; }
 
-/* Add creative button */
-.add-creative-btn {
-  width: 100%; height: 160px;
+/* Add creative drop zone */
+.add-creative-zone {
+  width: 100%; min-height: 160px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
   background: transparent; border: 2px dashed var(--border-strong);
   border-radius: var(--radius-md); cursor: pointer; color: var(--text-faint);
-  font-size: 12px; font-weight: 500; transition: all 0.15s;
+  font-size: 12px; font-weight: 500; transition: all 0.2s;
+  position: relative;
 }
-.add-creative-btn:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
-.add-creative-btn svg { width: 20px; height: 20px; fill: currentColor; }
+.add-creative-zone:hover, .add-creative-zone.dragover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
+.add-creative-zone svg { width: 22px; height: 22px; fill: currentColor; }
+.add-creative-zone .zone-sub { font-size: 10px; color: var(--text-faint); margin-top: 2px; }
+.add-creative-zone.dragover .zone-sub { color: var(--purple); }
+.add-creative-zone.analyzing { border-color: var(--purple); background: var(--purple-light); pointer-events: none; }
+
+.analyzing-inner { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 1rem; }
+.analyzing-spinner { width: 28px; height: 28px; border: 3px solid var(--purple-mid); border-top-color: var(--purple); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.analyzing-text { font-size: 12px; color: var(--purple); font-weight: 500; }
+.analyzing-sub { font-size: 10px; color: var(--text-muted); }
 
 .file-input { display: none; }
+
+/* AI suggestion modal */
+.ai-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 500; align-items: center; justify-content: center; padding: 2rem; }
+.ai-modal-overlay.open { display: flex; }
+.ai-modal { background: var(--surface); border-radius: var(--radius-xl); width: 100%; max-width: 520px; box-shadow: var(--shadow-lg); overflow: hidden; }
+.ai-modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.ai-badge { background: var(--purple); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.05em; }
+.ai-modal-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; }
+.ai-modal-body { padding: 1.25rem 1.5rem; }
+.ai-preview-row { display: flex; gap: 1rem; margin-bottom: 1.25rem; align-items: flex-start; }
+.ai-preview-img { width: 100px; height: 100px; object-fit: cover; border-radius: var(--radius-md); flex-shrink: 0; border: 1px solid var(--border-med); }
+.ai-suggestion-block { flex: 1; }
+.ai-field { margin-bottom: 0.875rem; }
+.ai-field-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-faint); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.ai-tag { background: var(--purple-light); color: var(--purple); font-size: 9px; font-weight: 600; padding: 1px 6px; border-radius: 20px; }
+.ai-value { font-size: 13px; font-weight: 500; color: var(--text); padding: 7px 10px; background: var(--surface2); border: 1px solid var(--border-med); border-radius: var(--radius-sm); cursor: text; }
+.ai-value[contenteditable]:focus { outline: none; border-color: var(--purple); background: #fff; }
+.ai-analysis { background: var(--purple-light); border-radius: var(--radius-sm); padding: 0.75rem 1rem; margin-bottom: 1rem; }
+.ai-analysis-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--purple); margin-bottom: 4px; }
+.ai-analysis-text { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.ai-modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; background: var(--surface2); }
+.ai-note { font-size: 11px; color: var(--text-faint); margin-right: auto; align-self: center; }
 
 /* ── SETTINGS PAGE ── */
 .settings-main { max-width: 900px; margin: 0 auto; padding: 2rem; }
@@ -348,11 +380,12 @@ nav {
         <div class="variation-body">
           <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Book held toward camera, cartoon likeness in yellow outfit, warm magical glow. Real child visible in background laughing.</p>
           <div class="creatives-grid" id="grid-A1"></div>
-          <button class="add-creative-btn" onclick="openAddModal('A1')">
+          <div class="add-creative-zone" id="zone-A1" onclick="document.getElementById('file-A1').click()">
             <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            Add creative
-          </button>
-          <input type="file" class="file-input" id="file-A1" accept="image/*" onchange="handleFileForModal(this,'A1')" />
+            <span>Drop image here or click to upload</span>
+            <span class="zone-sub">Claude will analyze and name it automatically</span>
+          </div>
+          <input type="file" class="file-input" id="file-A1" accept="image/*" onchange="handleDropOrPick(this.files[0],'A1')" />
         </div>
       </div>
 
@@ -368,11 +401,12 @@ nav {
         <div class="variation-body">
           <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Dark-haired boy, mouth wide open seeing book cover with cartoon astronaut likeness. Fix reviewer avatar at designer.</p>
           <div class="creatives-grid" id="grid-A2"></div>
-          <button class="add-creative-btn" onclick="openAddModal('A2')">
+          <div class="add-creative-zone" id="zone-A2" onclick="document.getElementById('file-A2').click()">
             <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            Add creative
-          </button>
-          <input type="file" class="file-input" id="file-A2" accept="image/*" onchange="handleFileForModal(this,'A2')" />
+            <span>Drop image here or click to upload</span>
+            <span class="zone-sub">Claude will analyze and name it automatically</span>
+          </div>
+          <input type="file" class="file-input" id="file-A2" accept="image/*" onchange="handleDropOrPick(this.files[0],'A2')" />
         </div>
       </div>
 
@@ -388,11 +422,12 @@ nav {
         <div class="variation-body">
           <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Girl holding book beside her face in mirror. Real vs cartoon likeness side by side. Most convincing likeness match in library.</p>
           <div class="creatives-grid" id="grid-A3"></div>
-          <button class="add-creative-btn" onclick="openAddModal('A3')">
+          <div class="add-creative-zone" id="zone-A3" onclick="document.getElementById('file-A3').click()">
             <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            Add creative
-          </button>
-          <input type="file" class="file-input" id="file-A3" accept="image/*" onchange="handleFileForModal(this,'A3')" />
+            <span>Drop image here or click to upload</span>
+            <span class="zone-sub">Claude will analyze and name it automatically</span>
+          </div>
+          <input type="file" class="file-input" id="file-A3" accept="image/*" onchange="handleDropOrPick(this.files[0],'A3')" />
         </div>
       </div>
 
@@ -408,11 +443,12 @@ nav {
         <div class="variation-body">
           <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Over-shoulder angle, girl turning back laughing, cartoon princess on open page. Best emotional pull in entire library.</p>
           <div class="creatives-grid" id="grid-A4"></div>
-          <button class="add-creative-btn" onclick="openAddModal('A4')">
+          <div class="add-creative-zone" id="zone-A4" onclick="document.getElementById('file-A4').click()">
             <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            Add creative
-          </button>
-          <input type="file" class="file-input" id="file-A4" accept="image/*" onchange="handleFileForModal(this,'A4')" />
+            <span>Drop image here or click to upload</span>
+            <span class="zone-sub">Claude will analyze and name it automatically</span>
+          </div>
+          <input type="file" class="file-input" id="file-A4" accept="image/*" onchange="handleDropOrPick(this.files[0],'A4')" />
         </div>
       </div>
 
@@ -439,11 +475,12 @@ nav {
         <div class="variation-body">
           <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Real photo → open book with cartoon → delivery box. Wooden surface, arrows. "That's literally it." tagline. Needs WonderWraps branding.</p>
           <div class="creatives-grid" id="grid-B1"></div>
-          <button class="add-creative-btn" onclick="openAddModal('B1')">
+          <div class="add-creative-zone" id="zone-B1" onclick="document.getElementById('file-B1').click()">
             <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            Add creative
-          </button>
-          <input type="file" class="file-input" id="file-B1" accept="image/*" onchange="handleFileForModal(this,'B1')" />
+            <span>Drop image here or click to upload</span>
+            <span class="zone-sub">Claude will analyze and name it automatically</span>
+          </div>
+          <input type="file" class="file-input" id="file-B1" accept="image/*" onchange="handleDropOrPick(this.files[0],'B1')" />
         </div>
       </div>
     </div>
@@ -469,11 +506,12 @@ nav {
         <div class="variation-body">
           <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Over-shoulder shot. Phone showing photo upload on left. Finished branded delivery box with book on right. Before/after story in two text overlays.</p>
           <div class="creatives-grid" id="grid-C1"></div>
-          <button class="add-creative-btn" onclick="openAddModal('C1')">
+          <div class="add-creative-zone" id="zone-C1" onclick="document.getElementById('file-C1').click()">
             <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            Add creative
-          </button>
-          <input type="file" class="file-input" id="file-C1" accept="image/*" onchange="handleFileForModal(this,'C1')" />
+            <span>Drop image here or click to upload</span>
+            <span class="zone-sub">Claude will analyze and name it automatically</span>
+          </div>
+          <input type="file" class="file-input" id="file-C1" accept="image/*" onchange="handleDropOrPick(this.files[0],'C1')" />
         </div>
       </div>
     </div>
@@ -553,27 +591,36 @@ nav {
 </div>
 </div>
 
-<!-- ══════════════ ADD CREATIVE MODAL ══════════════ -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal">
-    <div class="modal-title">Add creative</div>
-    <div class="modal-field">
-      <label class="modal-label">Creative name</label>
-      <input class="modal-input" id="modal-name" placeholder="e.g. Blonde Girl Bedtime — Version 1" />
+<!-- ══════════════ AI SUGGESTION MODAL ══════════════ -->
+<div class="ai-modal-overlay" id="ai-modal-overlay">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <span class="ai-badge">AI</span>
+      <span class="ai-modal-title">Creative analysis</span>
     </div>
-    <div class="modal-field">
-      <label class="modal-label">Meta ad name (for performance tracking)</label>
-      <input class="modal-input" id="modal-adname" placeholder="e.g. WW_A_A1_01_BlondeGirlBedtime" />
-      <div class="modal-hint">Format: WW_[Concept]_[Variation]_[##]_[Desc]</div>
+    <div class="ai-modal-body">
+      <div class="ai-preview-row">
+        <img class="ai-preview-img" id="ai-preview-img" src="" alt="" />
+        <div class="ai-suggestion-block">
+          <div class="ai-field">
+            <div class="ai-field-label">Creative name <span class="ai-tag">AI suggested</span></div>
+            <div class="ai-value" id="ai-name-val" contenteditable="true"></div>
+          </div>
+          <div class="ai-field">
+            <div class="ai-field-label">Meta ad name <span class="ai-tag">AI suggested</span></div>
+            <div class="ai-value" id="ai-adname-val" contenteditable="true" style="font-family:monospace;font-size:12px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="ai-analysis">
+        <div class="ai-analysis-title">Claude's analysis</div>
+        <div class="ai-analysis-text" id="ai-analysis-text">Analyzing your creative...</div>
+      </div>
     </div>
-    <div class="modal-field">
-      <label class="modal-label">Image</label>
-      <button class="btn btn-ghost" style="width:100%;border:1px dashed var(--border-strong);padding:10px;" onclick="triggerImagePick()">Click to upload image</button>
-      <div id="modal-img-preview" style="margin-top:8px;display:none;"><img id="modal-preview-img" style="width:100%;height:120px;object-fit:cover;border-radius:var(--radius-sm);" /></div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveCreative()">Add creative</button>
+    <div class="ai-modal-footer">
+      <span class="ai-note">You can edit the fields above before saving</span>
+      <button class="btn btn-ghost" onclick="closeAIModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveAICreative()">Add creative</button>
     </div>
   </div>
 </div>
@@ -590,13 +637,10 @@ nav {
 <script>
 // ── STATE ──
 var state = {
-  creatives: {},    // { vid: [ {id, name, adname, img} ] }
-  performance: {},  // { adname: {ctr, cpc, spend, purchases, impressions, clicks} }
-  uploads: []       // [ {filename, date, rows} ]
+  creatives: {},
+  performance: {},
+  uploads: []
 };
-
-var currentVid = null;
-var modalImgData = null;
 
 // ── LOAD FROM STORAGE ──
 (function init() {
@@ -645,50 +689,153 @@ function setActiveFilter(btn) {
   btn.classList.add('active');
 }
 
-// ── MODAL ──
-function openAddModal(vid) {
-  currentVid = vid;
-  modalImgData = null;
-  document.getElementById('modal-name').value = '';
-  document.getElementById('modal-adname').value = '';
-  document.getElementById('modal-img-preview').style.display = 'none';
-  document.getElementById('modal-overlay').classList.add('open');
-}
+// ── AI DRAG & DROP FLOW ──
+var currentVid = null;
+var modalImgData = null;
 
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-  currentVid = null;
-  modalImgData = null;
-}
+// Set up drag-and-drop on all zones after DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+  ['A1','A2','A3','A4','B1','C1'].forEach(function(vid) {
+    var zone = document.getElementById('zone-' + vid);
+    if (!zone) return;
+    zone.addEventListener('dragover', function(e) {
+      e.preventDefault(); e.stopPropagation();
+      zone.classList.add('dragover');
+    });
+    zone.addEventListener('dragleave', function() {
+      zone.classList.remove('dragover');
+    });
+    zone.addEventListener('drop', function(e) {
+      e.preventDefault(); e.stopPropagation();
+      zone.classList.remove('dragover');
+      var file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        handleDropOrPick(file, vid);
+      } else {
+        showToast('Please drop an image file');
+      }
+    });
+  });
+});
 
-function triggerImagePick() {
-  document.getElementById('file-' + currentVid).click();
-}
-
-function handleFileForModal(input, vid) {
-  var file = input.files[0];
+function handleDropOrPick(file, vid) {
   if (!file) return;
+  currentVid = vid;
   var reader = new FileReader();
   reader.onload = function(e) {
     modalImgData = e.target.result;
-    document.getElementById('modal-preview-img').src = modalImgData;
-    document.getElementById('modal-img-preview').style.display = 'block';
+    analyzeWithClaude(modalImgData, vid);
   };
   reader.readAsDataURL(file);
 }
 
-function saveCreative() {
-  var name = document.getElementById('modal-name').value.trim();
-  var adname = document.getElementById('modal-adname').value.trim();
-  if (!name) { showToast('Please enter a creative name'); return; }
+function analyzeWithClaude(imgData, vid) {
+  // Show analyzing state on the zone
+  var zone = document.getElementById('zone-' + vid);
+  if (zone) {
+    zone.classList.add('analyzing');
+    zone.innerHTML = '<div class="analyzing-inner"><div class="analyzing-spinner"></div><div class="analyzing-text">Claude is analyzing your creative...</div><div class="analyzing-sub">Generating name and Meta ad name</div></div>';
+  }
+
+  // Get variation context for smarter naming
+  var varCard = document.querySelector('[data-vid="' + vid + '"]');
+  var varTitle = varCard ? varCard.querySelector('.var-title-text').textContent : vid;
+  var conceptLetter = vid.charAt(0);
+  var existingCount = (state.creatives[vid] || []).length + 1;
+  var paddedNum = existingCount < 10 ? '0' + existingCount : '' + existingCount;
+
+  var base64 = imgData.split(',')[1];
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{
+        role: 'user',
+        content: [
+          {
+            type: 'image',
+            source: { type: 'base64', media_type: 'image/jpeg', data: base64 }
+          },
+          {
+            type: 'text',
+            text: 'You are analyzing a Facebook ad creative for WonderWraps — a personalized children\'s book brand where kids are illustrated as cartoon characters in the book.\n\nThis creative belongs to:\n- Variation: ' + vid + ' — "' + varTitle + '"\n- Concept: ' + conceptLetter + '\n- It is creative number ' + existingCount + ' in this variation\n\nAnalyze this image and respond ONLY with a JSON object, no markdown, no explanation:\n{\n  "creative_name": "A short descriptive name (max 6 words, e.g. Red-Haired Girl Mirror Version 2)",\n  "meta_ad_name": "Following format WW_' + conceptLetter + '_' + vid + '_' + paddedNum + '_[CamelCaseDesc] e.g. WW_A_A1_01_BlondeGirlBedtime",\n  "analysis": "2-3 sentence analysis: what angle/emotion is used, what makes it strong or weak for Facebook ads, and one specific suggestion to improve it"\n}'
+          }
+        ]
+      }]
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    var text = data.content && data.content[0] ? data.content[0].text : '';
+    var clean = text.replace(/```json|```/g,'').trim();
+    var result;
+    try { result = JSON.parse(clean); } catch(e) {
+      result = {
+        creative_name: varTitle + ' — Version ' + existingCount,
+        meta_ad_name: 'WW_' + conceptLetter + '_' + vid + '_' + paddedNum + '_Creative' + existingCount,
+        analysis: 'Claude could not analyze this image. Please check the image and try again.'
+      };
+    }
+    resetZone(vid);
+    openAIModal(imgData, result);
+  })
+  .catch(function(err) {
+    resetZone(vid);
+    // Fallback: open modal with auto-generated names
+    openAIModal(imgData, {
+      creative_name: varTitle + ' — Version ' + existingCount,
+      meta_ad_name: 'WW_' + conceptLetter + '_' + vid + '_' + paddedNum + '_Creative' + existingCount,
+      analysis: 'Analysis unavailable. You can edit the name and Meta ad name manually above.'
+    });
+  });
+}
+
+function resetZone(vid) {
+  var zone = document.getElementById('zone-' + vid);
+  if (!zone) return;
+  zone.classList.remove('analyzing');
+  zone.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>Drop image here or click to upload</span><span class="zone-sub">Claude will analyze and name it automatically</span>';
+  // Re-attach click handler
+  zone.onclick = function() { document.getElementById('file-' + vid).click(); };
+  // Re-attach drag events
+  zone.addEventListener('dragover', function(e) { e.preventDefault(); e.stopPropagation(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault(); e.stopPropagation(); zone.classList.remove('dragover');
+    var file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) handleDropOrPick(file, vid);
+  });
+}
+
+function openAIModal(imgData, result) {
+  document.getElementById('ai-preview-img').src = imgData;
+  document.getElementById('ai-name-val').textContent = result.creative_name || '';
+  document.getElementById('ai-adname-val').textContent = result.meta_ad_name || '';
+  document.getElementById('ai-analysis-text').textContent = result.analysis || '';
+  document.getElementById('ai-modal-overlay').classList.add('open');
+}
+
+function closeAIModal() {
+  document.getElementById('ai-modal-overlay').classList.remove('open');
+  currentVid = null;
+  modalImgData = null;
+}
+
+function saveAICreative() {
+  var name = document.getElementById('ai-name-val').textContent.trim();
+  var adname = document.getElementById('ai-adname-val').textContent.trim();
+  if (!name) { showToast('Creative name cannot be empty'); return; }
   var id = 'cr-' + Date.now();
   if (!state.creatives[currentVid]) state.creatives[currentVid] = [];
   state.creatives[currentVid].push({ id: id, name: name, adname: adname, img: modalImgData });
   save();
   renderCreatives(currentVid);
   updateStats();
-  closeModal();
-  showToast('Creative added to ' + currentVid);
+  closeAIModal();
+  showToast('Creative added — ' + name);
 }
 
 // ── RENDER CREATIVES ──
@@ -909,7 +1056,7 @@ function openLight(src, meta) {
   document.getElementById('lightbox').classList.add('open');
 }
 function closeLight() { document.getElementById('lightbox').classList.remove('open'); }
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeLight(); closeModal(); } });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeLight(); closeAIModal(); } });
 
 // ── TOAST ──
 function showToast(msg) {
