@@ -7,342 +7,335 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
 :root {
-  --purple: #6B3FA0;
-  --purple-light: #f0ebf8;
-  --purple-mid: #c4a8e8;
-  --green: #22c55e;
-  --green-light: #dcfce7;
-  --green-dark: #15803d;
-  --amber: #f59e0b;
-  --amber-light: #fef3c7;
-  --amber-dark: #92400e;
-  --red: #ef4444;
-  --red-light: #fee2e2;
-  --red-dark: #991b1b;
-  --violet-light: #ede9fe;
-  --violet-dark: #5b21b6;
-  --pink-light: #fce7f3;
-  --pink-dark: #9d174d;
-  --bg: #f7f6f3;
-  --surface: #ffffff;
-  --surface2: #f9f8f6;
-  --border: rgba(0,0,0,0.07);
-  --border-med: rgba(0,0,0,0.12);
-  --border-strong: rgba(0,0,0,0.18);
-  --text: #1a1a1a;
-  --text-muted: #6b6b6b;
-  --text-faint: #a0a0a0;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
+  --purple:#6B3FA0;--purple-light:#f0ebf8;--purple-mid:#c4a8e8;
+  --green:#22c55e;--green-light:#dcfce7;--green-dark:#15803d;
+  --amber:#f59e0b;--amber-light:#fef3c7;--amber-dark:#92400e;
+  --red:#ef4444;--red-light:#fee2e2;--red-dark:#991b1b;
+  --blue:#3b82f6;--blue-light:#eff6ff;--blue-dark:#1d4ed8;
+  --violet-light:#ede9fe;--violet-dark:#5b21b6;
+  --pink-light:#fce7f3;--pink-dark:#9d174d;
+  --bg:#f7f6f3;--surface:#fff;--surface2:#f9f8f6;
+  --border:rgba(0,0,0,0.07);--border-med:rgba(0,0,0,0.12);--border-strong:rgba(0,0,0,0.18);
+  --text:#1a1a1a;--text-muted:#6b6b6b;--text-faint:#a0a0a0;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.06);--shadow-md:0 4px 16px rgba(0,0,0,0.08);--shadow-lg:0 8px 32px rgba(0,0,0,0.14);
+  --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:20px;--r-2xl:24px;
 }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
+/* LOGIN */
+#login-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-2xl);padding:2.5rem;width:360px;box-shadow:var(--shadow-lg);text-align:center;}
+.login-logo{width:48px;height:48px;background:var(--purple);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:20px;margin:0 auto 1rem;}
+.login-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px;}
+.login-sub{font-size:12px;color:var(--text-muted);margin-bottom:1.5rem;}
+.login-user-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1.25rem;}
+.login-user-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border:1px solid var(--border-med);border-radius:var(--r-md);cursor:pointer;background:var(--surface2);transition:all 0.15s;}
+.login-user-btn:hover{border-color:var(--purple);background:var(--purple-light);}
+.login-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;}
+.login-user-name{font-size:11px;font-weight:500;color:var(--text);}
+.login-user-role{font-size:10px;color:var(--text-faint);}
 
-/* ── NAV ── */
-nav {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
-  display: flex; align-items: center; justify-content: space-between;
-  height: 58px; position: sticky; top: 0; z-index: 200;
-  box-shadow: var(--shadow-sm);
-}
-.nav-left { display: flex; align-items: center; gap: 12px; }
-.logo { width: 34px; height: 34px; background: var(--purple); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: #fff; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; flex-shrink: 0; }
-.nav-title { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 15px; }
-.nav-sub { font-size: 12px; color: var(--text-muted); }
-.nav-right { display: flex; align-items: center; gap: 10px; }
-.nav-tab { font-size: 13px; font-weight: 500; padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border-med); background: transparent; cursor: pointer; color: var(--text-muted); transition: all 0.15s; }
-.nav-tab:hover { border-color: var(--purple); color: var(--purple); }
-.nav-tab.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+/* NAV */
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:200;box-shadow:var(--shadow-sm);}
+.nav-left{display:flex;align-items:center;gap:12px;}
+.logo{width:34px;height:34px;background:var(--purple);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;flex-shrink:0;}
+.nav-title{font-family:'Syne',sans-serif;font-weight:600;font-size:15px;}
+.nav-sub{font-size:12px;color:var(--text-muted);}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-tab{font-size:13px;font-weight:500;padding:6px 16px;border-radius:20px;border:1px solid var(--border-med);background:transparent;cursor:pointer;color:var(--text-muted);transition:all 0.15s;}
+.nav-tab:hover{border-color:var(--purple);color:var(--purple);}
+.nav-tab.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+.nav-user{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;}
+.nav-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
+.nav-logout{font-size:11px;color:var(--text-faint);cursor:pointer;padding:4px 8px;border-radius:6px;}
+.nav-logout:hover{background:var(--surface2);color:var(--text);}
 
-/* ── PAGES ── */
-.page { display: none; }
-.page.active { display: block; }
+/* PAGES */
+.page{display:none;}.page.active{display:block;}
+.main{max-width:1280px;margin:0 auto;padding:2rem;}
 
-/* ── MAIN LAYOUT ── */
-.main { max-width: 1280px; margin: 0 auto; padding: 2rem; }
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:2rem;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:1rem 1.25rem;box-shadow:var(--shadow-sm);}
+.stat-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-faint);margin-bottom:5px;}
+.stat-value{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;line-height:1;}
+.stat-value.purple{color:var(--purple);}.stat-value.green{color:var(--green);}.stat-value.amber{color:var(--amber);}
 
-/* ── STATS ROW ── */
-.stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 2rem; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem 1.25rem; box-shadow: var(--shadow-sm); }
-.stat-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); margin-bottom: 5px; }
-.stat-value { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; line-height: 1; }
-.stat-value.purple { color: var(--purple); }
-.stat-value.green { color: var(--green); }
-.stat-value.amber { color: var(--amber); }
-.stat-value.red { color: var(--red); }
+/* CONTROLS */
+.controls-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:12px;}
+.legend{display:flex;gap:16px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);}
+.legend-bar{width:16px;height:3px;border-radius:2px;}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.filter-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:1px solid var(--border-med);background:transparent;cursor:pointer;color:var(--text-muted);transition:all 0.15s;}
+.filter-btn:hover{border-color:var(--purple);color:var(--purple);}
+.filter-btn.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+.filter-select{font-family:'DM Sans',sans-serif;font-size:11px;padding:5px 10px;border-radius:20px;border:1px solid var(--border-med);background:var(--surface);color:var(--text-muted);cursor:pointer;outline:none;}
 
-/* ── LEGEND + FILTERS ── */
-.controls-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 12px; }
-.legend { display: flex; gap: 16px; flex-wrap: wrap; }
-.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-muted); }
-.legend-bar { width: 16px; height: 3px; border-radius: 2px; }
-.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; }
-.filter-btn { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; padding: 5px 13px; border-radius: 20px; border: 1px solid var(--border-med); background: transparent; cursor: pointer; color: var(--text-muted); transition: all 0.15s; }
-.filter-btn:hover { border-color: var(--purple); color: var(--purple); }
-.filter-btn.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+/* CONCEPT */
+.concept-section{margin-bottom:2.5rem;}
+.concept-header{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;padding-bottom:0.875rem;border-bottom:1px solid var(--border-med);}
+.concept-badge{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;background:var(--purple);color:#fff;letter-spacing:0.05em;}
+.concept-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;}
+.concept-meta{font-size:11px;color:var(--text-faint);margin-left:auto;}
 
-/* ── CONCEPT SECTION ── */
-.concept-section { margin-bottom: 2.5rem; }
-.concept-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; padding-bottom: 0.875rem; border-bottom: 1px solid var(--border-med); }
-.concept-badge { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; padding: 3px 11px; border-radius: 20px; background: var(--purple); color: #fff; letter-spacing: 0.05em; }
-.concept-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; }
-.concept-meta { font-size: 11px; color: var(--text-faint); margin-left: auto; }
+/* VARIATION CARD */
+.variation-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:16px;box-shadow:var(--shadow-sm);overflow:hidden;}
+.variation-card.approved{border-left:3px solid var(--green);}
+.variation-card.needs-fix{border-left:3px solid var(--amber);}
+.variation-card.in-progress{border-left:3px solid var(--purple);}
+.variation-header{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;cursor:pointer;border-bottom:1px solid var(--border);background:var(--surface2);user-select:none;}
+.variation-header:hover{background:#f3f1ee;}
+.var-id{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--purple);min-width:28px;}
+.var-title-text{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;}
+.var-status{font-size:10px;font-weight:500;padding:2px 9px;border-radius:20px;}
+.status-approved{background:var(--green-light);color:var(--green-dark);}
+.status-priority{background:var(--pink-light);color:var(--pink-dark);}
+.status-fix{background:var(--amber-light);color:var(--amber-dark);}
+.status-progress{background:var(--violet-light);color:var(--violet-dark);}
+.var-creative-count{font-size:11px;color:var(--text-faint);margin-left:auto;}
+.var-perf-pills{display:flex;gap:6px;align-items:center;}
+.perf-pill{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;background:var(--surface);border:1px solid var(--border-med);color:var(--text-muted);white-space:nowrap;}
+.perf-pill.good{background:var(--green-light);color:var(--green-dark);border-color:transparent;}
+.perf-pill.warn{background:var(--amber-light);color:var(--amber-dark);border-color:transparent;}
+.perf-pill.bad{background:var(--red-light);color:var(--red-dark);border-color:transparent;}
+.chevron{font-size:12px;color:var(--text-faint);transition:transform 0.2s;margin-left:4px;}
+.variation-card.expanded .chevron{transform:rotate(180deg);}
+.variation-body{display:none;padding:0;}
+.variation-card.expanded .variation-body{display:block;}
 
-/* ── VARIATION CARD ── */
-.variation-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  margin-bottom: 16px;
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-}
-.variation-card.approved { border-left: 3px solid var(--green); }
-.variation-card.needs-fix { border-left: 3px solid var(--amber); }
-.variation-card.in-progress { border-left: 3px solid var(--purple); }
+/* VARIATION HERO */
+.variation-hero{display:flex;gap:1.25rem;padding:1.25rem;border-bottom:1px solid var(--border);align-items:flex-start;}
+.variation-hero-img-wrap{width:120px;height:120px;flex-shrink:0;border-radius:var(--r-md);overflow:hidden;background:var(--purple-light);border:2px dashed var(--purple-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;transition:all 0.15s;}
+.variation-hero-img-wrap:hover{border-color:var(--purple);background:#e8dff5;}
+.variation-hero-img-wrap img{width:100%;height:100%;object-fit:cover;display:none;}
+.variation-hero-img-wrap img.loaded{display:block;}
+.variation-hero-placeholder{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;}
+.variation-hero-placeholder svg{width:20px;height:20px;fill:var(--purple);opacity:0.5;}
+.variation-hero-placeholder span{font-size:10px;color:var(--purple);font-weight:500;}
+.variation-hero-info{flex:1;}
+.variation-hero-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;margin-bottom:6px;}
+.variation-hero-notes{font-size:12px;color:var(--text-muted);line-height:1.6;border:none;background:transparent;width:100%;resize:none;font-family:'DM Sans',sans-serif;outline:none;}
+.variation-hero-notes:focus{color:var(--text);}
 
-.variation-header {
-  display: flex; align-items: center; gap: 12px;
-  padding: 1rem 1.25rem;
-  cursor: pointer;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface2);
-  user-select: none;
-}
-.variation-header:hover { background: #f3f1ee; }
-.var-id { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--purple); min-width: 28px; }
-.var-title-text { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; }
-.var-status { font-size: 10px; font-weight: 500; padding: 2px 9px; border-radius: 20px; }
-.status-approved { background: var(--green-light); color: var(--green-dark); }
-.status-priority { background: var(--pink-light); color: var(--pink-dark); }
-.status-fix { background: var(--amber-light); color: var(--amber-dark); }
-.status-progress { background: var(--violet-light); color: var(--violet-dark); }
-.var-creative-count { font-size: 11px; color: var(--text-faint); margin-left: auto; }
+/* CREATIVES GRID */
+.creatives-grid-wrap{padding:1.25rem;}
+.creatives-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
 
-/* Performance pill on variation header */
-.var-perf-pills { display: flex; gap: 6px; align-items: center; }
-.perf-pill { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border-med); color: var(--text-muted); white-space: nowrap; }
-.perf-pill.good { background: var(--green-light); color: var(--green-dark); border-color: transparent; }
-.perf-pill.warn { background: var(--amber-light); color: var(--amber-dark); border-color: transparent; }
-.perf-pill.bad { background: var(--red-light); color: var(--red-dark); border-color: transparent; }
+/* CREATIVE CARD */
+.creative-card{background:var(--surface);border:1px solid var(--border-med);border-radius:var(--r-md);overflow:hidden;position:relative;transition:box-shadow 0.2s;}
+.creative-card:hover{box-shadow:var(--shadow-md);}
 
-.chevron { font-size: 12px; color: var(--text-faint); transition: transform 0.2s; margin-left: 4px; }
-.variation-card.expanded .chevron { transform: rotate(180deg); }
+.creative-media-wrap{width:100%;height:160px;overflow:hidden;position:relative;background:var(--purple-light);}
+.creative-media-wrap img{width:100%;height:100%;object-fit:cover;cursor:zoom-in;transition:transform 0.3s;display:block;}
+.creative-media-wrap img:hover{transform:scale(1.05);}
+.creative-media-wrap video{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer;}
+.video-play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.25);transition:background 0.2s;cursor:pointer;}
+.video-play-overlay:hover{background:rgba(0,0,0,0.4);}
+.play-icon{width:40px;height:40px;background:rgba(255,255,255,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.play-icon svg{width:18px;height:18px;fill:var(--purple);margin-left:2px;}
+.media-type-badge{position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.6);color:#fff;font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:0.05em;}
 
-.variation-body { display: none; padding: 1.25rem; }
-.variation-card.expanded .variation-body { display: block; }
+/* CREATIVE ACTIONS */
+.creative-actions{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;gap:6px;opacity:0;transition:opacity 0.2s;flex-wrap:wrap;padding:8px;}
+.creative-media-wrap:hover .creative-actions{opacity:1;}
+.action-btn{background:rgba(255,255,255,0.92);border:none;border-radius:6px;padding:5px 9px;font-size:10px;font-weight:600;cursor:pointer;color:var(--text);transition:background 0.1s;white-space:nowrap;}
+.action-btn:hover{background:#fff;}
+.action-btn.danger{background:rgba(239,68,68,0.85);color:#fff;}
+.action-btn.danger:hover{background:var(--red);}
 
-/* ── CREATIVES GRID ── */
-.creatives-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1rem; }
+/* CREATIVE BODY */
+.creative-body{padding:0.625rem 0.75rem;}
+.creative-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.creative-ad-id{font-size:10px;color:var(--text-faint);font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.creative-meta-row{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+.creative-author{font-size:10px;color:var(--text-faint);display:flex;align-items:center;gap:4px;}
+.author-dot{width:14px;height:14px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#fff;}
+.creative-status-badge{font-size:9px;font-weight:600;padding:1px 6px;border-radius:20px;}
+.cs-published{background:var(--green-light);color:var(--green-dark);}
+.cs-reviewing{background:var(--amber-light);color:var(--amber-dark);}
+.cs-testing{background:var(--blue-light);color:var(--blue-dark);}
+.cs-paused{background:var(--surface2);color:var(--text-faint);border:1px solid var(--border-med);}
+.cs-draft{background:var(--violet-light);color:var(--violet-dark);}
 
-.creative-card {
-  background: var(--surface);
-  border: 1px solid var(--border-med);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  position: relative;
-  transition: box-shadow 0.2s;
-}
-.creative-card:hover { box-shadow: var(--shadow-md); }
+/* PERF MINI */
+.creative-perf{padding:0.5rem 0.75rem;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.perf-item{display:flex;flex-direction:column;}
+.perf-key{font-size:9px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);}
+.perf-val{font-size:12px;font-weight:600;color:var(--text);}
+.perf-val.good{color:var(--green-dark);}.perf-val.warn{color:var(--amber-dark);}.perf-val.bad{color:var(--red-dark);}
+.no-data{font-size:10px;color:var(--text-faint);padding:0.5rem 0.75rem;}
 
-.creative-img-wrap { width: 100%; height: 160px; overflow: hidden; position: relative; background: var(--purple-light); }
-.creative-img-wrap img { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: transform 0.3s; display: none; }
-.creative-img-wrap img.loaded { display: block; }
-.creative-img-wrap img:hover { transform: scale(1.05); }
+/* ADD ZONE (last card in grid) */
+.add-creative-zone{height:100%;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:transparent;border:2px dashed var(--border-strong);border-radius:var(--r-md);cursor:pointer;color:var(--text-faint);font-size:12px;font-weight:500;transition:all 0.2s;padding:1rem;}
+.add-creative-zone:hover,.add-creative-zone.dragover{border-color:var(--purple);color:var(--purple);background:var(--purple-light);}
+.add-creative-zone svg{width:22px;height:22px;fill:currentColor;}
+.add-creative-zone .zone-sub{font-size:10px;color:var(--text-faint);margin-top:2px;text-align:center;}
+.add-creative-zone.dragover .zone-sub{color:var(--purple);}
+.add-creative-zone.analyzing{border-color:var(--purple);background:var(--purple-light);pointer-events:none;}
+.analyzing-inner{display:flex;flex-direction:column;align-items:center;gap:10px;padding:1rem;}
+.analyzing-spinner{width:28px;height:28px;border:3px solid var(--purple-mid);border-top-color:var(--purple);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.analyzing-text{font-size:12px;color:var(--purple);font-weight:500;}
+.analyzing-sub{font-size:10px;color:var(--text-muted);}
+.file-input{display:none;}
 
-.creative-placeholder { width: 100%; height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: var(--purple-light); border: 2px dashed var(--purple-mid); cursor: pointer; transition: background 0.15s; }
-.creative-placeholder:hover { background: #e8dff5; }
-.creative-placeholder svg { width: 24px; height: 24px; fill: var(--purple); opacity: 0.6; }
-.creative-placeholder span { font-size: 11px; color: var(--purple); font-weight: 500; }
+/* AI MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:600;align-items:center;justify-content:center;padding:1.5rem;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--surface);border-radius:var(--r-2xl);width:100%;box-shadow:var(--shadow-lg);overflow:hidden;max-height:90vh;overflow-y:auto;}
+.modal-box.sm{max-width:480px;}
+.modal-box.md{max-width:600px;}
+.modal-box.lg{max-width:780px;}
+.modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;position:sticky;top:0;background:var(--surface);z-index:1;}
+.modal-badge{background:var(--purple);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:0.05em;}
+.modal-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;flex:1;}
+.modal-close-btn{background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-faint);padding:0 4px;line-height:1;}
+.modal-body{padding:1.25rem 1.5rem;}
+.modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;background:var(--surface2);position:sticky;bottom:0;}
+.modal-note{font-size:11px;color:var(--text-faint);margin-right:auto;align-self:center;}
 
-.creative-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; transition: opacity 0.2s; }
-.creative-img-wrap:hover .creative-overlay { opacity: 1; }
-.overlay-btn { background: rgba(255,255,255,0.9); border: none; border-radius: 6px; padding: 5px 10px; font-size: 11px; font-weight: 500; cursor: pointer; color: var(--text); }
-.overlay-btn:hover { background: #fff; }
+/* AI SUGGESTION FIELDS */
+.ai-preview-row{display:flex;gap:1rem;margin-bottom:1.25rem;align-items:flex-start;}
+.ai-preview-thumb{width:100px;height:100px;object-fit:cover;border-radius:var(--r-md);flex-shrink:0;border:1px solid var(--border-med);}
+.ai-preview-thumb-video{width:100px;height:100px;object-fit:cover;border-radius:var(--r-md);flex-shrink:0;border:1px solid var(--border-med);background:#000;}
+.ai-suggestion-block{flex:1;}
+.ai-field{margin-bottom:0.875rem;}
+.ai-field-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-faint);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.ai-tag{background:var(--purple-light);color:var(--purple);font-size:9px;font-weight:600;padding:1px 6px;border-radius:20px;}
+.ai-value{font-size:13px;font-weight:500;color:var(--text);padding:7px 10px;background:var(--surface2);border:1px solid var(--border-med);border-radius:var(--r-sm);cursor:text;min-height:32px;}
+.ai-value[contenteditable]:focus{outline:none;border-color:var(--purple);background:#fff;}
+.ai-select{width:100%;padding:7px 10px;border:1px solid var(--border-med);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--surface2);outline:none;cursor:pointer;}
+.ai-select:focus{border-color:var(--purple);}
+.ai-analysis{background:var(--purple-light);border-radius:var(--r-sm);padding:0.75rem 1rem;margin-bottom:1rem;}
+.ai-analysis-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--purple);margin-bottom:4px;}
+.ai-analysis-text{font-size:12px;color:var(--text-muted);line-height:1.6;}
 
-.creative-body { padding: 0.625rem 0.75rem; }
-.creative-name { font-size: 11px; font-weight: 500; color: var(--text); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.creative-ad-id { font-size: 10px; color: var(--text-faint); font-family: monospace; }
+/* ANALYTICS MODAL */
+.analytics-status-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.analytics-status-label{font-size:12px;color:var(--text-muted);font-weight:500;}
+.analytics-status-select{padding:6px 12px;border:1px solid var(--border-med);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:12px;background:var(--surface);outline:none;cursor:pointer;}
+.analytics-status-select:focus{border-color:var(--purple);}
+.analytics-big-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem;}
+.analytics-big-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-md);padding:1rem;text-align:center;}
+.analytics-big-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:2px;}
+.analytics-big-key{font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-faint);}
+.analytics-section-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;margin-bottom:8px;margin-top:1rem;}
+.analytics-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.analytics-detail-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:0.75rem;}
+.analytics-detail-key{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:3px;}
+.analytics-detail-val{font-size:14px;font-weight:600;}
+.analytics-no-data{text-align:center;padding:2rem;color:var(--text-faint);font-size:13px;}
+.adsets-list{margin-top:0.5rem;}
+.adset-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.adset-row:last-child{border-bottom:none;}
+.adset-name{color:var(--text-muted);font-family:monospace;font-size:11px;}
 
-/* Performance inside creative card */
-.creative-perf { padding: 0.5rem 0.75rem; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-.perf-item { display: flex; flex-direction: column; }
-.perf-key { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); }
-.perf-val { font-size: 12px; font-weight: 600; color: var(--text); }
-.perf-val.good { color: var(--green-dark); }
-.perf-val.warn { color: var(--amber-dark); }
-.perf-val.bad { color: var(--red-dark); }
-.no-data { font-size: 10px; color: var(--text-faint); padding: 0.5rem 0.75rem; }
+/* LIGHTBOX */
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:2rem;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:100%;max-height:82vh;border-radius:12px;object-fit:contain;}
+.lightbox video{max-width:100%;max-height:82vh;border-radius:12px;}
+.lightbox-meta{color:rgba(255,255,255,0.65);font-size:13px;text-align:center;}
+.lightbox-close{color:#fff;font-size:13px;cursor:pointer;padding:8px 20px;border:1px solid rgba(255,255,255,0.3);border-radius:20px;background:transparent;}
 
-/* Add creative drop zone */
-.add-creative-zone {
-  width: 100%; min-height: 160px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
-  background: transparent; border: 2px dashed var(--border-strong);
-  border-radius: var(--radius-md); cursor: pointer; color: var(--text-faint);
-  font-size: 12px; font-weight: 500; transition: all 0.2s;
-  position: relative;
-}
-.add-creative-zone:hover, .add-creative-zone.dragover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
-.add-creative-zone svg { width: 22px; height: 22px; fill: currentColor; }
-.add-creative-zone .zone-sub { font-size: 10px; color: var(--text-faint); margin-top: 2px; }
-.add-creative-zone.dragover .zone-sub { color: var(--purple); }
-.add-creative-zone.analyzing { border-color: var(--purple); background: var(--purple-light); pointer-events: none; }
+/* SETTINGS */
+.settings-main{max-width:900px;margin:0 auto;padding:2rem;}
+.settings-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1.5rem;box-shadow:var(--shadow-sm);}
+.settings-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;margin-bottom:0.5rem;}
+.settings-desc{font-size:12px;color:var(--text-muted);margin-bottom:1.25rem;line-height:1.6;}
+.upload-zone{border:2px dashed var(--border-strong);border-radius:var(--r-md);padding:2.5rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--surface2);}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--purple);background:var(--purple-light);}
+.upload-zone-icon{font-size:32px;margin-bottom:8px;}
+.upload-zone-text{font-size:14px;font-weight:500;margin-bottom:4px;}
+.upload-zone-sub{font-size:12px;color:var(--text-muted);}
+.upload-history{margin-top:1rem;}
+.upload-entry{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;border:1px solid var(--border);border-radius:var(--r-sm);margin-bottom:8px;background:var(--surface2);}
+.upload-entry-name{font-size:12px;font-weight:500;}
+.upload-entry-meta{font-size:11px;color:var(--text-faint);}
+.upload-entry-status{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;background:var(--green-light);color:var(--green-dark);}
+.naming-table{width:100%;border-collapse:collapse;font-size:12px;}
+.naming-table th{text-align:left;padding:8px 10px;background:var(--surface2);border-bottom:1px solid var(--border-med);font-weight:500;color:var(--text-muted);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;}
+.naming-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+.naming-table tr:last-child td{border-bottom:none;}
+.code{font-family:monospace;background:var(--purple-light);color:var(--purple);padding:2px 6px;border-radius:4px;font-size:11px;}
+.analytics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:1rem;}
+.analytics-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-md);padding:1rem;}
+.analytics-card-title{font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;}
+.analytics-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.analytics-row:last-child{border-bottom:none;}
+.analytics-row-label{color:var(--text-muted);}
+.analytics-row-val{font-weight:600;}
 
-.analyzing-inner { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 1rem; }
-.analyzing-spinner { width: 28px; height: 28px; border: 3px solid var(--purple-mid); border-top-color: var(--purple); border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.analyzing-text { font-size: 12px; color: var(--purple); font-weight: 500; }
-.analyzing-sub { font-size: 10px; color: var(--text-muted); }
+/* TEAM SETTINGS */
+.team-member-row{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;border:1px solid var(--border);border-radius:var(--r-sm);margin-bottom:8px;background:var(--surface2);}
+.team-member-info{display:flex;align-items:center;gap:10px;}
+.team-avatar-sm{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
+.team-member-name{font-size:13px;font-weight:500;}
+.team-member-role{font-size:11px;color:var(--text-faint);}
 
-.file-input { display: none; }
+/* BUTTONS */
+.btn{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:8px 18px;border-radius:var(--r-sm);border:1px solid var(--border-med);cursor:pointer;transition:all 0.15s;}
+.btn-primary{background:var(--purple);color:#fff;border-color:var(--purple);}
+.btn-primary:hover{background:#5a3388;}
+.btn-ghost{background:transparent;color:var(--text-muted);}
+.btn-ghost:hover{background:var(--surface2);}
+.btn-sm{font-size:12px;padding:6px 14px;}
 
-/* AI suggestion modal */
-.ai-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 500; align-items: center; justify-content: center; padding: 2rem; }
-.ai-modal-overlay.open { display: flex; }
-.ai-modal { background: var(--surface); border-radius: var(--radius-xl); width: 100%; max-width: 520px; box-shadow: var(--shadow-lg); overflow: hidden; }
-.ai-modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-.ai-badge { background: var(--purple); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.05em; }
-.ai-modal-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; }
-.ai-modal-body { padding: 1.25rem 1.5rem; }
-.ai-preview-row { display: flex; gap: 1rem; margin-bottom: 1.25rem; align-items: flex-start; }
-.ai-preview-img { width: 100px; height: 100px; object-fit: cover; border-radius: var(--radius-md); flex-shrink: 0; border: 1px solid var(--border-med); }
-.ai-suggestion-block { flex: 1; }
-.ai-field { margin-bottom: 0.875rem; }
-.ai-field-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-faint); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-.ai-tag { background: var(--purple-light); color: var(--purple); font-size: 9px; font-weight: 600; padding: 1px 6px; border-radius: 20px; }
-.ai-value { font-size: 13px; font-weight: 500; color: var(--text); padding: 7px 10px; background: var(--surface2); border: 1px solid var(--border-med); border-radius: var(--radius-sm); cursor: text; }
-.ai-value[contenteditable]:focus { outline: none; border-color: var(--purple); background: #fff; }
-.ai-analysis { background: var(--purple-light); border-radius: var(--radius-sm); padding: 0.75rem 1rem; margin-bottom: 1rem; }
-.ai-analysis-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--purple); margin-bottom: 4px; }
-.ai-analysis-text { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
-.ai-modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; background: var(--surface2); }
-.ai-note { font-size: 11px; color: var(--text-faint); margin-right: auto; align-self: center; }
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;font-size:13px;padding:10px 20px;border-radius:20px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;}
 
-/* ── SETTINGS PAGE ── */
-.settings-main { max-width: 900px; margin: 0 auto; padding: 2rem; }
-.settings-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); }
-.settings-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 0.5rem; }
-.settings-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.6; }
+/* REVIEW BANK */
+.review-section{margin-top:0.5rem;}
+.section-label{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;margin-bottom:1rem;}
+.review-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;}
+.review-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:1rem;box-shadow:var(--shadow-sm);}
+.review-stars{color:var(--amber);font-size:12px;margin-bottom:6px;letter-spacing:1px;}
+.review-text{font-size:12px;font-style:italic;line-height:1.6;margin-bottom:6px;}
+.review-author{font-size:11px;color:var(--text-muted);}
+.review-use{font-size:10px;color:var(--purple);margin-top:4px;font-weight:500;}
+.divider{border:none;border-top:1px solid var(--border);margin:2rem 0;}
 
-.upload-zone {
-  border: 2px dashed var(--border-strong); border-radius: var(--radius-md);
-  padding: 2.5rem; text-align: center;
-  cursor: pointer; transition: all 0.2s;
-  background: var(--surface2);
-}
-.upload-zone:hover { border-color: var(--purple); background: var(--purple-light); }
-.upload-zone.dragover { border-color: var(--purple); background: var(--purple-light); }
-.upload-zone-icon { font-size: 32px; margin-bottom: 8px; }
-.upload-zone-text { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-.upload-zone-sub { font-size: 12px; color: var(--text-muted); }
-
-.upload-history { margin-top: 1rem; }
-.upload-entry { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 8px; background: var(--surface2); }
-.upload-entry-name { font-size: 12px; font-weight: 500; }
-.upload-entry-meta { font-size: 11px; color: var(--text-faint); }
-.upload-entry-status { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 20px; background: var(--green-light); color: var(--green-dark); }
-
-/* Naming convention guide */
-.naming-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.naming-table th { text-align: left; padding: 8px 10px; background: var(--surface2); border-bottom: 1px solid var(--border-med); font-weight: 500; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
-.naming-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
-.naming-table tr:last-child td { border-bottom: none; }
-.code { font-family: monospace; background: var(--purple-light); color: var(--purple); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-
-/* Analytics summary */
-.analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 1rem; }
-.analytics-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem; }
-.analytics-card-title { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
-.analytics-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
-.analytics-row:last-child { border-bottom: none; }
-.analytics-row-label { color: var(--text-muted); }
-.analytics-row-val { font-weight: 600; }
-
-/* ── LIGHTBOX ── */
-.lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; align-items: center; justify-content: center; flex-direction: column; gap: 16px; padding: 2rem; }
-.lightbox.open { display: flex; }
-.lightbox img { max-width: 100%; max-height: 82vh; border-radius: 12px; object-fit: contain; }
-.lightbox-meta { color: rgba(255,255,255,0.65); font-size: 13px; text-align: center; }
-.lightbox-close { color: #fff; font-size: 13px; cursor: pointer; padding: 8px 20px; border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; background: transparent; }
-
-/* ── MODAL (Add Creative) ── */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; align-items: center; justify-content: center; padding: 2rem; }
-.modal-overlay.open { display: flex; }
-.modal { background: var(--surface); border-radius: var(--radius-xl); padding: 1.75rem; width: 100%; max-width: 480px; box-shadow: var(--shadow-lg); }
-.modal-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 600; margin-bottom: 1.25rem; }
-.modal-field { margin-bottom: 1rem; }
-.modal-label { font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 5px; display: block; }
-.modal-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border-med); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); background: var(--surface); outline: none; }
-.modal-input:focus { border-color: var(--purple); }
-.modal-hint { font-size: 10px; color: var(--text-faint); margin-top: 3px; font-family: monospace; }
-.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; }
-.btn { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; padding: 8px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-med); cursor: pointer; transition: all 0.15s; }
-.btn-primary { background: var(--purple); color: #fff; border-color: var(--purple); }
-.btn-primary:hover { background: #5a3388; }
-.btn-ghost { background: transparent; color: var(--text-muted); }
-.btn-ghost:hover { background: var(--surface2); }
-
-/* ── TOAST ── */
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; font-size: 13px; padding: 10px 20px; border-radius: 20px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
-.toast.show { opacity: 1; }
-
-/* ── REVIEW BANK ── */
-.review-section { margin-top: 0.5rem; }
-.section-label { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 1rem; }
-.review-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
-.review-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem; box-shadow: var(--shadow-sm); }
-.review-stars { color: var(--amber); font-size: 12px; margin-bottom: 6px; letter-spacing: 1px; }
-.review-text { font-size: 12px; font-style: italic; line-height: 1.6; margin-bottom: 6px; }
-.review-author { font-size: 11px; color: var(--text-muted); }
-.review-use { font-size: 10px; color: var(--purple); margin-top: 4px; font-weight: 500; }
-
-.divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
-
-@media (max-width: 768px) {
-  .stats-row { grid-template-columns: repeat(2, 1fr); }
-  .main, .settings-main { padding: 1rem; }
-  nav { padding: 0 1rem; }
-  .analytics-grid { grid-template-columns: 1fr; }
-}
+@media(max-width:768px){.stats-row{grid-template-columns:repeat(2,1fr);}.main,.settings-main{padding:1rem;}nav{padding:0 1rem;}.analytics-grid{grid-template-columns:1fr;}.analytics-big-grid{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">W</div>
+    <div class="login-title">WonderWraps</div>
+    <div class="login-sub">Creative Ad Library — Sign in as</div>
+    <div class="login-user-grid" id="login-user-grid"></div>
+    <div style="font-size:11px;color:var(--text-faint);">Select your name to continue</div>
+  </div>
+</div>
+
 <nav>
   <div class="nav-left">
     <div class="logo">W</div>
-    <div>
-      <div class="nav-title">WonderWraps</div>
-      <div class="nav-sub">Creative Ad Library</div>
-    </div>
+    <div><div class="nav-title">WonderWraps</div><div class="nav-sub">Creative Ad Library</div></div>
   </div>
   <div class="nav-right">
-    <button class="nav-tab active" onclick="showPage('library')">Library</button>
-    <button class="nav-tab" onclick="showPage('settings')">Settings & Analytics</button>
+    <button class="nav-tab active" onclick="showPage('library',this)">Library</button>
+    <button class="nav-tab" onclick="showPage('settings',this)">Settings & Analytics</button>
+    <div class="nav-user" id="nav-user-display"></div>
   </div>
 </nav>
 
-<!-- ══════════════ LIBRARY PAGE ══════════════ -->
+<!-- LIBRARY PAGE -->
 <div class="page active" id="page-library">
 <div class="main">
-
   <div class="stats-row">
-    <div class="stat-card"><div class="stat-label">Concepts</div><div class="stat-value purple" id="s-concepts">3</div></div>
-    <div class="stat-card"><div class="stat-label">Variations</div><div class="stat-value" id="s-variations">6</div></div>
+    <div class="stat-card"><div class="stat-label">Concepts</div><div class="stat-value purple">3</div></div>
+    <div class="stat-card"><div class="stat-label">Variations</div><div class="stat-value">6</div></div>
     <div class="stat-card"><div class="stat-label">Creatives</div><div class="stat-value" id="s-creatives">0</div></div>
-    <div class="stat-card"><div class="stat-label">Approved</div><div class="stat-value green" id="s-approved">5</div></div>
-    <div class="stat-card"><div class="stat-label">In Progress</div><div class="stat-value amber" id="s-progress">1</div></div>
+    <div class="stat-card"><div class="stat-label">Approved</div><div class="stat-value green">5</div></div>
+    <div class="stat-card"><div class="stat-label">In Progress</div><div class="stat-value amber">1</div></div>
   </div>
-
   <div class="controls-row">
     <div class="legend">
       <div class="legend-item"><div class="legend-bar" style="background:var(--green)"></div>Approved</div>
@@ -356,6 +349,7 @@ nav {
       <button class="filter-btn" onclick="filterConcept(this,'C')">Concept C</button>
       <button class="filter-btn" onclick="filterStatus(this,'approved')">Approved</button>
       <button class="filter-btn" onclick="filterStatus(this,'in-progress')">In progress</button>
+      <select class="filter-select" id="filter-user" onchange="filterByUser(this.value)"><option value="">All team members</option></select>
     </div>
   </div>
 
@@ -364,270 +358,250 @@ nav {
     <div class="concept-header">
       <span class="concept-badge">A</span>
       <span class="concept-title">Real kid + open book same frame</span>
-      <span class="concept-meta" id="concept-A-meta">4 variations</span>
+      <span class="concept-meta">4 variations</span>
     </div>
-    <div id="concept-A-variations">
-
+    <div id="vars-A">
       <div class="variation-card approved expanded" data-concept="A" data-status="approved" data-vid="A1">
-        <div class="variation-header" onclick="toggleVariation(this)">
-          <span class="var-id">A1</span>
-          <span class="var-title-text">Blonde girl — bedtime scene</span>
-          <div class="var-perf-pills" id="perf-pills-A1"></div>
+        <div class="variation-header" onclick="toggleVar(this)">
+          <span class="var-id">A1</span><span class="var-title-text">Blonde girl — bedtime scene</span>
+          <div class="var-perf-pills" id="pp-A1"></div>
           <span class="var-status status-approved">Approved</span>
-          <span class="var-creative-count" id="count-A1">0 creatives</span>
-          <span class="chevron">▾</span>
+          <span class="var-creative-count" id="cnt-A1">0 creatives</span><span class="chevron">▾</span>
         </div>
         <div class="variation-body">
-          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Book held toward camera, cartoon likeness in yellow outfit, warm magical glow. Real child visible in background laughing.</p>
-          <div class="creatives-grid" id="grid-A1"></div>
-          <div class="add-creative-zone" id="zone-A1" onclick="document.getElementById('file-A1').click()">
-            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            <span>Drop image here or click to upload</span>
-            <span class="zone-sub">Claude will analyze and name it automatically</span>
+          <div class="variation-hero">
+            <div class="variation-hero-img-wrap" id="hero-wrap-A1" onclick="document.getElementById('hero-file-A1').click()">
+              <img id="hero-img-A1" alt="hero" /><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero image</span></div>
+            </div>
+            <input type="file" class="file-input" id="hero-file-A1" accept="image/*" onchange="setHeroImg(this,'A1')" />
+            <div class="variation-hero-info">
+              <div class="variation-hero-title">Key notes for this variation</div>
+              <textarea class="variation-hero-notes" id="notes-A1" rows="4" placeholder="What makes this variation unique? What to focus on when creating creatives for it..." onblur="saveNotes('A1',this.value)">Book held toward camera, cartoon likeness in yellow outfit, warm magical glow. Real child visible in background laughing. Focus: likeness match + emotional reaction visible simultaneously.</textarea>
+            </div>
           </div>
-          <input type="file" class="file-input" id="file-A1" accept="image/*" onchange="handleDropOrPick(this.files[0],'A1')" />
+          <div class="creatives-grid-wrap">
+            <div class="creatives-grid" id="grid-A1"></div>
+          </div>
         </div>
       </div>
 
       <div class="variation-card approved" data-concept="A" data-status="approved" data-vid="A2">
-        <div class="variation-header" onclick="toggleVariation(this)">
-          <span class="var-id">A2</span>
-          <span class="var-title-text">Lucas — unboxing reaction</span>
-          <div class="var-perf-pills" id="perf-pills-A2"></div>
+        <div class="variation-header" onclick="toggleVar(this)">
+          <span class="var-id">A2</span><span class="var-title-text">Lucas — unboxing reaction</span>
+          <div class="var-perf-pills" id="pp-A2"></div>
           <span class="var-status status-priority">Priority test</span>
-          <span class="var-creative-count" id="count-A2">0 creatives</span>
-          <span class="chevron">▾</span>
+          <span class="var-creative-count" id="cnt-A2">0 creatives</span><span class="chevron">▾</span>
         </div>
         <div class="variation-body">
-          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Dark-haired boy, mouth wide open seeing book cover with cartoon astronaut likeness. Fix reviewer avatar at designer.</p>
-          <div class="creatives-grid" id="grid-A2"></div>
-          <div class="add-creative-zone" id="zone-A2" onclick="document.getElementById('file-A2').click()">
-            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            <span>Drop image here or click to upload</span>
-            <span class="zone-sub">Claude will analyze and name it automatically</span>
+          <div class="variation-hero">
+            <div class="variation-hero-img-wrap" id="hero-wrap-A2" onclick="document.getElementById('hero-file-A2').click()">
+              <img id="hero-img-A2" alt="hero" /><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero image</span></div>
+            </div>
+            <input type="file" class="file-input" id="hero-file-A2" accept="image/*" onchange="setHeroImg(this,'A2')" />
+            <div class="variation-hero-info">
+              <div class="variation-hero-title">Key notes for this variation</div>
+              <textarea class="variation-hero-notes" id="notes-A2" rows="4" placeholder="What makes this variation unique..." onblur="saveNotes('A2',this.value)">Dark-haired boy, mouth wide open seeing book cover with cartoon astronaut likeness. Fix reviewer avatar at designer. Key: the shock/joy micro-expression is the hero.</textarea>
+            </div>
           </div>
-          <input type="file" class="file-input" id="file-A2" accept="image/*" onchange="handleDropOrPick(this.files[0],'A2')" />
+          <div class="creatives-grid-wrap"><div class="creatives-grid" id="grid-A2"></div></div>
         </div>
       </div>
 
       <div class="variation-card approved" data-concept="A" data-status="approved" data-vid="A3">
-        <div class="variation-header" onclick="toggleVariation(this)">
-          <span class="var-id">A3</span>
-          <span class="var-title-text">Red-haired girl — mirror moment</span>
-          <div class="var-perf-pills" id="perf-pills-A3"></div>
+        <div class="variation-header" onclick="toggleVar(this)">
+          <span class="var-id">A3</span><span class="var-title-text">Red-haired girl — mirror moment</span>
+          <div class="var-perf-pills" id="pp-A3"></div>
           <span class="var-status status-approved">Approved</span>
-          <span class="var-creative-count" id="count-A3">0 creatives</span>
-          <span class="chevron">▾</span>
+          <span class="var-creative-count" id="cnt-A3">0 creatives</span><span class="chevron">▾</span>
         </div>
         <div class="variation-body">
-          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Girl holding book beside her face in mirror. Real vs cartoon likeness side by side. Most convincing likeness match in library.</p>
-          <div class="creatives-grid" id="grid-A3"></div>
-          <div class="add-creative-zone" id="zone-A3" onclick="document.getElementById('file-A3').click()">
-            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            <span>Drop image here or click to upload</span>
-            <span class="zone-sub">Claude will analyze and name it automatically</span>
+          <div class="variation-hero">
+            <div class="variation-hero-img-wrap" id="hero-wrap-A3" onclick="document.getElementById('hero-file-A3').click()">
+              <img id="hero-img-A3" alt="hero" /><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero image</span></div>
+            </div>
+            <input type="file" class="file-input" id="hero-file-A3" accept="image/*" onchange="setHeroImg(this,'A3')" />
+            <div class="variation-hero-info">
+              <div class="variation-hero-title">Key notes for this variation</div>
+              <textarea class="variation-hero-notes" id="notes-A3" rows="4" placeholder="What makes this variation unique..." onblur="saveNotes('A3',this.value)">Girl holding book beside her face in mirror. Real vs cartoon likeness side by side. Most convincing likeness match. Key: hair, freckles, outfit must all match between real and cartoon.</textarea>
+            </div>
           </div>
-          <input type="file" class="file-input" id="file-A3" accept="image/*" onchange="handleDropOrPick(this.files[0],'A3')" />
+          <div class="creatives-grid-wrap"><div class="creatives-grid" id="grid-A3"></div></div>
         </div>
       </div>
 
       <div class="variation-card approved" data-concept="A" data-status="approved" data-vid="A4">
-        <div class="variation-header" onclick="toggleVariation(this)">
-          <span class="var-id">A4</span>
-          <span class="var-title-text">Blonde girl — princess over-shoulder</span>
-          <div class="var-perf-pills" id="perf-pills-A4"></div>
+        <div class="variation-header" onclick="toggleVar(this)">
+          <span class="var-id">A4</span><span class="var-title-text">Blonde girl — princess over-shoulder</span>
+          <div class="var-perf-pills" id="pp-A4"></div>
           <span class="var-status status-priority">Priority test</span>
-          <span class="var-creative-count" id="count-A4">0 creatives</span>
-          <span class="chevron">▾</span>
+          <span class="var-creative-count" id="cnt-A4">0 creatives</span><span class="chevron">▾</span>
         </div>
         <div class="variation-body">
-          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Over-shoulder angle, girl turning back laughing, cartoon princess on open page. Best emotional pull in entire library.</p>
-          <div class="creatives-grid" id="grid-A4"></div>
-          <div class="add-creative-zone" id="zone-A4" onclick="document.getElementById('file-A4').click()">
-            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            <span>Drop image here or click to upload</span>
-            <span class="zone-sub">Claude will analyze and name it automatically</span>
+          <div class="variation-hero">
+            <div class="variation-hero-img-wrap" id="hero-wrap-A4" onclick="document.getElementById('hero-file-A4').click()">
+              <img id="hero-img-A4" alt="hero" /><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero image</span></div>
+            </div>
+            <input type="file" class="file-input" id="hero-file-A4" accept="image/*" onchange="setHeroImg(this,'A4')" />
+            <div class="variation-hero-info">
+              <div class="variation-hero-title">Key notes for this variation</div>
+              <textarea class="variation-hero-notes" id="notes-A4" rows="4" placeholder="What makes this variation unique..." onblur="saveNotes('A4',this.value)">Over-shoulder angle, girl turning back laughing, cartoon princess on open page. Best emotional pull in entire library. Key: the over-shoulder look-back is the scroll stopper.</textarea>
+            </div>
           </div>
-          <input type="file" class="file-input" id="file-A4" accept="image/*" onchange="handleDropOrPick(this.files[0],'A4')" />
+          <div class="creatives-grid-wrap"><div class="creatives-grid" id="grid-A4"></div></div>
         </div>
       </div>
-
     </div>
   </div>
 
   <!-- CONCEPT B -->
   <div class="concept-section" data-concept="B">
-    <div class="concept-header">
-      <span class="concept-badge">B</span>
-      <span class="concept-title">That's literally it — flat lay formula</span>
-      <span class="concept-meta">1 variation</span>
-    </div>
-    <div>
-      <div class="variation-card in-progress" data-concept="B" data-status="in-progress" data-vid="B1">
-        <div class="variation-header" onclick="toggleVariation(this)">
-          <span class="var-id">B1</span>
-          <span class="var-title-text">Three step flat lay</span>
-          <div class="var-perf-pills" id="perf-pills-B1"></div>
-          <span class="var-status status-progress">Going to designer</span>
-          <span class="var-creative-count" id="count-B1">0 creatives</span>
-          <span class="chevron">▾</span>
-        </div>
-        <div class="variation-body">
-          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Real photo → open book with cartoon → delivery box. Wooden surface, arrows. "That's literally it." tagline. Needs WonderWraps branding.</p>
-          <div class="creatives-grid" id="grid-B1"></div>
-          <div class="add-creative-zone" id="zone-B1" onclick="document.getElementById('file-B1').click()">
-            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            <span>Drop image here or click to upload</span>
-            <span class="zone-sub">Claude will analyze and name it automatically</span>
+    <div class="concept-header"><span class="concept-badge">B</span><span class="concept-title">That's literally it — flat lay formula</span><span class="concept-meta">1 variation</span></div>
+    <div class="variation-card in-progress" data-concept="B" data-status="in-progress" data-vid="B1">
+      <div class="variation-header" onclick="toggleVar(this)">
+        <span class="var-id">B1</span><span class="var-title-text">Three step flat lay</span>
+        <div class="var-perf-pills" id="pp-B1"></div>
+        <span class="var-status status-progress">Going to designer</span>
+        <span class="var-creative-count" id="cnt-B1">0 creatives</span><span class="chevron">▾</span>
+      </div>
+      <div class="variation-body">
+        <div class="variation-hero">
+          <div class="variation-hero-img-wrap" id="hero-wrap-B1" onclick="document.getElementById('hero-file-B1').click()">
+            <img id="hero-img-B1" alt="hero" /><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero image</span></div>
           </div>
-          <input type="file" class="file-input" id="file-B1" accept="image/*" onchange="handleDropOrPick(this.files[0],'B1')" />
+          <input type="file" class="file-input" id="hero-file-B1" accept="image/*" onchange="setHeroImg(this,'B1')" />
+          <div class="variation-hero-info">
+            <div class="variation-hero-title">Key notes for this variation</div>
+            <textarea class="variation-hero-notes" id="notes-B1" rows="4" placeholder="What makes this variation unique..." onblur="saveNotes('B1',this.value)">Real photo → open book with cartoon → delivery box. Wooden surface, arrows. "That's literally it." tagline. Needs WonderWraps branding. Key: simplicity and process clarity is the entire value.</textarea>
+          </div>
         </div>
+        <div class="creatives-grid-wrap"><div class="creatives-grid" id="grid-B1"></div></div>
       </div>
     </div>
   </div>
 
   <!-- CONCEPT C -->
   <div class="concept-section" data-concept="C">
-    <div class="concept-header">
-      <span class="concept-badge">C</span>
-      <span class="concept-title">You upload one photo — parent perspective</span>
-      <span class="concept-meta">1 variation</span>
-    </div>
-    <div>
-      <div class="variation-card in-progress" data-concept="C" data-status="in-progress" data-vid="C1">
-        <div class="variation-header" onclick="toggleVariation(this)">
-          <span class="var-id">C1</span>
-          <span class="var-title-text">Parent at kitchen table</span>
-          <div class="var-perf-pills" id="perf-pills-C1"></div>
-          <span class="var-status status-progress">Going to designer</span>
-          <span class="var-creative-count" id="count-C1">0 creatives</span>
-          <span class="chevron">▾</span>
-        </div>
-        <div class="variation-body">
-          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Over-shoulder shot. Phone showing photo upload on left. Finished branded delivery box with book on right. Before/after story in two text overlays.</p>
-          <div class="creatives-grid" id="grid-C1"></div>
-          <div class="add-creative-zone" id="zone-C1" onclick="document.getElementById('file-C1').click()">
-            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            <span>Drop image here or click to upload</span>
-            <span class="zone-sub">Claude will analyze and name it automatically</span>
+    <div class="concept-header"><span class="concept-badge">C</span><span class="concept-title">You upload one photo — parent perspective</span><span class="concept-meta">1 variation</span></div>
+    <div class="variation-card in-progress" data-concept="C" data-status="in-progress" data-vid="C1">
+      <div class="variation-header" onclick="toggleVar(this)">
+        <span class="var-id">C1</span><span class="var-title-text">Parent at kitchen table</span>
+        <div class="var-perf-pills" id="pp-C1"></div>
+        <span class="var-status status-progress">Going to designer</span>
+        <span class="var-creative-count" id="cnt-C1">0 creatives</span><span class="chevron">▾</span>
+      </div>
+      <div class="variation-body">
+        <div class="variation-hero">
+          <div class="variation-hero-img-wrap" id="hero-wrap-C1" onclick="document.getElementById('hero-file-C1').click()">
+            <img id="hero-img-C1" alt="hero" /><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero image</span></div>
           </div>
-          <input type="file" class="file-input" id="file-C1" accept="image/*" onchange="handleDropOrPick(this.files[0],'C1')" />
+          <input type="file" class="file-input" id="hero-file-C1" accept="image/*" onchange="setHeroImg(this,'C1')" />
+          <div class="variation-hero-info">
+            <div class="variation-hero-title">Key notes for this variation</div>
+            <textarea class="variation-hero-notes" id="notes-C1" rows="4" placeholder="What makes this variation unique..." onblur="saveNotes('C1',this.value)">Over-shoulder shot. Phone showing photo upload on left. Finished branded delivery box with book on right. Before/after story in two text overlays. Key: makes the process feel effortless for parents.</textarea>
+          </div>
         </div>
+        <div class="creatives-grid-wrap"><div class="creatives-grid" id="grid-C1"></div></div>
       </div>
     </div>
   </div>
 
   <hr class="divider" />
-
-  <!-- REVIEW BANK -->
   <div class="review-section">
     <div class="section-label">Review bank — attach to any creative</div>
     <div class="review-grid">
-      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"My daughter screamed when she saw her face in the book!"</div><div class="review-author">Sarah T. · 3 days ago</div><div class="review-use">Use with: A1, A4 (blonde girl)</div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"She carried it everywhere for a week straight"</div><div class="review-author">Emma R. · 2 days ago</div><div class="review-use">Use with: A1, A4 (blonde girl)</div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"She said mommy that's literally me!"</div><div class="review-author">Claire B. · 6 days ago</div><div class="review-use">Use with: A3 (red-haired girl)</div></div>
-      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"The packaging alone made it feel so special"</div><div class="review-author">Anna S. · 1 week ago</div><div class="review-use">Use with: A2 (Lucas unboxing)</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"My daughter screamed when she saw her face in the book!"</div><div class="review-author">Sarah T. · 3 days ago</div><div class="review-use">Use with: A1, A4</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"She carried it everywhere for a week straight"</div><div class="review-author">Emma R. · 2 days ago</div><div class="review-use">Use with: A1, A4</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"She said mommy that's literally me!"</div><div class="review-author">Claire B. · 6 days ago</div><div class="review-use">Use with: A3</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"The packaging alone made it feel so special"</div><div class="review-author">Anna S. · 1 week ago</div><div class="review-use">Use with: A2</div></div>
     </div>
   </div>
-
 </div>
 </div>
 
-<!-- ══════════════ SETTINGS PAGE ══════════════ -->
+<!-- SETTINGS PAGE -->
 <div class="page" id="page-settings">
 <div class="settings-main">
-
-  <!-- NAMING CONVENTION -->
+  <div class="settings-section">
+    <div class="settings-title">Team members</div>
+    <div class="settings-desc">These are the people who can log in and suggest creatives. Add or manage team members here.</div>
+    <div id="team-list"></div>
+  </div>
   <div class="settings-section">
     <div class="settings-title">Meta ad naming convention</div>
-    <div class="settings-desc">Name every ad in Meta Ads Manager using this exact format so the dashboard can automatically map performance data to the right creative.</div>
-    <div style="background:var(--purple-light);border-radius:var(--radius-md);padding:1rem 1.25rem;margin-bottom:1.25rem;font-family:monospace;font-size:14px;color:var(--purple);font-weight:600;">
-      WW_[Concept]_[Variation]_[Creative#]_[ShortDesc]
-    </div>
+    <div class="settings-desc">Name every ad in Meta Ads Manager exactly like this so performance data maps automatically.</div>
+    <div style="background:var(--purple-light);border-radius:var(--r-md);padding:1rem 1.25rem;margin-bottom:1.25rem;font-family:monospace;font-size:14px;color:var(--purple);font-weight:600;">WW_[Concept]_[Variation]_[Creative#]_[ShortDesc]</div>
     <table class="naming-table">
       <thead><tr><th>Part</th><th>Format</th><th>Example</th><th>Notes</th></tr></thead>
       <tbody>
-        <tr><td>Prefix</td><td><span class="code">WW_</span></td><td><span class="code">WW_</span></td><td>Always start with this — filters WonderWraps ads</td></tr>
-        <tr><td>Concept</td><td><span class="code">A</span> / <span class="code">B</span> / <span class="code">C</span></td><td><span class="code">A</span></td><td>Single letter matching concept badge</td></tr>
-        <tr><td>Variation</td><td><span class="code">A1</span> / <span class="code">A2</span> etc.</td><td><span class="code">A1</span></td><td>Variation ID from the library</td></tr>
-        <tr><td>Creative #</td><td><span class="code">01</span> / <span class="code">02</span> etc.</td><td><span class="code">01</span></td><td>Sequential number per variation</td></tr>
-        <tr><td>Description</td><td>Free text, no spaces</td><td><span class="code">BlondeGirlBedtime</span></td><td>Use underscores if needed</td></tr>
+        <tr><td>Prefix</td><td><span class="code">WW_</span></td><td><span class="code">WW_</span></td><td>Always start with this</td></tr>
+        <tr><td>Concept</td><td><span class="code">A/B/C</span></td><td><span class="code">A</span></td><td>Single letter matching concept badge</td></tr>
+        <tr><td>Variation</td><td><span class="code">A1/A2</span> etc.</td><td><span class="code">A1</span></td><td>Variation ID from library</td></tr>
+        <tr><td>Creative #</td><td><span class="code">01/02</span> etc.</td><td><span class="code">01</span></td><td>Sequential per variation</td></tr>
+        <tr><td>Description</td><td>CamelCase</td><td><span class="code">BlondeGirlBedtime</span></td><td>No spaces or special chars</td></tr>
       </tbody>
     </table>
-    <div style="margin-top:1rem;padding:0.875rem 1rem;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);">
-      <div style="font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:6px;">FULL EXAMPLES</div>
-      <div style="font-family:monospace;font-size:12px;line-height:2;color:var(--text);">
-        WW_A_A1_01_BlondeGirlBedtime<br>
-        WW_A_A2_01_LucasUnboxing<br>
-        WW_A_A3_01_RedMirror<br>
-        WW_A_A4_01_PrincessOverShoulder<br>
-        WW_B_B1_01_FlatLayV1<br>
-        WW_C_C1_01_ParentTable
-      </div>
+    <div style="margin-top:1rem;padding:0.875rem 1rem;background:var(--surface2);border-radius:var(--r-sm);border:1px solid var(--border);">
+      <div style="font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:6px;">EXAMPLES</div>
+      <div style="font-family:monospace;font-size:12px;line-height:2;">WW_A_A1_01_BlondeGirlBedtime<br>WW_A_A2_01_LucasUnboxing<br>WW_A_A3_01_RedMirror<br>WW_A_A4_01_PrincessOverShoulder<br>WW_B_B1_01_FlatLayV1<br>WW_C_C1_01_ParentTable</div>
     </div>
   </div>
-
-  <!-- META CSV UPLOAD -->
   <div class="settings-section">
     <div class="settings-title">Upload Meta Ads export</div>
-    <div class="settings-desc">Export your ad performance from Meta Ads Manager daily (Ad level, CSV format) and upload here. The dashboard will automatically match ads to creatives using the naming convention above and display CTR, CPC, Spend, and Purchases per creative.<br><br>
-    In Meta: <strong>Ads Manager → Ads level → Export → CSV</strong>. Make sure columns include: Ad name, Impressions, Clicks, CTR, CPC, Amount spent, Purchases.</div>
-    <div class="upload-zone" id="csv-upload-zone" onclick="document.getElementById('csv-file-input').click()">
+    <div class="settings-desc">Export daily from Meta Ads Manager at Ad level as CSV. The dashboard maps performance to each creative automatically using the naming convention above.<br><br><strong>Meta: Ads Manager → Ads level → Export → CSV.</strong> Columns needed: Ad name, Impressions, Clicks, CTR, CPC, Amount spent, Purchases.</div>
+    <div class="upload-zone" id="csv-zone" onclick="document.getElementById('csv-input').click()">
       <div class="upload-zone-icon">📊</div>
-      <div class="upload-zone-text">Drop your Meta CSV export here</div>
+      <div class="upload-zone-text">Drop Meta CSV export here</div>
       <div class="upload-zone-sub">or click to browse — CSV files only</div>
     </div>
-    <input type="file" id="csv-file-input" accept=".csv" style="display:none" onchange="handleCSVUpload(this)" />
+    <input type="file" id="csv-input" accept=".csv" style="display:none" onchange="handleCSV(this)" />
     <div class="upload-history" id="upload-history"></div>
   </div>
-
-  <!-- ANALYTICS SUMMARY -->
   <div class="settings-section" id="analytics-section" style="display:none">
-    <div class="settings-title">Performance summary</div>
-    <div class="settings-desc">Auto-generated from your latest Meta export. Data mapped by ad naming convention.</div>
+    <div class="settings-title">Performance summary by concept</div>
     <div class="analytics-grid" id="analytics-grid"></div>
   </div>
-
 </div>
 </div>
 
-<!-- ══════════════ AI SUGGESTION MODAL ══════════════ -->
-<div class="ai-modal-overlay" id="ai-modal-overlay">
-  <div class="ai-modal">
-    <div class="ai-modal-header">
-      <span class="ai-badge">AI</span>
-      <span class="ai-modal-title">Creative analysis</span>
-    </div>
-    <div class="ai-modal-body">
+<!-- AI MODAL -->
+<div class="modal-overlay" id="ai-modal">
+  <div class="modal-box sm">
+    <div class="modal-header"><span class="modal-badge">AI</span><span class="modal-title">Creative analysis</span><button class="modal-close-btn" onclick="closeAIModal()">×</button></div>
+    <div class="modal-body">
       <div class="ai-preview-row">
-        <img class="ai-preview-img" id="ai-preview-img" src="" alt="" />
+        <img class="ai-preview-thumb" id="ai-thumb" src="" alt="" />
         <div class="ai-suggestion-block">
-          <div class="ai-field">
-            <div class="ai-field-label">Creative name <span class="ai-tag">AI suggested</span></div>
-            <div class="ai-value" id="ai-name-val" contenteditable="true"></div>
-          </div>
-          <div class="ai-field">
-            <div class="ai-field-label">Meta ad name <span class="ai-tag">AI suggested</span></div>
-            <div class="ai-value" id="ai-adname-val" contenteditable="true" style="font-family:monospace;font-size:12px;"></div>
-          </div>
+          <div class="ai-field"><div class="ai-field-label">Creative name <span class="ai-tag">AI suggested</span></div><div class="ai-value" id="ai-name" contenteditable="true"></div></div>
+          <div class="ai-field"><div class="ai-field-label">Meta ad name <span class="ai-tag">AI suggested</span></div><div class="ai-value" id="ai-adname" contenteditable="true" style="font-family:monospace;font-size:12px;"></div></div>
         </div>
       </div>
-      <div class="ai-analysis">
-        <div class="ai-analysis-title">Claude's analysis</div>
-        <div class="ai-analysis-text" id="ai-analysis-text">Analyzing your creative...</div>
+      <div class="ai-field"><div class="ai-field-label">Suggested by</div><select class="ai-select" id="ai-author"></select></div>
+      <div class="ai-field"><div class="ai-field-label">Status</div>
+        <select class="ai-select" id="ai-status">
+          <option value="draft">Draft</option>
+          <option value="reviewing">Reviewing</option>
+          <option value="testing">Testing</option>
+          <option value="published" selected>Published</option>
+          <option value="paused">Paused</option>
+        </select>
       </div>
+      <div class="ai-analysis"><div class="ai-analysis-title">Claude's analysis</div><div class="ai-analysis-text" id="ai-analysis">Analyzing...</div></div>
     </div>
-    <div class="ai-modal-footer">
-      <span class="ai-note">You can edit the fields above before saving</span>
-      <button class="btn btn-ghost" onclick="closeAIModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveAICreative()">Add creative</button>
-    </div>
+    <div class="modal-footer"><span class="modal-note">Edit fields above before saving</span><button class="btn btn-ghost" onclick="closeAIModal()">Cancel</button><button class="btn btn-primary" onclick="saveCreative()">Add creative</button></div>
+  </div>
+</div>
+
+<!-- ANALYTICS MODAL -->
+<div class="modal-overlay" id="perf-modal">
+  <div class="modal-box md">
+    <div class="modal-header"><span class="modal-badge">Analytics</span><span class="modal-title" id="perf-modal-title">Creative performance</span><button class="modal-close-btn" onclick="closePerfModal()">×</button></div>
+    <div class="modal-body" id="perf-modal-body"></div>
   </div>
 </div>
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLight()">
-  <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()" />
+  <div id="lightbox-content"></div>
   <div class="lightbox-meta" id="lightbox-meta"></div>
   <button class="lightbox-close" onclick="closeLight()">Close</button>
 </div>
@@ -635,441 +609,523 @@ nav {
 <div class="toast" id="toast"></div>
 
 <script>
-// ── STATE ──
-var state = {
-  creatives: {},
-  performance: {},
-  uploads: []
+// ─── TEAM ───
+var TEAM = [
+  {id:'arben',name:'Arben',role:'CEO',color:'#6B3FA0'},
+  {id:'egzon',name:'Egzon',role:'Head of Growth',color:'#0ea5e9'},
+  {id:'burbuqe',name:'Burbuqe',role:'Creative Director',color:'#ec4899'},
+  {id:'rene',name:'Rene',role:'Meta Ads',color:'#f59e0b'},
+  {id:'besfort',name:'Besfort',role:'Creative Execution',color:'#22c55e'},
+  {id:'flaka',name:'Flaka',role:'Product Production',color:'#8b5cf6'}
+];
+
+var VIDS = ['A1','A2','A3','A4','B1','C1'];
+var STATUSES = {
+  published:{label:'Published',cls:'cs-published'},
+  reviewing:{label:'Reviewing',cls:'cs-reviewing'},
+  testing:{label:'Testing',cls:'cs-testing'},
+  paused:{label:'Paused',cls:'cs-paused'},
+  draft:{label:'Draft',cls:'cs-draft'}
 };
 
-// ── LOAD FROM STORAGE ──
-(function init() {
-  try {
-    var saved = localStorage.getItem('ww-state');
-    if (saved) state = JSON.parse(saved);
-  } catch(e) {}
-  renderAll();
+// ─── STATE ───
+var state = {creatives:{},performance:{},uploads:{},heroImgs:{},notes:{},currentUser:null};
+(function(){
+  try{var s=localStorage.getItem('ww-v4');if(s)state=JSON.parse(s);}catch(e){}
+  buildLoginScreen();
+  if(state.currentUser) doLogin(state.currentUser,true);
 })();
 
-function save() {
-  try { localStorage.setItem('ww-state', JSON.stringify(state)); } catch(e) {}
-}
+function save(){try{localStorage.setItem('ww-v4',JSON.stringify(state));}catch(e){}}
 
-// ── PAGES ──
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.nav-tab').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('page-' + id).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// ── TOGGLE VARIATION ──
-function toggleVariation(header) {
-  var card = header.closest('.variation-card');
-  card.classList.toggle('expanded');
-}
-
-// ── FILTERS ──
-function filterAll(btn) {
-  setActiveFilter(btn);
-  document.querySelectorAll('.concept-section, .variation-card').forEach(function(el) { el.style.display = ''; });
-}
-function filterConcept(btn, concept) {
-  setActiveFilter(btn);
-  document.querySelectorAll('.concept-section').forEach(function(s) { s.style.display = s.dataset.concept === concept ? '' : 'none'; });
-  document.querySelectorAll('.variation-card').forEach(function(c) { c.style.display = ''; });
-}
-function filterStatus(btn, status) {
-  setActiveFilter(btn);
-  document.querySelectorAll('.concept-section').forEach(function(s) { s.style.display = ''; });
-  document.querySelectorAll('.variation-card').forEach(function(c) { c.style.display = c.dataset.status === status ? '' : 'none'; });
-}
-function setActiveFilter(btn) {
-  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
-  btn.classList.add('active');
-}
-
-// ── AI DRAG & DROP FLOW ──
-var currentVid = null;
-var modalImgData = null;
-
-// Set up drag-and-drop on all zones after DOM ready
-document.addEventListener('DOMContentLoaded', function() {
-  ['A1','A2','A3','A4','B1','C1'].forEach(function(vid) {
-    var zone = document.getElementById('zone-' + vid);
-    if (!zone) return;
-    zone.addEventListener('dragover', function(e) {
-      e.preventDefault(); e.stopPropagation();
-      zone.classList.add('dragover');
-    });
-    zone.addEventListener('dragleave', function() {
-      zone.classList.remove('dragover');
-    });
-    zone.addEventListener('drop', function(e) {
-      e.preventDefault(); e.stopPropagation();
-      zone.classList.remove('dragover');
-      var file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith('image/')) {
-        handleDropOrPick(file, vid);
-      } else {
-        showToast('Please drop an image file');
-      }
-    });
+// ─── LOGIN ───
+function buildLoginScreen(){
+  var grid=document.getElementById('login-user-grid');
+  grid.innerHTML='';
+  TEAM.forEach(function(u){
+    var initials=u.name.charAt(0);
+    grid.innerHTML+='<div class="login-user-btn" onclick="doLogin(\''+u.id+'\')">'+
+      '<div class="login-avatar" style="background:'+u.color+'">'+initials+'</div>'+
+      '<div class="login-user-name">'+u.name+'</div>'+
+      '<div class="login-user-role">'+u.role+'</div></div>';
   });
-});
+}
 
-function handleDropOrPick(file, vid) {
-  if (!file) return;
-  currentVid = vid;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    modalImgData = e.target.result;
-    analyzeWithClaude(modalImgData, vid);
+function doLogin(userId,silent){
+  var user=TEAM.find(function(u){return u.id===userId;});
+  if(!user)return;
+  state.currentUser=userId;
+  if(!silent)save();
+  document.getElementById('login-screen').style.display='none';
+  var d=document.getElementById('nav-user-display');
+  d.innerHTML='<div class="nav-avatar" style="background:'+user.color+'">'+user.name.charAt(0)+'</div>'+
+    '<span>'+user.name+'</span><span class="nav-logout" onclick="logout()">Sign out</span>';
+  populateAuthorSelects();
+  populateUserFilter();
+  renderAll();
+}
+
+function logout(){
+  state.currentUser=null;
+  save();
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('nav-user-display').innerHTML='';
+}
+
+function populateAuthorSelects(){
+  var sel=document.getElementById('ai-author');
+  sel.innerHTML='';
+  TEAM.forEach(function(u){
+    var opt=document.createElement('option');
+    opt.value=u.id;opt.textContent=u.name;
+    if(u.id===state.currentUser)opt.selected=true;
+    sel.appendChild(opt);
+  });
+}
+
+function populateUserFilter(){
+  var sel=document.getElementById('filter-user');
+  sel.innerHTML='<option value="">All team members</option>';
+  TEAM.forEach(function(u){
+    sel.innerHTML+='<option value="'+u.id+'">'+u.name+'</option>';
+  });
+}
+
+// ─── PAGES ───
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+
+// ─── VARIATION TOGGLE ───
+function toggleVar(header){header.closest('.variation-card').classList.toggle('expanded');}
+
+// ─── HERO IMAGE ───
+function setHeroImg(input,vid){
+  var file=input.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    state.heroImgs[vid]=e.target.result;
+    save();applyHeroImg(vid);
+  };
+  reader.readAsDataURL(file);
+}
+function applyHeroImg(vid){
+  var img=document.getElementById('hero-img-'+vid);
+  var wrap=document.getElementById('hero-wrap-'+vid);
+  if(!img||!state.heroImgs[vid])return;
+  img.src=state.heroImgs[vid];img.classList.add('loaded');
+  var ph=wrap.querySelector('.variation-hero-placeholder');
+  if(ph)ph.style.display='none';
+}
+
+// ─── NOTES ───
+function saveNotes(vid,val){state.notes[vid]=val;save();}
+function applyNotes(vid){
+  var ta=document.getElementById('notes-'+vid);
+  if(ta&&state.notes[vid])ta.value=state.notes[vid];
+}
+
+// ─── FILTERS ───
+function filterAll(btn){setAF(btn);document.querySelectorAll('.concept-section,.variation-card').forEach(function(e){e.style.display='';});}
+function filterConcept(btn,c){setAF(btn);document.querySelectorAll('.concept-section').forEach(function(s){s.style.display=s.dataset.concept===c?'':'none';});document.querySelectorAll('.variation-card').forEach(function(c){c.style.display='';});}
+function filterStatus(btn,s){setAF(btn);document.querySelectorAll('.concept-section').forEach(function(e){e.style.display='';});document.querySelectorAll('.variation-card').forEach(function(c){c.style.display=c.dataset.status===s?'':'none';});}
+function filterByUser(uid){
+  if(!uid){renderAll();return;}
+  VIDS.forEach(function(vid){
+    var grid=document.getElementById('grid-'+vid);if(!grid)return;
+    var list=state.creatives[vid]||[];
+    grid.innerHTML='';
+    list.filter(function(cr){return cr.author===uid;}).forEach(function(cr){grid.appendChild(makeCard(cr,vid));});
+    var zone=makeAddZone(vid);grid.appendChild(zone);setupZone(zone,vid);
+  });
+}
+function setAF(btn){document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}
+
+// ─── DRAG & DROP + AI FLOW ───
+var currentVid=null,modalMedia=null,modalIsVideo=false;
+
+function setupZone(zone,vid){
+  zone.addEventListener('dragover',function(e){e.preventDefault();e.stopPropagation();zone.classList.add('dragover');});
+  zone.addEventListener('dragleave',function(){zone.classList.remove('dragover');});
+  zone.addEventListener('drop',function(e){
+    e.preventDefault();e.stopPropagation();zone.classList.remove('dragover');
+    var file=e.dataTransfer.files[0];
+    if(file&&(file.type.startsWith('image/')||file.type.startsWith('video/'))){handleMedia(file,vid);}
+    else{showToast('Drop an image or video file');}
+  });
+  zone.querySelector('input').onchange=function(){if(this.files[0])handleMedia(this.files[0],vid);};
+}
+
+function handleMedia(file,vid){
+  currentVid=vid;modalIsVideo=file.type.startsWith('video/');
+  var reader=new FileReader();
+  reader.onload=function(e){
+    modalMedia=e.target.result;
+    if(modalIsVideo){openAIModalDirect();}
+    else{analyzeWithClaude(modalMedia,vid);}
   };
   reader.readAsDataURL(file);
 }
 
-function analyzeWithClaude(imgData, vid) {
-  // Show analyzing state on the zone
-  var zone = document.getElementById('zone-' + vid);
-  if (zone) {
-    zone.classList.add('analyzing');
-    zone.innerHTML = '<div class="analyzing-inner"><div class="analyzing-spinner"></div><div class="analyzing-text">Claude is analyzing your creative...</div><div class="analyzing-sub">Generating name and Meta ad name</div></div>';
-  }
-
-  // Get variation context for smarter naming
-  var varCard = document.querySelector('[data-vid="' + vid + '"]');
-  var varTitle = varCard ? varCard.querySelector('.var-title-text').textContent : vid;
-  var conceptLetter = vid.charAt(0);
-  var existingCount = (state.creatives[vid] || []).length + 1;
-  var paddedNum = existingCount < 10 ? '0' + existingCount : '' + existingCount;
-
-  var base64 = imgData.split(',')[1];
-
-  fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [{
-        role: 'user',
-        content: [
-          {
-            type: 'image',
-            source: { type: 'base64', media_type: 'image/jpeg', data: base64 }
-          },
-          {
-            type: 'text',
-            text: 'You are analyzing a Facebook ad creative for WonderWraps — a personalized children\'s book brand where kids are illustrated as cartoon characters in the book.\n\nThis creative belongs to:\n- Variation: ' + vid + ' — "' + varTitle + '"\n- Concept: ' + conceptLetter + '\n- It is creative number ' + existingCount + ' in this variation\n\nAnalyze this image and respond ONLY with a JSON object, no markdown, no explanation:\n{\n  "creative_name": "A short descriptive name (max 6 words, e.g. Red-Haired Girl Mirror Version 2)",\n  "meta_ad_name": "Following format WW_' + conceptLetter + '_' + vid + '_' + paddedNum + '_[CamelCaseDesc] e.g. WW_A_A1_01_BlondeGirlBedtime",\n  "analysis": "2-3 sentence analysis: what angle/emotion is used, what makes it strong or weak for Facebook ads, and one specific suggestion to improve it"\n}'
-          }
-        ]
-      }]
+function analyzeWithClaude(imgData,vid){
+  var zone=document.getElementById('grid-'+vid);
+  var addZone=zone?zone.querySelector('.add-creative-zone'):null;
+  if(addZone){addZone.classList.add('analyzing');addZone.innerHTML='<div class="analyzing-inner"><div class="analyzing-spinner"></div><div class="analyzing-text">Claude is analyzing...</div><div class="analyzing-sub">Generating name and Meta ad name</div></div>';}
+  var varCard=document.querySelector('[data-vid="'+vid+'"]');
+  var varTitle=varCard?varCard.querySelector('.var-title-text').textContent:vid;
+  var conceptLetter=vid.charAt(0);
+  var num=(state.creatives[vid]||[]).length+1;
+  var pn=num<10?'0'+num:''+num;
+  var b64=imgData.split(',')[1];
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:800,
+      messages:[{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
+        {type:'text',text:'Analyze this Facebook ad creative for WonderWraps — personalized children\'s books where kids are illustrated as cartoon characters.\n\nVariation: '+vid+' "'+varTitle+'"\nCreative number: '+num+'\n\nRespond ONLY with JSON:\n{"creative_name":"Short name max 6 words","meta_ad_name":"WW_'+conceptLetter+'_'+vid+'_'+pn+'_[CamelCaseDesc]","analysis":"2-3 sentences: angle/emotion used, strength/weakness for Facebook, one improvement suggestion"}'}
+      ]}]
     })
-  })
-  .then(function(r) { return r.json(); })
-  .then(function(data) {
-    var text = data.content && data.content[0] ? data.content[0].text : '';
-    var clean = text.replace(/```json|```/g,'').trim();
-    var result;
-    try { result = JSON.parse(clean); } catch(e) {
-      result = {
-        creative_name: varTitle + ' — Version ' + existingCount,
-        meta_ad_name: 'WW_' + conceptLetter + '_' + vid + '_' + paddedNum + '_Creative' + existingCount,
-        analysis: 'Claude could not analyze this image. Please check the image and try again.'
-      };
-    }
-    resetZone(vid);
-    openAIModal(imgData, result);
-  })
-  .catch(function(err) {
-    resetZone(vid);
-    // Fallback: open modal with auto-generated names
-    openAIModal(imgData, {
-      creative_name: varTitle + ' — Version ' + existingCount,
-      meta_ad_name: 'WW_' + conceptLetter + '_' + vid + '_' + paddedNum + '_Creative' + existingCount,
-      analysis: 'Analysis unavailable. You can edit the name and Meta ad name manually above.'
-    });
+  }).then(function(r){return r.json();}).then(function(data){
+    var text=data.content&&data.content[0]?data.content[0].text:'';
+    var clean=text.replace(/```json|```/g,'').trim();
+    var res;try{res=JSON.parse(clean);}catch(e){res={creative_name:varTitle+' v'+num,meta_ad_name:'WW_'+conceptLetter+'_'+vid+'_'+pn+'_Creative'+num,analysis:'Could not analyze. Edit manually.'};}
+    rerenderGrid(vid);
+    openAIModal(res);
+  }).catch(function(){
+    rerenderGrid(vid);
+    openAIModal({creative_name:varTitle+' v'+num,meta_ad_name:'WW_'+conceptLetter+'_'+vid+'_'+pn+'_Creative'+num,analysis:'Analysis unavailable. Edit manually.'});
   });
 }
 
-function resetZone(vid) {
-  var zone = document.getElementById('zone-' + vid);
-  if (!zone) return;
-  zone.classList.remove('analyzing');
-  zone.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span>Drop image here or click to upload</span><span class="zone-sub">Claude will analyze and name it automatically</span>';
-  // Re-attach click handler
-  zone.onclick = function() { document.getElementById('file-' + vid).click(); };
-  // Re-attach drag events
-  zone.addEventListener('dragover', function(e) { e.preventDefault(); e.stopPropagation(); zone.classList.add('dragover'); });
-  zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
-  zone.addEventListener('drop', function(e) {
-    e.preventDefault(); e.stopPropagation(); zone.classList.remove('dragover');
-    var file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) handleDropOrPick(file, vid);
+function openAIModal(res){
+  var thumb=document.getElementById('ai-thumb');
+  if(modalIsVideo){thumb.style.display='none';}
+  else{thumb.style.display='';thumb.src=modalMedia;}
+  document.getElementById('ai-name').textContent=res.creative_name||'';
+  document.getElementById('ai-adname').textContent=res.meta_ad_name||'';
+  document.getElementById('ai-analysis').textContent=res.analysis||'';
+  document.getElementById('ai-modal').classList.add('open');
+}
+function openAIModalDirect(){
+  openAIModal({
+    creative_name:'Video creative '+((state.creatives[currentVid]||[]).length+1),
+    meta_ad_name:'WW_'+currentVid.charAt(0)+'_'+currentVid+'_'+String((state.creatives[currentVid]||[]).length+1).padStart(2,'0')+'_Video',
+    analysis:'Video creative uploaded. Edit the name and Meta ad name above, then save.'
   });
 }
+function closeAIModal(){document.getElementById('ai-modal').classList.remove('open');currentVid=null;modalMedia=null;modalIsVideo=false;}
 
-function openAIModal(imgData, result) {
-  document.getElementById('ai-preview-img').src = imgData;
-  document.getElementById('ai-name-val').textContent = result.creative_name || '';
-  document.getElementById('ai-adname-val').textContent = result.meta_ad_name || '';
-  document.getElementById('ai-analysis-text').textContent = result.analysis || '';
-  document.getElementById('ai-modal-overlay').classList.add('open');
+function saveCreative(){
+  var name=document.getElementById('ai-name').textContent.trim();
+  var adname=document.getElementById('ai-adname').textContent.trim();
+  var author=document.getElementById('ai-author').value;
+  var status=document.getElementById('ai-status').value;
+  if(!name){showToast('Name cannot be empty');return;}
+  var id='cr-'+Date.now();
+  if(!state.creatives[currentVid])state.creatives[currentVid]=[];
+  state.creatives[currentVid].push({id:id,name:name,adname:adname,img:modalIsVideo?null:modalMedia,video:modalIsVideo?modalMedia:null,author:author,status:status});
+  save();rerenderGrid(currentVid);updateStats();closeAIModal();showToast('Creative added — '+name);
 }
 
-function closeAIModal() {
-  document.getElementById('ai-modal-overlay').classList.remove('open');
-  currentVid = null;
-  modalImgData = null;
+// ─── RENDER ───
+function renderAll(){
+  VIDS.forEach(function(vid){rerenderGrid(vid);applyHeroImg(vid);applyNotes(vid);});
+  renderTeamList();renderUploadHistory();updateStats();renderAnalytics();
 }
 
-function saveAICreative() {
-  var name = document.getElementById('ai-name-val').textContent.trim();
-  var adname = document.getElementById('ai-adname-val').textContent.trim();
-  if (!name) { showToast('Creative name cannot be empty'); return; }
-  var id = 'cr-' + Date.now();
-  if (!state.creatives[currentVid]) state.creatives[currentVid] = [];
-  state.creatives[currentVid].push({ id: id, name: name, adname: adname, img: modalImgData });
-  save();
-  renderCreatives(currentVid);
-  updateStats();
-  closeAIModal();
-  showToast('Creative added — ' + name);
-}
-
-// ── RENDER CREATIVES ──
-function renderAll() {
-  var vids = ['A1','A2','A3','A4','B1','C1'];
-  vids.forEach(function(vid) { renderCreatives(vid); });
-  renderUploadHistory();
-  updateStats();
-  renderAnalytics();
-}
-
-function renderCreatives(vid) {
-  var grid = document.getElementById('grid-' + vid);
-  if (!grid) return;
-  var list = state.creatives[vid] || [];
-  grid.innerHTML = '';
-  list.forEach(function(cr) { grid.appendChild(makeCreativeCard(cr, vid)); });
-  var countEl = document.getElementById('count-' + vid);
-  if (countEl) countEl.textContent = list.length + ' creative' + (list.length !== 1 ? 's' : '');
+function rerenderGrid(vid){
+  var grid=document.getElementById('grid-'+vid);if(!grid)return;
+  var list=state.creatives[vid]||[];
+  grid.innerHTML='';
+  list.forEach(function(cr){grid.appendChild(makeCard(cr,vid));});
+  var zone=makeAddZone(vid);grid.appendChild(zone);setupZone(zone,vid);
+  var cnt=document.getElementById('cnt-'+vid);
+  if(cnt)cnt.textContent=list.length+' creative'+(list.length!==1?'s':'');
   renderPerfPills(vid);
 }
 
-function makeCreativeCard(cr, vid) {
-  var div = document.createElement('div');
-  div.className = 'creative-card';
-  div.id = 'card-' + cr.id;
-
-  var perf = cr.adname ? state.performance[cr.adname] : null;
-
-  var imgSection = '';
-  if (cr.img) {
-    imgSection = '<div class="creative-img-wrap">' +
-      '<img src="' + cr.img + '" class="loaded" onclick="openLight(\'' + cr.img.replace(/'/g,"\\'")+'\',\'' + cr.name.replace(/'/g,"\\'") + '\')" />' +
-      '<div class="creative-overlay">' +
-        '<button class="overlay-btn" onclick="openLight(\'' + cr.img.replace(/'/g,"\\'")+'\',\'' + cr.name.replace(/'/g,"\\'") + '\')">Zoom</button>' +
-        '<button class="overlay-btn" onclick="removeCreative(\'' + vid + '\',\'' + cr.id + '\')">Remove</button>' +
-      '</div></div>';
-  } else {
-    imgSection = '<div class="creative-placeholder" onclick="openReplaceModal(\'' + vid + '\',\'' + cr.id + '\')">' +
-      '<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>' +
-      '<span>Upload image</span></div>';
-  }
-
-  var perfSection = '';
-  if (perf) {
-    var ctrClass = parseFloat(perf.ctr) > 2 ? 'good' : parseFloat(perf.ctr) > 1 ? 'warn' : 'bad';
-    var cpcClass = parseFloat(perf.cpc) < 0.3 ? 'good' : parseFloat(perf.cpc) < 0.5 ? 'warn' : 'bad';
-    perfSection = '<div class="creative-perf">' +
-      '<div class="perf-item"><div class="perf-key">CTR</div><div class="perf-val ' + ctrClass + '">' + parseFloat(perf.ctr).toFixed(2) + '%</div></div>' +
-      '<div class="perf-item"><div class="perf-key">CPC</div><div class="perf-val ' + cpcClass + '">€' + parseFloat(perf.cpc).toFixed(2) + '</div></div>' +
-      '<div class="perf-item"><div class="perf-key">Spend</div><div class="perf-val">€' + parseFloat(perf.spend).toFixed(0) + '</div></div>' +
-      '<div class="perf-item"><div class="perf-key">Purchases</div><div class="perf-val">' + (perf.purchases || 0) + '</div></div>' +
+function makeAddZone(vid){
+  var div=document.createElement('div');
+  div.innerHTML='<div class="add-creative-zone" id="zone-'+vid+'">'+
+    '<svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>'+
+    '<span>Drop image or video</span>'+
+    '<span class="zone-sub">Claude analyzes and names it automatically</span>'+
+    '<input type="file" class="file-input" accept="image/*,video/*" />'+
     '</div>';
-  } else if (cr.adname) {
-    perfSection = '<div class="no-data">No data yet — upload Meta CSV</div>';
+  var zone=div.firstChild;
+  zone.addEventListener('click',function(e){if(e.target.tagName!=='INPUT')zone.querySelector('input').click();});
+  return zone;
+}
+
+function makeCard(cr,vid){
+  var div=document.createElement('div');
+  div.className='creative-card';div.id='card-'+cr.id;
+  var perf=cr.adname?state.performance[cr.adname]:null;
+  var author=TEAM.find(function(u){return u.id===cr.author;});
+  var statusInfo=STATUSES[cr.status||'draft']||STATUSES.draft;
+  var mediaHtml='';
+  if(cr.video){
+    var safeId='v'+cr.id.replace(/[^a-z0-9]/gi,'');
+    mediaHtml='<div class="creative-media-wrap">'+
+      '<div class="video-play-overlay" id="vpo-'+safeId+'" onclick="playVideo(\''+safeId+'\')">'+
+        '<div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>'+
+      '</div>'+
+      '<video id="vid-'+safeId+'" src="'+cr.video+'" preload="none"></video>'+
+      '<span class="media-type-badge">Video</span>'+
+      '<div class="creative-actions">'+
+        '<button class="action-btn" onclick="downloadMedia(\''+cr.id+'\',\''+vid+'\')">Download</button>'+
+        '<button class="action-btn" onclick="openPerfModal(\''+cr.id+'\',\''+vid+'\')">Analytics</button>'+
+        '<button class="action-btn danger" onclick="removeCreative(\''+vid+'\',\''+cr.id+'\')">Remove</button>'+
+      '</div></div>';
+  } else if(cr.img){
+    var safeImg=cr.img.replace(/'/g,"\\'");
+    var safeName=cr.name.replace(/'/g,"\\'");
+    mediaHtml='<div class="creative-media-wrap">'+
+      '<img src="'+cr.img+'" onclick="openLight(\''+safeImg+'\',\''+safeName+'\')" />'+
+      '<div class="creative-actions">'+
+        '<button class="action-btn" onclick="openLight(\''+safeImg+'\',\''+safeName+'\')">Zoom</button>'+
+        '<button class="action-btn" onclick="downloadMedia(\''+cr.id+'\',\''+vid+'\')">Download</button>'+
+        '<button class="action-btn" onclick="openPerfModal(\''+cr.id+'\',\''+vid+'\')">Analytics</button>'+
+        '<button class="action-btn danger" onclick="removeCreative(\''+vid+'\',\''+cr.id+'\')">Remove</button>'+
+      '</div></div>';
   }
-
-  div.innerHTML = imgSection +
-    '<div class="creative-body">' +
-      '<div class="creative-name" title="' + cr.name + '">' + cr.name + '</div>' +
-      (cr.adname ? '<div class="creative-ad-id">' + cr.adname + '</div>' : '<div class="creative-ad-id" style="color:var(--amber-dark)">No ad name set</div>') +
-    '</div>' + perfSection;
-
+  var perfHtml='';
+  if(perf){
+    var ctrC=parseFloat(perf.ctr)>2?'good':parseFloat(perf.ctr)>1?'warn':'bad';
+    var cpcC=parseFloat(perf.cpc)<0.3?'good':parseFloat(perf.cpc)<0.5?'warn':'bad';
+    perfHtml='<div class="creative-perf">'+
+      '<div class="perf-item"><div class="perf-key">CTR</div><div class="perf-val '+ctrC+'">'+parseFloat(perf.ctr).toFixed(2)+'%</div></div>'+
+      '<div class="perf-item"><div class="perf-key">CPC</div><div class="perf-val '+cpcC+'">€'+parseFloat(perf.cpc).toFixed(2)+'</div></div>'+
+      '<div class="perf-item"><div class="perf-key">Spend</div><div class="perf-val">€'+parseFloat(perf.spend).toFixed(0)+'</div></div>'+
+      '<div class="perf-item"><div class="perf-key">Purch.</div><div class="perf-val">'+(perf.purchases||0)+'</div></div>'+
+    '</div>';
+  } else if(cr.adname){perfHtml='<div class="no-data">No data — upload Meta CSV</div>';}
+  div.innerHTML=mediaHtml+
+    '<div class="creative-body">'+
+      '<div class="creative-name" title="'+cr.name+'">'+cr.name+'</div>'+
+      (cr.adname?'<div class="creative-ad-id">'+cr.adname+'</div>':'<div class="creative-ad-id" style="color:var(--amber-dark)">No ad name</div>')+
+      '<div class="creative-meta-row">'+
+        (author?'<div class="creative-author"><div class="author-dot" style="background:'+author.color+'">'+author.name.charAt(0)+'</div>'+author.name+'</div>':'<div></div>')+
+        '<span class="creative-status-badge '+statusInfo.cls+'">'+statusInfo.label+'</span>'+
+      '</div>'+
+    '</div>'+perfHtml;
   return div;
 }
 
-function removeCreative(vid, id) {
-  if (!confirm('Remove this creative?')) return;
-  state.creatives[vid] = (state.creatives[vid] || []).filter(function(c) { return c.id !== id; });
-  save();
-  renderCreatives(vid);
-  updateStats();
-  showToast('Creative removed');
+function playVideo(safeId){
+  var vid=document.getElementById('vid-'+safeId);
+  var overlay=document.getElementById('vpo-'+safeId);
+  if(!vid)return;
+  if(vid.paused){vid.play();if(overlay)overlay.style.display='none';}
+  else{vid.pause();if(overlay)overlay.style.display='flex';}
 }
 
-// ── PERF PILLS ON VARIATION HEADER ──
-function renderPerfPills(vid) {
-  var pills = document.getElementById('perf-pills-' + vid);
-  if (!pills) return;
-  var list = state.creatives[vid] || [];
-  var allPerf = list.filter(function(c) { return c.adname && state.performance[c.adname]; });
-  if (!allPerf.length) { pills.innerHTML = ''; return; }
-  var totalSpend = 0, totalClicks = 0, totalImpr = 0, totalPurch = 0;
-  allPerf.forEach(function(c) {
-    var p = state.performance[c.adname];
-    totalSpend += parseFloat(p.spend) || 0;
-    totalClicks += parseInt(p.clicks) || 0;
-    totalImpr += parseInt(p.impressions) || 0;
-    totalPurch += parseInt(p.purchases) || 0;
+function removeCreative(vid,id){
+  if(!confirm('Remove this creative?'))return;
+  state.creatives[vid]=(state.creatives[vid]||[]).filter(function(c){return c.id!==id;});
+  save();rerenderGrid(vid);updateStats();showToast('Removed');
+}
+
+function downloadMedia(crid,vid){
+  var cr=(state.creatives[vid]||[]).find(function(c){return c.id===crid;});
+  if(!cr)return;
+  var data=cr.video||cr.img;if(!data)return;
+  var a=document.createElement('a');
+  a.href=data;
+  a.download=cr.name.replace(/[^a-z0-9]/gi,'_')+(cr.video?'.mp4':'.jpg');
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  showToast('Downloading '+cr.name);
+}
+
+// ─── ANALYTICS MODAL ───
+function openPerfModal(crid,vid){
+  var cr=(state.creatives[vid]||[]).find(function(c){return c.id===crid;});
+  if(!cr)return;
+  var perf=cr.adname?state.performance[cr.adname]:null;
+  var author=TEAM.find(function(u){return u.id===cr.author;});
+  var statusInfo=STATUSES[cr.status||'draft']||STATUSES.draft;
+  document.getElementById('perf-modal-title').textContent=cr.name;
+  var html='';
+  // Status row
+  html+='<div class="analytics-status-row">'+
+    '<span class="analytics-status-label">Ad status</span>'+
+    '<select class="analytics-status-select" onchange="updateCreativeStatus(\''+vid+'\',\''+crid+'\',this.value)">';
+  Object.keys(STATUSES).forEach(function(k){
+    html+='<option value="'+k+'"'+(cr.status===k?' selected':'')+'>'+STATUSES[k].label+'</option>';
   });
-  var avgCtr = totalImpr > 0 ? (totalClicks / totalImpr * 100) : 0;
-  var ctrClass = avgCtr > 2 ? 'good' : avgCtr > 1 ? 'warn' : 'bad';
-  pills.innerHTML =
-    '<span class="perf-pill ' + ctrClass + '">CTR ' + avgCtr.toFixed(2) + '%</span>' +
-    '<span class="perf-pill">€' + totalSpend.toFixed(0) + ' spent</span>' +
-    '<span class="perf-pill">' + totalPurch + ' purchases</span>';
-}
-
-// ── STATS ──
-function updateStats() {
-  var total = 0;
-  Object.values(state.creatives).forEach(function(list) { total += list.length; });
-  document.getElementById('s-creatives').textContent = total;
-}
-
-// ── CSV UPLOAD ──
-var csvZone = document.getElementById('csv-upload-zone');
-csvZone.addEventListener('dragover', function(e) { e.preventDefault(); csvZone.classList.add('dragover'); });
-csvZone.addEventListener('dragleave', function() { csvZone.classList.remove('dragover'); });
-csvZone.addEventListener('drop', function(e) {
-  e.preventDefault(); csvZone.classList.remove('dragover');
-  var file = e.dataTransfer.files[0];
-  if (file && file.name.endsWith('.csv')) processCSV(file);
-  else showToast('Please upload a CSV file');
-});
-
-function handleCSVUpload(input) {
-  var file = input.files[0];
-  if (file) processCSV(file);
-}
-
-function processCSV(file) {
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var text = e.target.result;
-    var rows = parseCSV(text);
-    var matched = 0;
-    rows.forEach(function(row) {
-      var adname = row['Ad name'] || row['Ad Name'] || row['ad_name'] || row['name'] || '';
-      if (!adname.startsWith('WW_')) return;
-      var perf = {
-        impressions: row['Impressions'] || row['impressions'] || 0,
-        clicks: row['Link clicks'] || row['Clicks'] || row['clicks'] || 0,
-        ctr: row['CTR (link click-through rate)'] || row['CTR'] || row['ctr'] || 0,
-        cpc: row['CPC (cost per link click)'] || row['CPC'] || row['cpc'] || 0,
-        spend: row['Amount spent (EUR)'] || row['Amount spent (USD)'] || row['Amount spent'] || row['spend'] || 0,
-        purchases: row['Purchases'] || row['purchases'] || row['Results'] || 0
-      };
-      state.performance[adname] = perf;
-      matched++;
+  html+='</select></div>';
+  // Author
+  if(author){html+='<div style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Suggested by: <strong>'+author.name+'</strong> ('+author.role+')</div>';}
+  if(cr.adname){html+='<div style="font-size:11px;font-family:monospace;background:var(--purple-light);color:var(--purple);padding:6px 10px;border-radius:6px;margin-bottom:1.25rem;">'+cr.adname+'</div>';}
+  if(perf){
+    var ctr=parseFloat(perf.ctr)||0;
+    var cpc=parseFloat(perf.cpc)||0;
+    var spend=parseFloat(perf.spend)||0;
+    var purch=parseInt(perf.purchases)||0;
+    var impr=parseInt(perf.impressions)||0;
+    var clicks=parseInt(perf.clicks)||0;
+    var cpo=purch>0?(spend/purch).toFixed(2):'—';
+    var ctrC=ctr>2?'good':ctr>1?'warn':'bad';
+    var spendC=spend>100?'bad':spend>50?'warn':'good';
+    html+='<div class="analytics-big-grid">'+
+      '<div class="analytics-big-card"><div class="analytics-big-val perf-val '+ctrC+'">'+ctr.toFixed(2)+'%</div><div class="analytics-big-key">CTR</div></div>'+
+      '<div class="analytics-big-card"><div class="analytics-big-val">€'+spend.toFixed(0)+'</div><div class="analytics-big-key">Spend</div></div>'+
+      '<div class="analytics-big-card"><div class="analytics-big-val">'+purch+'</div><div class="analytics-big-key">Purchases</div></div>'+
+    '</div>';
+    html+='<div class="analytics-section-title">Detailed metrics</div>';
+    html+='<div class="analytics-detail-grid">'+
+      '<div class="analytics-detail-item"><div class="analytics-detail-key">Impressions</div><div class="analytics-detail-val">'+impr.toLocaleString()+'</div></div>'+
+      '<div class="analytics-detail-item"><div class="analytics-detail-key">Link clicks</div><div class="analytics-detail-val">'+clicks.toLocaleString()+'</div></div>'+
+      '<div class="analytics-detail-item"><div class="analytics-detail-key">CPC</div><div class="analytics-detail-val">€'+cpc.toFixed(2)+'</div></div>'+
+      '<div class="analytics-detail-item"><div class="analytics-detail-key">Cost per purchase</div><div class="analytics-detail-val">'+(cpo!=='—'?'€'+cpo:'—')+'</div></div>'+
+    '</div>';
+    // Signal strength
+    html+='<div class="analytics-section-title">Signal</div>';
+    var signals=[];
+    if(ctr>3)signals.push({c:'good',t:'CTR is strong ('+ctr.toFixed(2)+'%) — creative is stopping the scroll'});
+    else if(ctr<1)signals.push({c:'bad',t:'CTR is low ('+ctr.toFixed(2)+'%) — consider new hook or thumbnail'});
+    if(purch>10)signals.push({c:'good',t:'Strong purchase volume — this creative is converting'});
+    else if(purch===0&&spend>20)signals.push({c:'bad',t:'No purchases despite spend — check landing page alignment'});
+    if(cpc<0.2)signals.push({c:'good',t:'Very efficient CPC (€'+cpc.toFixed(2)+') — audience targeting is well matched'});
+    if(!signals.length)signals.push({c:'warn',t:'Not enough data yet to draw conclusions'});
+    signals.forEach(function(s){
+      html+='<div style="padding:8px 12px;border-radius:8px;font-size:12px;margin-bottom:6px;background:'+(s.c==='good'?'var(--green-light)':s.c==='bad'?'var(--red-light)':'var(--amber-light)')+';">'+s.t+'</div>';
     });
-    state.uploads.unshift({ filename: file.name, date: new Date().toLocaleDateString('en-GB'), rows: matched });
-    save();
-    renderAll();
-    showToast(matched + ' ads matched from ' + file.name);
-    document.getElementById('analytics-section').style.display = 'block';
-    renderAnalytics();
+  } else {
+    html+='<div class="analytics-no-data">';
+    if(!cr.adname){html+='<div style="margin-bottom:8px;">⚠️ No Meta ad name set for this creative.</div><div style="font-size:12px;color:var(--text-faint);">Add a Meta ad name to this creative to track performance.</div>';}
+    else{html+='<div style="margin-bottom:8px;">No performance data yet.</div><div style="font-size:12px;color:var(--text-faint);">Upload a Meta CSV export in Settings to see performance data here.</div>';}
+    html+='</div>';
+  }
+  document.getElementById('perf-modal-body').innerHTML=html;
+  document.getElementById('perf-modal').classList.add('open');
+}
+function closePerfModal(){document.getElementById('perf-modal').classList.remove('open');}
+
+function updateCreativeStatus(vid,crid,newStatus){
+  var list=state.creatives[vid]||[];
+  var cr=list.find(function(c){return c.id===crid;});
+  if(cr){cr.status=newStatus;save();rerenderGrid(vid);showToast('Status updated to '+STATUSES[newStatus].label);}
+}
+
+// ─── PERF PILLS ───
+function renderPerfPills(vid){
+  var pills=document.getElementById('pp-'+vid);if(!pills)return;
+  var list=state.creatives[vid]||[];
+  var withPerf=list.filter(function(c){return c.adname&&state.performance[c.adname];});
+  if(!withPerf.length){pills.innerHTML='';return;}
+  var ts=0,tc=0,ti=0,tp=0;
+  withPerf.forEach(function(c){var p=state.performance[c.adname];ts+=parseFloat(p.spend)||0;tc+=parseInt(p.clicks)||0;ti+=parseInt(p.impressions)||0;tp+=parseInt(p.purchases)||0;});
+  var ctr=ti>0?(tc/ti*100):0;
+  var cc=ctr>2?'good':ctr>1?'warn':'bad';
+  pills.innerHTML='<span class="perf-pill '+cc+'">CTR '+ctr.toFixed(2)+'%</span><span class="perf-pill">€'+ts.toFixed(0)+' spent</span><span class="perf-pill">'+tp+' purch.</span>';
+}
+
+// ─── STATS ───
+function updateStats(){
+  var t=0;Object.values(state.creatives).forEach(function(l){t+=l.length;});
+  document.getElementById('s-creatives').textContent=t;
+}
+
+// ─── CSV ───
+var csvZone=document.getElementById('csv-zone');
+csvZone.addEventListener('dragover',function(e){e.preventDefault();csvZone.classList.add('dragover');});
+csvZone.addEventListener('dragleave',function(){csvZone.classList.remove('dragover');});
+csvZone.addEventListener('drop',function(e){e.preventDefault();csvZone.classList.remove('dragover');var f=e.dataTransfer.files[0];if(f&&f.name.endsWith('.csv'))processCSV(f);else showToast('CSV files only');});
+function handleCSV(inp){if(inp.files[0])processCSV(inp.files[0]);}
+function processCSV(file){
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var rows=parseCSV(e.target.result);var matched=0;
+    rows.forEach(function(row){
+      var an=row['Ad name']||row['Ad Name']||row['ad_name']||'';
+      if(!an.startsWith('WW_'))return;
+      state.performance[an]={
+        impressions:row['Impressions']||row['impressions']||0,
+        clicks:row['Link clicks']||row['Clicks']||row['clicks']||0,
+        ctr:row['CTR (link click-through rate)']||row['CTR']||row['ctr']||0,
+        cpc:row['CPC (cost per link click)']||row['CPC']||row['cpc']||0,
+        spend:row['Amount spent (EUR)']||row['Amount spent (USD)']||row['Amount spent']||row['spend']||0,
+        purchases:row['Purchases']||row['purchases']||row['Results']||0
+      };matched++;
+    });
+    if(!state.uploads)state.uploads={};
+    if(!Array.isArray(state.uploads))state.uploads=[];
+    state.uploads.unshift({filename:file.name,date:new Date().toLocaleDateString('en-GB'),rows:matched});
+    save();renderAll();showToast(matched+' ads matched from '+file.name);
+    document.getElementById('analytics-section').style.display='block';
   };
   reader.readAsText(file);
 }
-
-function parseCSV(text) {
-  var lines = text.split('\n');
-  if (!lines.length) return [];
-  var headers = lines[0].split(',').map(function(h) { return h.trim().replace(/^"|"$/g,''); });
-  var rows = [];
-  for (var i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue;
-    var vals = lines[i].split(',').map(function(v) { return v.trim().replace(/^"|"$/g,''); });
-    var row = {};
-    headers.forEach(function(h, idx) { row[h] = vals[idx] || ''; });
-    rows.push(row);
+function parseCSV(text){
+  var lines=text.split('\n');if(!lines.length)return[];
+  var headers=lines[0].split(',').map(function(h){return h.trim().replace(/^"|"$/g,'');});
+  var rows=[];
+  for(var i=1;i<lines.length;i++){
+    if(!lines[i].trim())continue;
+    var vals=lines[i].split(',').map(function(v){return v.trim().replace(/^"|"$/g,'');});
+    var row={};headers.forEach(function(h,idx){row[h]=vals[idx]||'';});rows.push(row);
   }
   return rows;
 }
+function renderUploadHistory(){
+  var el=document.getElementById('upload-history');if(!el)return;
+  var uploads=Array.isArray(state.uploads)?state.uploads:[];
+  el.innerHTML='';
+  uploads.forEach(function(u){
+    el.innerHTML+='<div class="upload-entry"><div><div class="upload-entry-name">'+u.filename+'</div><div class="upload-entry-meta">'+u.date+' · '+u.rows+' ads matched</div></div><span class="upload-entry-status">Imported</span></div>';
+  });
+}
+function renderAnalytics(){
+  var perf=state.performance||{};
+  if(!Object.keys(perf).length)return;
+  document.getElementById('analytics-section').style.display='block';
+  var grid=document.getElementById('analytics-grid');
+  var cd={A:{spend:0,purchases:0,clicks:0,impressions:0},B:{spend:0,purchases:0,clicks:0,impressions:0},C:{spend:0,purchases:0,clicks:0,impressions:0}};
+  Object.keys(perf).forEach(function(an){var parts=an.split('_');if(parts.length<3)return;var c=parts[1];var p=perf[an];if(cd[c]){cd[c].spend+=parseFloat(p.spend)||0;cd[c].purchases+=parseInt(p.purchases)||0;cd[c].clicks+=parseInt(p.clicks)||0;cd[c].impressions+=parseInt(p.impressions)||0;}});
+  var html='';
+  ['A','B','C'].forEach(function(c){
+    var d=cd[c];var ctr=d.impressions>0?(d.clicks/d.impressions*100).toFixed(2):'—';var cpo=d.purchases>0?(d.spend/d.purchases).toFixed(2):'—';
+    html+='<div class="analytics-card"><div class="analytics-card-title">Concept '+c+'</div>'+
+      '<div class="analytics-row"><span class="analytics-row-label">Spend</span><span class="analytics-row-val">€'+d.spend.toFixed(0)+'</span></div>'+
+      '<div class="analytics-row"><span class="analytics-row-label">CTR</span><span class="analytics-row-val">'+(ctr!=='—'?ctr+'%':'—')+'</span></div>'+
+      '<div class="analytics-row"><span class="analytics-row-label">Purchases</span><span class="analytics-row-val">'+d.purchases+'</span></div>'+
+      '<div class="analytics-row"><span class="analytics-row-label">Cost/purchase</span><span class="analytics-row-val">'+(cpo!=='—'?'€'+cpo:'—')+'</span></div></div>';
+  });
+  grid.innerHTML=html;
+}
 
-function renderUploadHistory() {
-  var el = document.getElementById('upload-history');
-  if (!el) return;
-  el.innerHTML = '';
-  state.uploads.forEach(function(u) {
-    el.innerHTML += '<div class="upload-entry">' +
-      '<div><div class="upload-entry-name">' + u.filename + '</div><div class="upload-entry-meta">' + u.date + ' · ' + u.rows + ' ads matched</div></div>' +
-      '<span class="upload-entry-status">Imported</span></div>';
+// ─── TEAM SETTINGS ───
+function renderTeamList(){
+  var el=document.getElementById('team-list');if(!el)return;
+  el.innerHTML='';
+  TEAM.forEach(function(u){
+    el.innerHTML+='<div class="team-member-row">'+
+      '<div class="team-member-info">'+
+        '<div class="team-avatar-sm" style="background:'+u.color+'">'+u.name.charAt(0)+'</div>'+
+        '<div><div class="team-member-name">'+u.name+'</div><div class="team-member-role">'+u.role+'</div></div>'+
+      '</div></div>';
   });
 }
 
-function renderAnalytics() {
-  if (!Object.keys(state.performance).length) return;
-  document.getElementById('analytics-section').style.display = 'block';
-  var grid = document.getElementById('analytics-grid');
-
-  // Aggregate by concept
-  var conceptData = { A: { spend:0, purchases:0, clicks:0, impressions:0 }, B: { spend:0, purchases:0, clicks:0, impressions:0 }, C: { spend:0, purchases:0, clicks:0, impressions:0 } };
-  Object.keys(state.performance).forEach(function(adname) {
-    var parts = adname.split('_');
-    if (parts.length < 3) return;
-    var concept = parts[1];
-    var p = state.performance[adname];
-    if (conceptData[concept]) {
-      conceptData[concept].spend += parseFloat(p.spend) || 0;
-      conceptData[concept].purchases += parseInt(p.purchases) || 0;
-      conceptData[concept].clicks += parseInt(p.clicks) || 0;
-      conceptData[concept].impressions += parseInt(p.impressions) || 0;
-    }
-  });
-
-  var html = '';
-  ['A','B','C'].forEach(function(c) {
-    var d = conceptData[c];
-    var ctr = d.impressions > 0 ? (d.clicks / d.impressions * 100).toFixed(2) : '—';
-    var cpo = d.purchases > 0 ? (d.spend / d.purchases).toFixed(2) : '—';
-    html += '<div class="analytics-card">' +
-      '<div class="analytics-card-title">Concept ' + c + '</div>' +
-      '<div class="analytics-row"><span class="analytics-row-label">Spend</span><span class="analytics-row-val">€' + d.spend.toFixed(0) + '</span></div>' +
-      '<div class="analytics-row"><span class="analytics-row-label">CTR</span><span class="analytics-row-val">' + ctr + (ctr !== '—' ? '%' : '') + '</span></div>' +
-      '<div class="analytics-row"><span class="analytics-row-label">Purchases</span><span class="analytics-row-val">' + d.purchases + '</span></div>' +
-      '<div class="analytics-row"><span class="analytics-row-label">Cost/purchase</span><span class="analytics-row-val">' + (cpo !== '—' ? '€' + cpo : '—') + '</span></div>' +
-    '</div>';
-  });
-  grid.innerHTML = html;
-}
-
-// ── LIGHTBOX ──
-function openLight(src, meta) {
-  document.getElementById('lightbox-img').src = src;
-  document.getElementById('lightbox-meta').textContent = meta || '';
+// ─── LIGHTBOX ───
+function openLight(src,meta){
+  var content=document.getElementById('lightbox-content');
+  content.innerHTML='<img src="'+src+'" style="max-width:100%;max-height:82vh;border-radius:12px;object-fit:contain;" />';
+  document.getElementById('lightbox-meta').textContent=meta||'';
   document.getElementById('lightbox').classList.add('open');
 }
-function closeLight() { document.getElementById('lightbox').classList.remove('open'); }
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeLight(); closeAIModal(); } });
+function closeLight(){document.getElementById('lightbox').classList.remove('open');}
 
-// ── TOAST ──
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(function() { t.classList.remove('show'); }, 2500);
-}
+// ─── KEYBOARD ───
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLight();closeAIModal();closePerfModal();}});
 
-// ── NAV DATE ──
-document.addEventListener('DOMContentLoaded', function() {
-  // date in nav
-});
+// ─── TOAST ───
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
 </script>
 </body>
 </html>
