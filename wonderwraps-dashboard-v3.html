@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WonderWraps — Creative Ad Library</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #6B3FA0;
+  --purple-light: #f0ebf8;
+  --purple-mid: #c4a8e8;
+  --green: #22c55e;
+  --green-light: #dcfce7;
+  --green-dark: #15803d;
+  --amber: #f59e0b;
+  --amber-light: #fef3c7;
+  --amber-dark: #92400e;
+  --red: #ef4444;
+  --red-light: #fee2e2;
+  --red-dark: #991b1b;
+  --violet-light: #ede9fe;
+  --violet-dark: #5b21b6;
+  --pink-light: #fce7f3;
+  --pink-dark: #9d174d;
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --surface2: #f9f8f6;
+  --border: rgba(0,0,0,0.07);
+  --border-med: rgba(0,0,0,0.12);
+  --border-strong: rgba(0,0,0,0.18);
+  --text: #1a1a1a;
+  --text-muted: #6b6b6b;
+  --text-faint: #a0a0a0;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
+
+/* ── NAV ── */
+nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 58px; position: sticky; top: 0; z-index: 200;
+  box-shadow: var(--shadow-sm);
+}
+.nav-left { display: flex; align-items: center; gap: 12px; }
+.logo { width: 34px; height: 34px; background: var(--purple); border-radius: 9px; display: flex; align-items: center; justify-content: center; color: #fff; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; flex-shrink: 0; }
+.nav-title { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 15px; }
+.nav-sub { font-size: 12px; color: var(--text-muted); }
+.nav-right { display: flex; align-items: center; gap: 10px; }
+.nav-tab { font-size: 13px; font-weight: 500; padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border-med); background: transparent; cursor: pointer; color: var(--text-muted); transition: all 0.15s; }
+.nav-tab:hover { border-color: var(--purple); color: var(--purple); }
+.nav-tab.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+
+/* ── PAGES ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── MAIN LAYOUT ── */
+.main { max-width: 1280px; margin: 0 auto; padding: 2rem; }
+
+/* ── STATS ROW ── */
+.stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 2rem; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem 1.25rem; box-shadow: var(--shadow-sm); }
+.stat-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); margin-bottom: 5px; }
+.stat-value { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; line-height: 1; }
+.stat-value.purple { color: var(--purple); }
+.stat-value.green { color: var(--green); }
+.stat-value.amber { color: var(--amber); }
+.stat-value.red { color: var(--red); }
+
+/* ── LEGEND + FILTERS ── */
+.controls-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 12px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-muted); }
+.legend-bar { width: 16px; height: 3px; border-radius: 2px; }
+.filter-bar { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-btn { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; padding: 5px 13px; border-radius: 20px; border: 1px solid var(--border-med); background: transparent; cursor: pointer; color: var(--text-muted); transition: all 0.15s; }
+.filter-btn:hover { border-color: var(--purple); color: var(--purple); }
+.filter-btn.active { background: var(--purple); color: #fff; border-color: var(--purple); }
+
+/* ── CONCEPT SECTION ── */
+.concept-section { margin-bottom: 2.5rem; }
+.concept-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; padding-bottom: 0.875rem; border-bottom: 1px solid var(--border-med); }
+.concept-badge { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; padding: 3px 11px; border-radius: 20px; background: var(--purple); color: #fff; letter-spacing: 0.05em; }
+.concept-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; }
+.concept-meta { font-size: 11px; color: var(--text-faint); margin-left: auto; }
+
+/* ── VARIATION CARD ── */
+.variation-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.variation-card.approved { border-left: 3px solid var(--green); }
+.variation-card.needs-fix { border-left: 3px solid var(--amber); }
+.variation-card.in-progress { border-left: 3px solid var(--purple); }
+
+.variation-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  user-select: none;
+}
+.variation-header:hover { background: #f3f1ee; }
+.var-id { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--purple); min-width: 28px; }
+.var-title-text { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; }
+.var-status { font-size: 10px; font-weight: 500; padding: 2px 9px; border-radius: 20px; }
+.status-approved { background: var(--green-light); color: var(--green-dark); }
+.status-priority { background: var(--pink-light); color: var(--pink-dark); }
+.status-fix { background: var(--amber-light); color: var(--amber-dark); }
+.status-progress { background: var(--violet-light); color: var(--violet-dark); }
+.var-creative-count { font-size: 11px; color: var(--text-faint); margin-left: auto; }
+
+/* Performance pill on variation header */
+.var-perf-pills { display: flex; gap: 6px; align-items: center; }
+.perf-pill { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 20px; background: var(--surface); border: 1px solid var(--border-med); color: var(--text-muted); white-space: nowrap; }
+.perf-pill.good { background: var(--green-light); color: var(--green-dark); border-color: transparent; }
+.perf-pill.warn { background: var(--amber-light); color: var(--amber-dark); border-color: transparent; }
+.perf-pill.bad { background: var(--red-light); color: var(--red-dark); border-color: transparent; }
+
+.chevron { font-size: 12px; color: var(--text-faint); transition: transform 0.2s; margin-left: 4px; }
+.variation-card.expanded .chevron { transform: rotate(180deg); }
+
+.variation-body { display: none; padding: 1.25rem; }
+.variation-card.expanded .variation-body { display: block; }
+
+/* ── CREATIVES GRID ── */
+.creatives-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1rem; }
+
+.creative-card {
+  background: var(--surface);
+  border: 1px solid var(--border-med);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 0.2s;
+}
+.creative-card:hover { box-shadow: var(--shadow-md); }
+
+.creative-img-wrap { width: 100%; height: 160px; overflow: hidden; position: relative; background: var(--purple-light); }
+.creative-img-wrap img { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: transform 0.3s; display: none; }
+.creative-img-wrap img.loaded { display: block; }
+.creative-img-wrap img:hover { transform: scale(1.05); }
+
+.creative-placeholder { width: 100%; height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: var(--purple-light); border: 2px dashed var(--purple-mid); cursor: pointer; transition: background 0.15s; }
+.creative-placeholder:hover { background: #e8dff5; }
+.creative-placeholder svg { width: 24px; height: 24px; fill: var(--purple); opacity: 0.6; }
+.creative-placeholder span { font-size: 11px; color: var(--purple); font-weight: 500; }
+
+.creative-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; transition: opacity 0.2s; }
+.creative-img-wrap:hover .creative-overlay { opacity: 1; }
+.overlay-btn { background: rgba(255,255,255,0.9); border: none; border-radius: 6px; padding: 5px 10px; font-size: 11px; font-weight: 500; cursor: pointer; color: var(--text); }
+.overlay-btn:hover { background: #fff; }
+
+.creative-body { padding: 0.625rem 0.75rem; }
+.creative-name { font-size: 11px; font-weight: 500; color: var(--text); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.creative-ad-id { font-size: 10px; color: var(--text-faint); font-family: monospace; }
+
+/* Performance inside creative card */
+.creative-perf { padding: 0.5rem 0.75rem; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.perf-item { display: flex; flex-direction: column; }
+.perf-key { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); }
+.perf-val { font-size: 12px; font-weight: 600; color: var(--text); }
+.perf-val.good { color: var(--green-dark); }
+.perf-val.warn { color: var(--amber-dark); }
+.perf-val.bad { color: var(--red-dark); }
+.no-data { font-size: 10px; color: var(--text-faint); padding: 0.5rem 0.75rem; }
+
+/* Add creative button */
+.add-creative-btn {
+  width: 100%; height: 160px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  background: transparent; border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-md); cursor: pointer; color: var(--text-faint);
+  font-size: 12px; font-weight: 500; transition: all 0.15s;
+}
+.add-creative-btn:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
+.add-creative-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+.file-input { display: none; }
+
+/* ── SETTINGS PAGE ── */
+.settings-main { max-width: 900px; margin: 0 auto; padding: 2rem; }
+.settings-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); }
+.settings-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 0.5rem; }
+.settings-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 1.25rem; line-height: 1.6; }
+
+.upload-zone {
+  border: 2px dashed var(--border-strong); border-radius: var(--radius-md);
+  padding: 2.5rem; text-align: center;
+  cursor: pointer; transition: all 0.2s;
+  background: var(--surface2);
+}
+.upload-zone:hover { border-color: var(--purple); background: var(--purple-light); }
+.upload-zone.dragover { border-color: var(--purple); background: var(--purple-light); }
+.upload-zone-icon { font-size: 32px; margin-bottom: 8px; }
+.upload-zone-text { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.upload-zone-sub { font-size: 12px; color: var(--text-muted); }
+
+.upload-history { margin-top: 1rem; }
+.upload-entry { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 8px; background: var(--surface2); }
+.upload-entry-name { font-size: 12px; font-weight: 500; }
+.upload-entry-meta { font-size: 11px; color: var(--text-faint); }
+.upload-entry-status { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 20px; background: var(--green-light); color: var(--green-dark); }
+
+/* Naming convention guide */
+.naming-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.naming-table th { text-align: left; padding: 8px 10px; background: var(--surface2); border-bottom: 1px solid var(--border-med); font-weight: 500; color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+.naming-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.naming-table tr:last-child td { border-bottom: none; }
+.code { font-family: monospace; background: var(--purple-light); color: var(--purple); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+
+/* Analytics summary */
+.analytics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 1rem; }
+.analytics-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem; }
+.analytics-card-title { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+.analytics-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.analytics-row:last-child { border-bottom: none; }
+.analytics-row-label { color: var(--text-muted); }
+.analytics-row-val { font-weight: 600; }
+
+/* ── LIGHTBOX ── */
+.lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; align-items: center; justify-content: center; flex-direction: column; gap: 16px; padding: 2rem; }
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 100%; max-height: 82vh; border-radius: 12px; object-fit: contain; }
+.lightbox-meta { color: rgba(255,255,255,0.65); font-size: 13px; text-align: center; }
+.lightbox-close { color: #fff; font-size: 13px; cursor: pointer; padding: 8px 20px; border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; background: transparent; }
+
+/* ── MODAL (Add Creative) ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; align-items: center; justify-content: center; padding: 2rem; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border-radius: var(--radius-xl); padding: 1.75rem; width: 100%; max-width: 480px; box-shadow: var(--shadow-lg); }
+.modal-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 600; margin-bottom: 1.25rem; }
+.modal-field { margin-bottom: 1rem; }
+.modal-label { font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 5px; display: block; }
+.modal-input { width: 100%; padding: 8px 12px; border: 1px solid var(--border-med); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); background: var(--surface); outline: none; }
+.modal-input:focus { border-color: var(--purple); }
+.modal-hint { font-size: 10px; color: var(--text-faint); margin-top: 3px; font-family: monospace; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; }
+.btn { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; padding: 8px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-med); cursor: pointer; transition: all 0.15s; }
+.btn-primary { background: var(--purple); color: #fff; border-color: var(--purple); }
+.btn-primary:hover { background: #5a3388; }
+.btn-ghost { background: transparent; color: var(--text-muted); }
+.btn-ghost:hover { background: var(--surface2); }
+
+/* ── TOAST ── */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; font-size: 13px; padding: 10px 20px; border-radius: 20px; z-index: 9999; opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap; }
+.toast.show { opacity: 1; }
+
+/* ── REVIEW BANK ── */
+.review-section { margin-top: 0.5rem; }
+.section-label { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 1rem; }
+.review-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.review-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1rem; box-shadow: var(--shadow-sm); }
+.review-stars { color: var(--amber); font-size: 12px; margin-bottom: 6px; letter-spacing: 1px; }
+.review-text { font-size: 12px; font-style: italic; line-height: 1.6; margin-bottom: 6px; }
+.review-author { font-size: 11px; color: var(--text-muted); }
+.review-use { font-size: 10px; color: var(--purple); margin-top: 4px; font-weight: 500; }
+
+.divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+@media (max-width: 768px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .main, .settings-main { padding: 1rem; }
+  nav { padding: 0 1rem; }
+  .analytics-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <div class="logo">W</div>
+    <div>
+      <div class="nav-title">WonderWraps</div>
+      <div class="nav-sub">Creative Ad Library</div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="nav-tab active" onclick="showPage('library')">Library</button>
+    <button class="nav-tab" onclick="showPage('settings')">Settings & Analytics</button>
+  </div>
+</nav>
+
+<!-- ══════════════ LIBRARY PAGE ══════════════ -->
+<div class="page active" id="page-library">
+<div class="main">
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Concepts</div><div class="stat-value purple" id="s-concepts">3</div></div>
+    <div class="stat-card"><div class="stat-label">Variations</div><div class="stat-value" id="s-variations">6</div></div>
+    <div class="stat-card"><div class="stat-label">Creatives</div><div class="stat-value" id="s-creatives">0</div></div>
+    <div class="stat-card"><div class="stat-label">Approved</div><div class="stat-value green" id="s-approved">5</div></div>
+    <div class="stat-card"><div class="stat-label">In Progress</div><div class="stat-value amber" id="s-progress">1</div></div>
+  </div>
+
+  <div class="controls-row">
+    <div class="legend">
+      <div class="legend-item"><div class="legend-bar" style="background:var(--green)"></div>Approved</div>
+      <div class="legend-item"><div class="legend-bar" style="background:var(--amber)"></div>Needs fix</div>
+      <div class="legend-item"><div class="legend-bar" style="background:var(--purple)"></div>In progress</div>
+    </div>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterAll(this)">All</button>
+      <button class="filter-btn" onclick="filterConcept(this,'A')">Concept A</button>
+      <button class="filter-btn" onclick="filterConcept(this,'B')">Concept B</button>
+      <button class="filter-btn" onclick="filterConcept(this,'C')">Concept C</button>
+      <button class="filter-btn" onclick="filterStatus(this,'approved')">Approved</button>
+      <button class="filter-btn" onclick="filterStatus(this,'in-progress')">In progress</button>
+    </div>
+  </div>
+
+  <!-- CONCEPT A -->
+  <div class="concept-section" data-concept="A">
+    <div class="concept-header">
+      <span class="concept-badge">A</span>
+      <span class="concept-title">Real kid + open book same frame</span>
+      <span class="concept-meta" id="concept-A-meta">4 variations</span>
+    </div>
+    <div id="concept-A-variations">
+
+      <div class="variation-card approved expanded" data-concept="A" data-status="approved" data-vid="A1">
+        <div class="variation-header" onclick="toggleVariation(this)">
+          <span class="var-id">A1</span>
+          <span class="var-title-text">Blonde girl — bedtime scene</span>
+          <div class="var-perf-pills" id="perf-pills-A1"></div>
+          <span class="var-status status-approved">Approved</span>
+          <span class="var-creative-count" id="count-A1">0 creatives</span>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="variation-body">
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Book held toward camera, cartoon likeness in yellow outfit, warm magical glow. Real child visible in background laughing.</p>
+          <div class="creatives-grid" id="grid-A1"></div>
+          <button class="add-creative-btn" onclick="openAddModal('A1')">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Add creative
+          </button>
+          <input type="file" class="file-input" id="file-A1" accept="image/*" onchange="handleFileForModal(this,'A1')" />
+        </div>
+      </div>
+
+      <div class="variation-card approved" data-concept="A" data-status="approved" data-vid="A2">
+        <div class="variation-header" onclick="toggleVariation(this)">
+          <span class="var-id">A2</span>
+          <span class="var-title-text">Lucas — unboxing reaction</span>
+          <div class="var-perf-pills" id="perf-pills-A2"></div>
+          <span class="var-status status-priority">Priority test</span>
+          <span class="var-creative-count" id="count-A2">0 creatives</span>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="variation-body">
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Dark-haired boy, mouth wide open seeing book cover with cartoon astronaut likeness. Fix reviewer avatar at designer.</p>
+          <div class="creatives-grid" id="grid-A2"></div>
+          <button class="add-creative-btn" onclick="openAddModal('A2')">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Add creative
+          </button>
+          <input type="file" class="file-input" id="file-A2" accept="image/*" onchange="handleFileForModal(this,'A2')" />
+        </div>
+      </div>
+
+      <div class="variation-card approved" data-concept="A" data-status="approved" data-vid="A3">
+        <div class="variation-header" onclick="toggleVariation(this)">
+          <span class="var-id">A3</span>
+          <span class="var-title-text">Red-haired girl — mirror moment</span>
+          <div class="var-perf-pills" id="perf-pills-A3"></div>
+          <span class="var-status status-approved">Approved</span>
+          <span class="var-creative-count" id="count-A3">0 creatives</span>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="variation-body">
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Girl holding book beside her face in mirror. Real vs cartoon likeness side by side. Most convincing likeness match in library.</p>
+          <div class="creatives-grid" id="grid-A3"></div>
+          <button class="add-creative-btn" onclick="openAddModal('A3')">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Add creative
+          </button>
+          <input type="file" class="file-input" id="file-A3" accept="image/*" onchange="handleFileForModal(this,'A3')" />
+        </div>
+      </div>
+
+      <div class="variation-card approved" data-concept="A" data-status="approved" data-vid="A4">
+        <div class="variation-header" onclick="toggleVariation(this)">
+          <span class="var-id">A4</span>
+          <span class="var-title-text">Blonde girl — princess over-shoulder</span>
+          <div class="var-perf-pills" id="perf-pills-A4"></div>
+          <span class="var-status status-priority">Priority test</span>
+          <span class="var-creative-count" id="count-A4">0 creatives</span>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="variation-body">
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Over-shoulder angle, girl turning back laughing, cartoon princess on open page. Best emotional pull in entire library.</p>
+          <div class="creatives-grid" id="grid-A4"></div>
+          <button class="add-creative-btn" onclick="openAddModal('A4')">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Add creative
+          </button>
+          <input type="file" class="file-input" id="file-A4" accept="image/*" onchange="handleFileForModal(this,'A4')" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CONCEPT B -->
+  <div class="concept-section" data-concept="B">
+    <div class="concept-header">
+      <span class="concept-badge">B</span>
+      <span class="concept-title">That's literally it — flat lay formula</span>
+      <span class="concept-meta">1 variation</span>
+    </div>
+    <div>
+      <div class="variation-card in-progress" data-concept="B" data-status="in-progress" data-vid="B1">
+        <div class="variation-header" onclick="toggleVariation(this)">
+          <span class="var-id">B1</span>
+          <span class="var-title-text">Three step flat lay</span>
+          <div class="var-perf-pills" id="perf-pills-B1"></div>
+          <span class="var-status status-progress">Going to designer</span>
+          <span class="var-creative-count" id="count-B1">0 creatives</span>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="variation-body">
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Real photo → open book with cartoon → delivery box. Wooden surface, arrows. "That's literally it." tagline. Needs WonderWraps branding.</p>
+          <div class="creatives-grid" id="grid-B1"></div>
+          <button class="add-creative-btn" onclick="openAddModal('B1')">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Add creative
+          </button>
+          <input type="file" class="file-input" id="file-B1" accept="image/*" onchange="handleFileForModal(this,'B1')" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT C -->
+  <div class="concept-section" data-concept="C">
+    <div class="concept-header">
+      <span class="concept-badge">C</span>
+      <span class="concept-title">You upload one photo — parent perspective</span>
+      <span class="concept-meta">1 variation</span>
+    </div>
+    <div>
+      <div class="variation-card in-progress" data-concept="C" data-status="in-progress" data-vid="C1">
+        <div class="variation-header" onclick="toggleVariation(this)">
+          <span class="var-id">C1</span>
+          <span class="var-title-text">Parent at kitchen table</span>
+          <div class="var-perf-pills" id="perf-pills-C1"></div>
+          <span class="var-status status-progress">Going to designer</span>
+          <span class="var-creative-count" id="count-C1">0 creatives</span>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="variation-body">
+          <p style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">Over-shoulder shot. Phone showing photo upload on left. Finished branded delivery box with book on right. Before/after story in two text overlays.</p>
+          <div class="creatives-grid" id="grid-C1"></div>
+          <button class="add-creative-btn" onclick="openAddModal('C1')">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Add creative
+          </button>
+          <input type="file" class="file-input" id="file-C1" accept="image/*" onchange="handleFileForModal(this,'C1')" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- REVIEW BANK -->
+  <div class="review-section">
+    <div class="section-label">Review bank — attach to any creative</div>
+    <div class="review-grid">
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"My daughter screamed when she saw her face in the book!"</div><div class="review-author">Sarah T. · 3 days ago</div><div class="review-use">Use with: A1, A4 (blonde girl)</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"She carried it everywhere for a week straight"</div><div class="review-author">Emma R. · 2 days ago</div><div class="review-use">Use with: A1, A4 (blonde girl)</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"She said mommy that's literally me!"</div><div class="review-author">Claire B. · 6 days ago</div><div class="review-use">Use with: A3 (red-haired girl)</div></div>
+      <div class="review-card"><div class="review-stars">★★★★★</div><div class="review-text">"The packaging alone made it feel so special"</div><div class="review-author">Anna S. · 1 week ago</div><div class="review-use">Use with: A2 (Lucas unboxing)</div></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════ SETTINGS PAGE ══════════════ -->
+<div class="page" id="page-settings">
+<div class="settings-main">
+
+  <!-- NAMING CONVENTION -->
+  <div class="settings-section">
+    <div class="settings-title">Meta ad naming convention</div>
+    <div class="settings-desc">Name every ad in Meta Ads Manager using this exact format so the dashboard can automatically map performance data to the right creative.</div>
+    <div style="background:var(--purple-light);border-radius:var(--radius-md);padding:1rem 1.25rem;margin-bottom:1.25rem;font-family:monospace;font-size:14px;color:var(--purple);font-weight:600;">
+      WW_[Concept]_[Variation]_[Creative#]_[ShortDesc]
+    </div>
+    <table class="naming-table">
+      <thead><tr><th>Part</th><th>Format</th><th>Example</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Prefix</td><td><span class="code">WW_</span></td><td><span class="code">WW_</span></td><td>Always start with this — filters WonderWraps ads</td></tr>
+        <tr><td>Concept</td><td><span class="code">A</span> / <span class="code">B</span> / <span class="code">C</span></td><td><span class="code">A</span></td><td>Single letter matching concept badge</td></tr>
+        <tr><td>Variation</td><td><span class="code">A1</span> / <span class="code">A2</span> etc.</td><td><span class="code">A1</span></td><td>Variation ID from the library</td></tr>
+        <tr><td>Creative #</td><td><span class="code">01</span> / <span class="code">02</span> etc.</td><td><span class="code">01</span></td><td>Sequential number per variation</td></tr>
+        <tr><td>Description</td><td>Free text, no spaces</td><td><span class="code">BlondeGirlBedtime</span></td><td>Use underscores if needed</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:1rem;padding:0.875rem 1rem;background:var(--surface2);border-radius:var(--radius-sm);border:1px solid var(--border);">
+      <div style="font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:6px;">FULL EXAMPLES</div>
+      <div style="font-family:monospace;font-size:12px;line-height:2;color:var(--text);">
+        WW_A_A1_01_BlondeGirlBedtime<br>
+        WW_A_A2_01_LucasUnboxing<br>
+        WW_A_A3_01_RedMirror<br>
+        WW_A_A4_01_PrincessOverShoulder<br>
+        WW_B_B1_01_FlatLayV1<br>
+        WW_C_C1_01_ParentTable
+      </div>
+    </div>
+  </div>
+
+  <!-- META CSV UPLOAD -->
+  <div class="settings-section">
+    <div class="settings-title">Upload Meta Ads export</div>
+    <div class="settings-desc">Export your ad performance from Meta Ads Manager daily (Ad level, CSV format) and upload here. The dashboard will automatically match ads to creatives using the naming convention above and display CTR, CPC, Spend, and Purchases per creative.<br><br>
+    In Meta: <strong>Ads Manager → Ads level → Export → CSV</strong>. Make sure columns include: Ad name, Impressions, Clicks, CTR, CPC, Amount spent, Purchases.</div>
+    <div class="upload-zone" id="csv-upload-zone" onclick="document.getElementById('csv-file-input').click()">
+      <div class="upload-zone-icon">📊</div>
+      <div class="upload-zone-text">Drop your Meta CSV export here</div>
+      <div class="upload-zone-sub">or click to browse — CSV files only</div>
+    </div>
+    <input type="file" id="csv-file-input" accept=".csv" style="display:none" onchange="handleCSVUpload(this)" />
+    <div class="upload-history" id="upload-history"></div>
+  </div>
+
+  <!-- ANALYTICS SUMMARY -->
+  <div class="settings-section" id="analytics-section" style="display:none">
+    <div class="settings-title">Performance summary</div>
+    <div class="settings-desc">Auto-generated from your latest Meta export. Data mapped by ad naming convention.</div>
+    <div class="analytics-grid" id="analytics-grid"></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════ ADD CREATIVE MODAL ══════════════ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">Add creative</div>
+    <div class="modal-field">
+      <label class="modal-label">Creative name</label>
+      <input class="modal-input" id="modal-name" placeholder="e.g. Blonde Girl Bedtime — Version 1" />
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Meta ad name (for performance tracking)</label>
+      <input class="modal-input" id="modal-adname" placeholder="e.g. WW_A_A1_01_BlondeGirlBedtime" />
+      <div class="modal-hint">Format: WW_[Concept]_[Variation]_[##]_[Desc]</div>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Image</label>
+      <button class="btn btn-ghost" style="width:100%;border:1px dashed var(--border-strong);padding:10px;" onclick="triggerImagePick()">Click to upload image</button>
+      <div id="modal-img-preview" style="margin-top:8px;display:none;"><img id="modal-preview-img" style="width:100%;height:120px;object-fit:cover;border-radius:var(--radius-sm);" /></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCreative()">Add creative</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLight()">
+  <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()" />
+  <div class="lightbox-meta" id="lightbox-meta"></div>
+  <button class="lightbox-close" onclick="closeLight()">Close</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+var state = {
+  creatives: {},    // { vid: [ {id, name, adname, img} ] }
+  performance: {},  // { adname: {ctr, cpc, spend, purchases, impressions, clicks} }
+  uploads: []       // [ {filename, date, rows} ]
+};
+
+var currentVid = null;
+var modalImgData = null;
+
+// ── LOAD FROM STORAGE ──
+(function init() {
+  try {
+    var saved = localStorage.getItem('ww-state');
+    if (saved) state = JSON.parse(saved);
+  } catch(e) {}
+  renderAll();
+})();
+
+function save() {
+  try { localStorage.setItem('ww-state', JSON.stringify(state)); } catch(e) {}
+}
+
+// ── PAGES ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('page-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── TOGGLE VARIATION ──
+function toggleVariation(header) {
+  var card = header.closest('.variation-card');
+  card.classList.toggle('expanded');
+}
+
+// ── FILTERS ──
+function filterAll(btn) {
+  setActiveFilter(btn);
+  document.querySelectorAll('.concept-section, .variation-card').forEach(function(el) { el.style.display = ''; });
+}
+function filterConcept(btn, concept) {
+  setActiveFilter(btn);
+  document.querySelectorAll('.concept-section').forEach(function(s) { s.style.display = s.dataset.concept === concept ? '' : 'none'; });
+  document.querySelectorAll('.variation-card').forEach(function(c) { c.style.display = ''; });
+}
+function filterStatus(btn, status) {
+  setActiveFilter(btn);
+  document.querySelectorAll('.concept-section').forEach(function(s) { s.style.display = ''; });
+  document.querySelectorAll('.variation-card').forEach(function(c) { c.style.display = c.dataset.status === status ? '' : 'none'; });
+}
+function setActiveFilter(btn) {
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+// ── MODAL ──
+function openAddModal(vid) {
+  currentVid = vid;
+  modalImgData = null;
+  document.getElementById('modal-name').value = '';
+  document.getElementById('modal-adname').value = '';
+  document.getElementById('modal-img-preview').style.display = 'none';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  currentVid = null;
+  modalImgData = null;
+}
+
+function triggerImagePick() {
+  document.getElementById('file-' + currentVid).click();
+}
+
+function handleFileForModal(input, vid) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    modalImgData = e.target.result;
+    document.getElementById('modal-preview-img').src = modalImgData;
+    document.getElementById('modal-img-preview').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveCreative() {
+  var name = document.getElementById('modal-name').value.trim();
+  var adname = document.getElementById('modal-adname').value.trim();
+  if (!name) { showToast('Please enter a creative name'); return; }
+  var id = 'cr-' + Date.now();
+  if (!state.creatives[currentVid]) state.creatives[currentVid] = [];
+  state.creatives[currentVid].push({ id: id, name: name, adname: adname, img: modalImgData });
+  save();
+  renderCreatives(currentVid);
+  updateStats();
+  closeModal();
+  showToast('Creative added to ' + currentVid);
+}
+
+// ── RENDER CREATIVES ──
+function renderAll() {
+  var vids = ['A1','A2','A3','A4','B1','C1'];
+  vids.forEach(function(vid) { renderCreatives(vid); });
+  renderUploadHistory();
+  updateStats();
+  renderAnalytics();
+}
+
+function renderCreatives(vid) {
+  var grid = document.getElementById('grid-' + vid);
+  if (!grid) return;
+  var list = state.creatives[vid] || [];
+  grid.innerHTML = '';
+  list.forEach(function(cr) { grid.appendChild(makeCreativeCard(cr, vid)); });
+  var countEl = document.getElementById('count-' + vid);
+  if (countEl) countEl.textContent = list.length + ' creative' + (list.length !== 1 ? 's' : '');
+  renderPerfPills(vid);
+}
+
+function makeCreativeCard(cr, vid) {
+  var div = document.createElement('div');
+  div.className = 'creative-card';
+  div.id = 'card-' + cr.id;
+
+  var perf = cr.adname ? state.performance[cr.adname] : null;
+
+  var imgSection = '';
+  if (cr.img) {
+    imgSection = '<div class="creative-img-wrap">' +
+      '<img src="' + cr.img + '" class="loaded" onclick="openLight(\'' + cr.img.replace(/'/g,"\\'")+'\',\'' + cr.name.replace(/'/g,"\\'") + '\')" />' +
+      '<div class="creative-overlay">' +
+        '<button class="overlay-btn" onclick="openLight(\'' + cr.img.replace(/'/g,"\\'")+'\',\'' + cr.name.replace(/'/g,"\\'") + '\')">Zoom</button>' +
+        '<button class="overlay-btn" onclick="removeCreative(\'' + vid + '\',\'' + cr.id + '\')">Remove</button>' +
+      '</div></div>';
+  } else {
+    imgSection = '<div class="creative-placeholder" onclick="openReplaceModal(\'' + vid + '\',\'' + cr.id + '\')">' +
+      '<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>' +
+      '<span>Upload image</span></div>';
+  }
+
+  var perfSection = '';
+  if (perf) {
+    var ctrClass = parseFloat(perf.ctr) > 2 ? 'good' : parseFloat(perf.ctr) > 1 ? 'warn' : 'bad';
+    var cpcClass = parseFloat(perf.cpc) < 0.3 ? 'good' : parseFloat(perf.cpc) < 0.5 ? 'warn' : 'bad';
+    perfSection = '<div class="creative-perf">' +
+      '<div class="perf-item"><div class="perf-key">CTR</div><div class="perf-val ' + ctrClass + '">' + parseFloat(perf.ctr).toFixed(2) + '%</div></div>' +
+      '<div class="perf-item"><div class="perf-key">CPC</div><div class="perf-val ' + cpcClass + '">€' + parseFloat(perf.cpc).toFixed(2) + '</div></div>' +
+      '<div class="perf-item"><div class="perf-key">Spend</div><div class="perf-val">€' + parseFloat(perf.spend).toFixed(0) + '</div></div>' +
+      '<div class="perf-item"><div class="perf-key">Purchases</div><div class="perf-val">' + (perf.purchases || 0) + '</div></div>' +
+    '</div>';
+  } else if (cr.adname) {
+    perfSection = '<div class="no-data">No data yet — upload Meta CSV</div>';
+  }
+
+  div.innerHTML = imgSection +
+    '<div class="creative-body">' +
+      '<div class="creative-name" title="' + cr.name + '">' + cr.name + '</div>' +
+      (cr.adname ? '<div class="creative-ad-id">' + cr.adname + '</div>' : '<div class="creative-ad-id" style="color:var(--amber-dark)">No ad name set</div>') +
+    '</div>' + perfSection;
+
+  return div;
+}
+
+function removeCreative(vid, id) {
+  if (!confirm('Remove this creative?')) return;
+  state.creatives[vid] = (state.creatives[vid] || []).filter(function(c) { return c.id !== id; });
+  save();
+  renderCreatives(vid);
+  updateStats();
+  showToast('Creative removed');
+}
+
+// ── PERF PILLS ON VARIATION HEADER ──
+function renderPerfPills(vid) {
+  var pills = document.getElementById('perf-pills-' + vid);
+  if (!pills) return;
+  var list = state.creatives[vid] || [];
+  var allPerf = list.filter(function(c) { return c.adname && state.performance[c.adname]; });
+  if (!allPerf.length) { pills.innerHTML = ''; return; }
+  var totalSpend = 0, totalClicks = 0, totalImpr = 0, totalPurch = 0;
+  allPerf.forEach(function(c) {
+    var p = state.performance[c.adname];
+    totalSpend += parseFloat(p.spend) || 0;
+    totalClicks += parseInt(p.clicks) || 0;
+    totalImpr += parseInt(p.impressions) || 0;
+    totalPurch += parseInt(p.purchases) || 0;
+  });
+  var avgCtr = totalImpr > 0 ? (totalClicks / totalImpr * 100) : 0;
+  var ctrClass = avgCtr > 2 ? 'good' : avgCtr > 1 ? 'warn' : 'bad';
+  pills.innerHTML =
+    '<span class="perf-pill ' + ctrClass + '">CTR ' + avgCtr.toFixed(2) + '%</span>' +
+    '<span class="perf-pill">€' + totalSpend.toFixed(0) + ' spent</span>' +
+    '<span class="perf-pill">' + totalPurch + ' purchases</span>';
+}
+
+// ── STATS ──
+function updateStats() {
+  var total = 0;
+  Object.values(state.creatives).forEach(function(list) { total += list.length; });
+  document.getElementById('s-creatives').textContent = total;
+}
+
+// ── CSV UPLOAD ──
+var csvZone = document.getElementById('csv-upload-zone');
+csvZone.addEventListener('dragover', function(e) { e.preventDefault(); csvZone.classList.add('dragover'); });
+csvZone.addEventListener('dragleave', function() { csvZone.classList.remove('dragover'); });
+csvZone.addEventListener('drop', function(e) {
+  e.preventDefault(); csvZone.classList.remove('dragover');
+  var file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.csv')) processCSV(file);
+  else showToast('Please upload a CSV file');
+});
+
+function handleCSVUpload(input) {
+  var file = input.files[0];
+  if (file) processCSV(file);
+}
+
+function processCSV(file) {
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var text = e.target.result;
+    var rows = parseCSV(text);
+    var matched = 0;
+    rows.forEach(function(row) {
+      var adname = row['Ad name'] || row['Ad Name'] || row['ad_name'] || row['name'] || '';
+      if (!adname.startsWith('WW_')) return;
+      var perf = {
+        impressions: row['Impressions'] || row['impressions'] || 0,
+        clicks: row['Link clicks'] || row['Clicks'] || row['clicks'] || 0,
+        ctr: row['CTR (link click-through rate)'] || row['CTR'] || row['ctr'] || 0,
+        cpc: row['CPC (cost per link click)'] || row['CPC'] || row['cpc'] || 0,
+        spend: row['Amount spent (EUR)'] || row['Amount spent (USD)'] || row['Amount spent'] || row['spend'] || 0,
+        purchases: row['Purchases'] || row['purchases'] || row['Results'] || 0
+      };
+      state.performance[adname] = perf;
+      matched++;
+    });
+    state.uploads.unshift({ filename: file.name, date: new Date().toLocaleDateString('en-GB'), rows: matched });
+    save();
+    renderAll();
+    showToast(matched + ' ads matched from ' + file.name);
+    document.getElementById('analytics-section').style.display = 'block';
+    renderAnalytics();
+  };
+  reader.readAsText(file);
+}
+
+function parseCSV(text) {
+  var lines = text.split('\n');
+  if (!lines.length) return [];
+  var headers = lines[0].split(',').map(function(h) { return h.trim().replace(/^"|"$/g,''); });
+  var rows = [];
+  for (var i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    var vals = lines[i].split(',').map(function(v) { return v.trim().replace(/^"|"$/g,''); });
+    var row = {};
+    headers.forEach(function(h, idx) { row[h] = vals[idx] || ''; });
+    rows.push(row);
+  }
+  return rows;
+}
+
+function renderUploadHistory() {
+  var el = document.getElementById('upload-history');
+  if (!el) return;
+  el.innerHTML = '';
+  state.uploads.forEach(function(u) {
+    el.innerHTML += '<div class="upload-entry">' +
+      '<div><div class="upload-entry-name">' + u.filename + '</div><div class="upload-entry-meta">' + u.date + ' · ' + u.rows + ' ads matched</div></div>' +
+      '<span class="upload-entry-status">Imported</span></div>';
+  });
+}
+
+function renderAnalytics() {
+  if (!Object.keys(state.performance).length) return;
+  document.getElementById('analytics-section').style.display = 'block';
+  var grid = document.getElementById('analytics-grid');
+
+  // Aggregate by concept
+  var conceptData = { A: { spend:0, purchases:0, clicks:0, impressions:0 }, B: { spend:0, purchases:0, clicks:0, impressions:0 }, C: { spend:0, purchases:0, clicks:0, impressions:0 } };
+  Object.keys(state.performance).forEach(function(adname) {
+    var parts = adname.split('_');
+    if (parts.length < 3) return;
+    var concept = parts[1];
+    var p = state.performance[adname];
+    if (conceptData[concept]) {
+      conceptData[concept].spend += parseFloat(p.spend) || 0;
+      conceptData[concept].purchases += parseInt(p.purchases) || 0;
+      conceptData[concept].clicks += parseInt(p.clicks) || 0;
+      conceptData[concept].impressions += parseInt(p.impressions) || 0;
+    }
+  });
+
+  var html = '';
+  ['A','B','C'].forEach(function(c) {
+    var d = conceptData[c];
+    var ctr = d.impressions > 0 ? (d.clicks / d.impressions * 100).toFixed(2) : '—';
+    var cpo = d.purchases > 0 ? (d.spend / d.purchases).toFixed(2) : '—';
+    html += '<div class="analytics-card">' +
+      '<div class="analytics-card-title">Concept ' + c + '</div>' +
+      '<div class="analytics-row"><span class="analytics-row-label">Spend</span><span class="analytics-row-val">€' + d.spend.toFixed(0) + '</span></div>' +
+      '<div class="analytics-row"><span class="analytics-row-label">CTR</span><span class="analytics-row-val">' + ctr + (ctr !== '—' ? '%' : '') + '</span></div>' +
+      '<div class="analytics-row"><span class="analytics-row-label">Purchases</span><span class="analytics-row-val">' + d.purchases + '</span></div>' +
+      '<div class="analytics-row"><span class="analytics-row-label">Cost/purchase</span><span class="analytics-row-val">' + (cpo !== '—' ? '€' + cpo : '—') + '</span></div>' +
+    '</div>';
+  });
+  grid.innerHTML = html;
+}
+
+// ── LIGHTBOX ──
+function openLight(src, meta) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-meta').textContent = meta || '';
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLight() { document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeLight(); closeModal(); } });
+
+// ── TOAST ──
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+// ── NAV DATE ──
+document.addEventListener('DOMContentLoaded', function() {
+  // date in nav
+});
+</script>
+</body>
+</html>
