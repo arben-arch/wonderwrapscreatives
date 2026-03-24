@@ -484,6 +484,42 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 .review-use{font-size:9.5px;color:var(--purple);margin-top:4px;font-weight:600;}
 .divider{border:none;border-top:1px solid var(--border);margin:1.75rem 0;}
 
+/* ─── AI AUTO-DETECT CARDS ───────────── */
+.ai-detect-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:0.625rem 0.75rem;}
+.adc-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-faint);margin-bottom:4px;}
+.adc-value{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);line-height:1;margin-bottom:5px;}
+.adc-sub{font-size:10px;color:var(--text-muted);margin-top:2px;line-height:1.4;}
+.adc-bar{height:4px;background:var(--border-med);border-radius:2px;overflow:hidden;}
+.adc-bar-fill{height:100%;border-radius:2px;background:var(--purple);transition:width 0.4s ease;}
+
+/* ─── HEALTH SCORE ───────────────────── */
+.health-score{position:absolute;top:7px;left:7px;background:rgba(255,255,255,0.92);backdrop-filter:blur(4px);border-radius:20px;padding:2px 7px;display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,0.1);}
+.health-score-dot{width:6px;height:6px;border-radius:50%;}
+.hs-great{color:#15803d;}.hs-great .health-score-dot{background:#16a34a;}
+.hs-good{color:#166534;}.hs-good .health-score-dot{background:#22c55e;}
+.hs-ok{color:#92400e;}.hs-ok .health-score-dot{background:#f59e0b;}
+.hs-low{color:#991b1b;}.hs-low .health-score-dot{background:#ef4444;}
+.hs-na{color:var(--text-faint);}.hs-na .health-score-dot{background:var(--border-strong);}
+
+/* ─── SUGGESTED ACTION ───────────────── */
+.suggested-action{padding:0.4rem 0.75rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.action-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;cursor:pointer;border:none;letter-spacing:0.02em;transition:all 0.12s;}
+.ap-scale{background:#dcfce7;color:#15803d;}.ap-scale:hover{background:#16a34a;color:#fff;}
+.ap-optimize{background:#fef3c7;color:#92400e;}.ap-optimize:hover{background:#f59e0b;color:#fff;}
+.ap-pause{background:#fee2e2;color:#991b1b;}.ap-pause:hover{background:#dc2626;color:#fff;}
+.ap-test{background:#eff6ff;color:#1d4ed8;}.ap-test:hover{background:#2563eb;color:#fff;}
+.ap-nodata{background:var(--surface3);color:var(--text-faint);}
+.action-reason{font-size:9.5px;color:var(--text-faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+
+/* ─── DUPLICATE WARNING ──────────────── */
+.duplicate-warning{background:#fffbeb;border:1.5px solid #f59e0b;border-radius:var(--r-sm);padding:8px 12px;margin-bottom:0.875rem;display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#92400e;}
+.duplicate-warning-icon{font-size:16px;flex-shrink:0;}
+
+/* ─── AUTO SYNC INDICATOR ────────────── */
+.sync-indicator{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--text-faint);}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse-dot 2s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
 /* ─── TOAST ──────────────────────────── */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(8px);background:#111;color:#fff;font-size:12.5px;font-weight:500;padding:9px 18px;border-radius:20px;z-index:9999;opacity:0;transition:opacity 0.25s,transform 0.25s;pointer-events:none;white-space:nowrap;box-shadow:var(--shadow-lg);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -804,6 +840,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
     </div>
     <div style="display:flex;gap:8px;align-items:center;">
       <div id="meta-sync-status" style="font-size:11px;color:var(--text-faint);"></div>
+      <button class="btn btn-ghost btn-sm" onclick="bulkImportToLibrary()" id="meta-bulk-btn">⬇ Import all to library</button>
       <button class="btn btn-primary btn-sm" onclick="syncMetaAds()" id="meta-sync-btn">⟳ Sync now</button>
     </div>
   </div>
@@ -1128,8 +1165,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 <div class="modal-overlay" id="ai-modal">
   <div class="modal-box sm">
     <div class="modal-header"><span class="modal-badge">AI</span><span class="modal-title">Add creative</span><button class="modal-close-btn" onclick="closeAIModal()">×</button></div>
-    <div class="modal-body">
-      <!-- Preview + name + adname -->
+    <div class="modal-body" id="ai-modal-body-inner">
       <div style="display:flex;gap:1rem;margin-bottom:1rem;align-items:flex-start;">
         <img id="ai-thumb" src="" alt="" style="width:90px;height:90px;object-fit:cover;border-radius:var(--r-md);border:1px solid var(--border-med);flex-shrink:0;"/>
         <div style="flex:1;">
@@ -1213,6 +1249,46 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
             </select>
           </div>
           <div class="field"></div>
+        </div>
+      </div>
+
+      <!-- AI AUTO-DETECTED FIELDS -->
+      <div class="modal-section" id="ai-autodetect-section" style="display:none;">
+        <div class="modal-section-title">🤖 AI auto-detected <span style="font-weight:400;color:var(--text-faint);margin-left:4px;">— review and adjust</span></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:0.875rem;">
+          <div class="ai-detect-card" id="adc-emotional">
+            <div class="adc-label">Emotional score</div>
+            <div class="adc-value" id="adc-emotional-val">—</div>
+            <div class="adc-bar"><div class="adc-bar-fill" id="adc-emotional-bar"></div></div>
+          </div>
+          <div class="ai-detect-card" id="adc-quality">
+            <div class="adc-label">Quality score</div>
+            <div class="adc-value" id="adc-quality-val">—</div>
+            <div class="adc-bar"><div class="adc-bar-fill" id="adc-quality-bar"></div></div>
+          </div>
+          <div class="ai-detect-card" id="adc-haskid">
+            <div class="adc-label">Has kid?</div>
+            <div class="adc-value" id="adc-haskid-val">—</div>
+            <div class="adc-sub" id="adc-kid-desc"></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div>
+            <div class="field-label" style="margin-bottom:4px;">Book detected <span class="ai-tag">AI</span></div>
+            <select class="field-select" id="ai-detected-book">
+              <option value="">None detected</option>
+            </select>
+          </div>
+          <div>
+            <div class="field-label" style="margin-bottom:4px;">Product visible <span class="ai-tag">AI</span></div>
+            <select class="field-select" id="ai-detected-product">
+              <option value="">Select...</option>
+              <option value="book">Book only</option>
+              <option value="box">Box/packaging only</option>
+              <option value="both">Book + packaging</option>
+              <option value="none">Neither visible</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -1382,7 +1458,7 @@ function doLogin(userId,silent){
   var d=document.getElementById('nav-user-display');
   d.innerHTML='<div class="nav-avatar" style="background:'+user.color+'">'+user.name.charAt(0)+'</div>'+
     '<span>'+user.name+'</span><span class="nav-logout" onclick="logout()">Sign out</span>';
-  populateSelects();populateUserFilter();populateConceptFilter();renderAll();renderConceptStats();updateMetaBadge();initView();
+  populateSelects();populateUserFilter();populateConceptFilter();renderAll();renderConceptStats();updateMetaBadge();startAutoSync();initView();
 }
 
 function logout(){
@@ -3572,6 +3648,367 @@ function renderSuggestionsMarkdown(text){
     .replace(/\n\n/g,'<br/><br/>')
     .replace(/\n/g,'<br/>');
 }
+// ─── HEALTH SCORE ───────────────────────────────────
+function calcHealthScore(cr){
+  var perf = cr.adname ? state.performance[cr.adname] : null;
+  var aov = parseFloat(state.aov)||32;
+  var scores = [];
+
+  // ROAS component (40% weight)
+  if(perf && parseFloat(perf.spend)>0){
+    var revenue = perf.revenue&&perf.revenue>0 ? perf.revenue : (parseInt(perf.purchases)||0)*aov;
+    var roas = revenue / parseFloat(perf.spend);
+    var roasScore = roas>=3.5?10 : roas>=2.5?8 : roas>=1.5?5 : roas>=0.5?3 : 1;
+    scores.push({s:roasScore, w:0.4});
+  }
+
+  // CTR component (20% weight)
+  if(perf && parseFloat(perf.ctr)>0){
+    var ctr = parseFloat(perf.ctr);
+    var ctrScore = ctr>=4?10 : ctr>=2?8 : ctr>=1?6 : ctr>=0.5?4 : 2;
+    scores.push({s:ctrScore, w:0.2});
+  }
+
+  // Quality score from AI (20% weight)
+  if(cr.qualityScore){ scores.push({s:cr.qualityScore, w:0.2}); }
+
+  // Emotional score from AI (20% weight)
+  if(cr.emotionalScore){ scores.push({s:cr.emotionalScore, w:0.2}); }
+
+  if(!scores.length) return null;
+
+  // Normalize weights and calculate
+  var totalWeight = scores.reduce(function(s,x){return s+x.w;},0);
+  var weighted = scores.reduce(function(s,x){return s+(x.s*x.w);},0);
+  return Math.round((weighted/totalWeight)*10)/10;
+}
+
+function getHealthInfo(score){
+  if(score===null) return {cls:'hs-na', label:'N/A', tip:'Add performance data'};
+  if(score>=8.5) return {cls:'hs-great', label:score.toFixed(1), tip:'Excellent — scale this'};
+  if(score>=6.5) return {cls:'hs-good',  label:score.toFixed(1), tip:'Good performance'};
+  if(score>=4.5) return {cls:'hs-ok',    label:score.toFixed(1), tip:'Needs optimization'};
+  return          {cls:'hs-low',          label:score.toFixed(1), tip:'Underperforming'};
+}
+
+// ─── SUGGESTED NEXT ACTION ──────────────────────────
+function getSuggestedAction(cr){
+  var perf = cr.adname ? state.performance[cr.adname] : null;
+  var aov = parseFloat(state.aov)||32;
+
+  if(!perf || parseFloat(perf.spend)<5){
+    if(cr.status==='draft') return {cls:'ap-test', label:'Launch →', reason:'Not yet running'};
+    return {cls:'ap-test', label:'Needs data', reason:'<€5 spend — too early to judge'};
+  }
+
+  var revenue = perf.revenue&&perf.revenue>0 ? perf.revenue : (parseInt(perf.purchases)||0)*aov;
+  var roas = parseFloat(perf.spend)>0 ? revenue/parseFloat(perf.spend) : 0;
+  var ctr = parseFloat(perf.ctr)||0;
+  var spend = parseFloat(perf.spend)||0;
+
+  if(roas>=3.5 && ctr>=2)
+    return {cls:'ap-scale', label:'Scale ↑', reason:'ROAS '+roas.toFixed(1)+'x · CTR '+ctr.toFixed(2)+'%'};
+  if(roas>=2.5)
+    return {cls:'ap-scale', label:'Scale carefully', reason:'ROAS '+roas.toFixed(1)+'x — approaching target'};
+  if(roas>=1.5 && ctr<1)
+    return {cls:'ap-optimize', label:'Fix hook', reason:'Low CTR '+ctr.toFixed(2)+'% is limiting reach'};
+  if(roas>=1.5)
+    return {cls:'ap-optimize', label:'Optimize', reason:'ROAS '+roas.toFixed(1)+'x — test new audience'};
+  if(roas<1.5 && spend>30)
+    return {cls:'ap-pause', label:'Pause ✕', reason:'ROAS '+roas.toFixed(1)+'x after €'+spend.toFixed(0)+' spend'};
+  return {cls:'ap-optimize', label:'Monitor', reason:'Gathering data...'};
+}
+
+// ─── DUPLICATE DETECTOR ─────────────────────────────
+function simpleHash(b64str){
+  // Quick fingerprint: sample pixels from a tiny canvas
+  return new Promise(function(resolve){
+    try{
+      var img = new Image();
+      img.onload = function(){
+        var c = document.createElement('canvas');
+        c.width=8;c.height=8;
+        var ctx=c.getContext('2d');
+        ctx.drawImage(img,0,0,8,8);
+        var d=ctx.getImageData(0,0,8,8).data;
+        var hash='';
+        for(var i=0;i<d.length;i+=16) hash+=Math.round(d[i]/16).toString(16);
+        resolve(hash);
+      };
+      img.onerror=function(){resolve(null);};
+      img.src='data:image/jpeg;base64,'+b64str;
+    }catch(e){resolve(null);}
+  });
+}
+
+function hammingDistance(a,b){
+  if(!a||!b||a.length!==b.length) return 999;
+  var dist=0;
+  for(var i=0;i<a.length;i++) if(a[i]!==b[i]) dist++;
+  return dist;
+}
+
+async function checkDuplicate(b64){
+  var hash = await simpleHash(b64);
+  if(!hash) return null;
+  var allCreatives = [];
+  VIDS.forEach(function(v){(state.creatives[v]||[]).forEach(function(c){if(c.imgHash)allCreatives.push(c);});});
+  for(var i=0;i<allCreatives.length;i++){
+    if(hammingDistance(hash,allCreatives[i].imgHash)<5)
+      return allCreatives[i];
+  }
+  return null;
+}
+
+// ─── EXTENDED AI ANALYSIS (auto-tagging) ────────────
+function buildAddPrompt(vid, varTitle, num, pn, conceptLetter){
+  var booksList = state.lists.books.length ? state.lists.books.join(', ') : 'unknown';
+  var productsList = state.lists.products.length ? state.lists.products.join(', ') : 'unknown';
+  return 'You are analyzing a Facebook ad creative for WonderWraps — personalized children\'s books where kids are illustrated as cartoon characters.\n\n'+
+    'Variation: '+vid+' "'+varTitle+'"\nCreative number: '+num+'\n'+
+    'Available hooks: '+state.lists.hooks.join(', ')+'\n'+
+    'Available formats: '+state.lists.formats.join(', ')+'\n'+
+    'Known books: '+booksList+'\n'+
+    'Known products: '+productsList+'\n\n'+
+    'Analyze this creative and respond ONLY with valid JSON (no markdown, no explanation):\n'+
+    '{'+
+      '"creative_name":"Short name max 6 words",'+
+      '"meta_ad_name":"WW_'+conceptLetter+'_'+vid+'_'+pn+'_[CamelCaseDesc]",'+
+      '"funnel_stage":"tofu or mofu or bofu or retargeting",'+
+      '"format":"one of the available formats",'+
+      '"hook":"one of the available hooks or none",'+
+      '"production_type":"ai_generated or professional or ugc or mixed",'+
+      '"language":"english or arabic or french or german or spanish or portuguese or other — detect from any text visible",'+
+      '"has_kid":true or false,'+
+      '"kid_description":"brief description of child visible e.g. blonde girl age 4-6 or null",'+
+      '"emotional_score":number 1-10 (how emotionally triggering for parents — 10 = tears),'+
+      '"quality_score":number 1-10 (visual production quality — 10 = magazine level),'+
+      '"book_detected":"exact book name from Known books list if visible else null",'+
+      '"product_visible":"book or box or both or none",'+
+      '"analysis":"2-3 sentences: emotional angle, Facebook strength/weakness, one improvement suggestion"'+
+    '}';
+}
+
+// ─── UPDATED analyzeMedia WITH AUTO-TAGGING ──────────
+var _origAnalyzeMedia = analyzeMedia;
+analyzeMedia = function(mediaData, vid, isVideo){
+  var grid=document.getElementById('grid-'+vid);
+  var addZone=grid?grid.querySelector('.add-creative-zone'):null;
+  var ai=getDefaultAI(isVideo?'video':'image');
+  var aiLabel=ai.charAt(0).toUpperCase()+ai.slice(1);
+  if(addZone){addZone.classList.add('analyzing');addZone.innerHTML='<div class="analyzing-inner"><div class="analyzing-spinner"></div><div class="analyzing-text">'+aiLabel+' analyzing...</div><div class="analyzing-sub">Auto-tagging: book, emotion, quality, kid detection</div></div>';}
+  var varCard=document.querySelector('[data-vid="'+vid+'"]');
+  var varTitle=varCard?varCard.querySelector('.var-title-text').textContent:vid;
+  var conceptLetter=vid.charAt(0);
+  var num=(state.creatives[vid]||[]).length+1;
+  var pn=num<10?'0'+num:''+num;
+  var key=getKeyFor(ai);
+  if(ai!=='claude'&&!key){rerenderGrid(vid);openAIModal({creative_name:varTitle+' v'+num,meta_ad_name:'WW_'+conceptLetter+'_'+vid+'_'+pn+'_Creative'+num,analysis:'No '+aiLabel+' API key. Go to Settings → AI providers.'});return;}
+  var b64=mediaData.split(',')[1];
+  var addPrompt=buildAddPrompt(vid,varTitle,num,pn,conceptLetter);
+  var fallback={creative_name:varTitle+' v'+num,meta_ad_name:'WW_'+conceptLetter+'_'+vid+'_'+pn+'_Creative'+num,analysis:'Analysis failed. Edit manually.'};
+
+  // Check for duplicates before analyzing
+  checkDuplicate(b64).then(function(dup){
+    if(dup){
+      // Show warning in modal immediately but still proceed with analysis
+      setTimeout(function(){
+        var body=document.getElementById('ai-modal-body-inner');
+        if(!body) return;
+        var warn=document.createElement('div');
+        warn.className='duplicate-warning';
+        warn.innerHTML='<div class="duplicate-warning-icon">⚠️</div><div><strong>Possible duplicate detected</strong> — similar to "'+dup.name+'" already in the library. Review before saving.</div>';
+        body.insertBefore(warn, body.firstChild);
+      }, 500);
+    }
+  });
+
+  function handleResp(p){
+    p.then(function(r){return r.json();}).then(function(data){
+      var text='';
+      if(ai==='claude') text=data.content&&data.content[0]?data.content[0].text:'';
+      else if(ai==='gemini') text=data.candidates&&data.candidates[0]?data.candidates[0].content.parts.map(function(p){return p.text||'';}).join(''):'';
+      else if(ai==='chatgpt') text=data.choices&&data.choices[0]?data.choices[0].message.content:'';
+      var clean=text.replace(/```json|```/g,'').trim();
+      var res;try{res=JSON.parse(clean);}catch(e){res=fallback;}
+      // Store AI scores for health calculation
+      if(res.emotional_score) res._emotionalScore=res.emotional_score;
+      if(res.quality_score) res._qualityScore=res.quality_score;
+      if(b64) simpleHash(b64).then(function(h){res._imgHash=h;});
+      rerenderGrid(vid);openAIModal(res);
+    }).catch(function(){rerenderGrid(vid);openAIModal(fallback);});
+  }
+
+  if(ai==='claude') handleResp(fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:addPrompt}]}]})}));
+  else if(ai==='gemini') handleResp(fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key='+key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{inline_data:{mime_type:isVideo?'video/mp4':'image/jpeg',data:b64}},{text:addPrompt}]}]})}));
+  else if(ai==='chatgpt') handleResp(fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'gpt-4o',max_tokens:1200,messages:[{role:'user',content:[{type:'image_url',image_url:{url:'data:image/jpeg;base64,'+b64}},{type:'text',text:addPrompt}]}]})}));
+};
+
+// ─── UPDATED openAIModal WITH AUTO-TAG DISPLAY ────────
+var _origOpenAIModal = openAIModal;
+openAIModal = function(res){
+  _origOpenAIModal(res);
+  // Populate auto-detect section
+  var section=document.getElementById('ai-autodetect-section');
+  if(!section) return;
+  section.style.display='';
+
+  // Emotional score
+  var emoVal=document.getElementById('adc-emotional-val');
+  var emoBar=document.getElementById('adc-emotional-bar');
+  var emoCard=document.getElementById('adc-emotional');
+  if(res.emotional_score||res._emotionalScore){
+    var es=res.emotional_score||res._emotionalScore;
+    if(emoVal) emoVal.textContent=es+'/10';
+    if(emoBar) emoBar.style.width=(es*10)+'%';
+    var emoColor=es>=8?'var(--green)':es>=5?'var(--amber)':'var(--red)';
+    if(emoBar) emoBar.style.background=emoColor;
+    if(emoCard) emoCard.style.borderColor=(es>=7?'var(--green-light)':es>=5?'var(--amber-light)':'var(--red-light)');
+  }
+
+  // Quality score
+  var qualVal=document.getElementById('adc-quality-val');
+  var qualBar=document.getElementById('adc-quality-bar');
+  if(res.quality_score||res._qualityScore){
+    var qs=res.quality_score||res._qualityScore;
+    if(qualVal) qualVal.textContent=qs+'/10';
+    if(qualBar){qualBar.style.width=(qs*10)+'%';qualBar.style.background=qs>=8?'var(--green)':qs>=6?'var(--amber)':'var(--red)';}
+  }
+
+  // Kid detection
+  var kidVal=document.getElementById('adc-haskid-val');
+  var kidDesc=document.getElementById('adc-kid-desc');
+  if(res.has_kid!==undefined){
+    if(kidVal) kidVal.textContent=res.has_kid?'Yes ✓':'No';
+    if(kidVal) kidVal.style.color=res.has_kid?'var(--green)':'var(--text-faint)';
+    if(kidDesc&&res.kid_description&&res.kid_description!=='null') kidDesc.textContent=res.kid_description;
+  }
+
+  // Language auto-set
+  if(res.language) setSelectVal('ai-language',res.language);
+
+  // Book detected
+  var bookSel=document.getElementById('ai-detected-book');
+  if(bookSel){
+    bookSel.innerHTML='<option value="">None detected</option>';
+    state.lists.books.forEach(function(b){bookSel.innerHTML+='<option value="'+b+'"'+(res.book_detected===b?' selected':'')+'>'+b+'</option>';});
+    if(res.book_detected&&res.book_detected!=='null') setSelectVal('ai-detected-book',res.book_detected);
+  }
+
+  // Product visible
+  if(res.product_visible) setSelectVal('ai-detected-product',res.product_visible);
+};
+
+// ─── UPDATED saveCreative WITH NEW FIELDS ────────────
+var _origSaveCreative = saveCreative;
+saveCreative = function(){
+  var name=document.getElementById('ai-name').textContent.trim();
+  if(!name){showToast('Name cannot be empty');return;}
+  var adname=document.getElementById('ai-adname').textContent.trim();
+  var author=document.getElementById('ai-author').value;
+  var status=document.getElementById('ai-status').value;
+  var funnel=document.getElementById('ai-funnel').value;
+  var format=document.getElementById('ai-format').value;
+  var hook=document.getElementById('ai-hook').value;
+  var prodtype=document.getElementById('ai-prodtype').value;
+  var language=document.getElementById('ai-language')?document.getElementById('ai-language').value:'';
+  var detectedBook=document.getElementById('ai-detected-book')?document.getElementById('ai-detected-book').value:'';
+  var detectedProduct=document.getElementById('ai-detected-product')?document.getElementById('ai-detected-product').value:'';
+  var id='cr-'+Date.now();
+  if(!state.creatives[currentVid])state.creatives[currentVid]=[];
+  state.creatives[currentVid].push({
+    id:id,name:name,adname:adname,
+    img:modalIsVideo?null:modalMedia,video:modalIsVideo?modalMedia:null,
+    author:author,status:status,funnel:funnel,format:format,hook:hook,
+    prodtype:prodtype,language:language,
+    books:detectedBook?[detectedBook]:[],
+    kids:[],products:detectedProduct?[detectedProduct]:[],audiences:[],
+    emotionalScore:window._lastEmotionalScore||null,
+    qualityScore:window._lastQualityScore||null,
+    imgHash:window._lastImgHash||null
+  });
+  save();rerenderGrid(currentVid);updateStats();closeAIModal();showToast('Creative added — '+name);
+};
+
+// ─── UPDATED makeCard WITH HEALTH SCORE + ACTION ─────
+var _prevMakeCard = makeCard;
+makeCard = function(cr, vid){
+  var div = _prevMakeCard(cr, vid);
+  var wrap = div.querySelector('.creative-media-wrap');
+  if(wrap){
+    // Health score badge
+    var score = calcHealthScore(cr);
+    var hi = getHealthInfo(score);
+    var hBadge = document.createElement('div');
+    hBadge.className='health-score '+hi.cls;
+    hBadge.title=hi.tip;
+    hBadge.innerHTML='<div class="health-score-dot"></div>'+hi.label;
+    wrap.appendChild(hBadge);
+  }
+  // Suggested action strip
+  var action = getSuggestedAction(cr);
+  var actionDiv = document.createElement('div');
+  actionDiv.className='suggested-action';
+  actionDiv.innerHTML='<button class="action-pill '+action.cls+'" onclick="event.stopPropagation()" title="'+action.reason+'">'+action.label+'</button>'+
+    '<span class="action-reason">'+action.reason+'</span>';
+  div.appendChild(actionDiv);
+  return div;
+};
+
+// ─── BULK IMPORT FROM META ADS ───────────────────────
+function bulkImportToLibrary(){
+  var ads = Object.values(state.metaAds||{});
+  var toImport = ads.filter(function(ad){
+    return ad.name && ad.name.startsWith('WW_') && !isAdInLibrary(ad.name);
+  });
+  if(!toImport.length){showToast('All WW_ ads are already in the library');return;}
+
+  var imported=0, skipped=0;
+  toImport.forEach(function(ad){
+    // Parse naming convention: WW_[Concept]_[Variation]_[##]_[Desc]
+    var parts=ad.name.split('_');
+    if(parts.length<4){skipped++;return;}
+    var vid=parts[2]; // e.g. A1, B1
+    if(VIDS.indexOf(vid)===-1){skipped++;return;}
+    if(!state.creatives[vid])state.creatives[vid]=[];
+    state.creatives[vid].push({
+      id:'cr-'+Date.now()+'-'+imported,
+      name:ad.name,adname:ad.name,
+      img:ad.thumb||null,video:null,
+      author:state.currentUser||'arben',
+      status:'published',
+      funnel:'',format:'',hook:'',prodtype:'',language:'',
+      books:[],kids:[],products:[],audiences:[],
+      fromMeta:true,metaAdId:ad.id
+    });
+    imported++;
+  });
+  save();VIDS.forEach(function(v){rerenderGrid(v);});updateStats();
+  updateMetaBadge();renderMetaAds();
+  showToast('Imported '+imported+' ads'+(skipped?' ('+skipped+' skipped — unknown variation)':''));
+}
+
+// ─── AUTO-SYNC EVERY 2 HOURS ─────────────────────────
+var _autoSyncInterval = null;
+function startAutoSync(){
+  if(_autoSyncInterval) clearInterval(_autoSyncInterval);
+  if(!isMetaConnected()) return;
+  // Sync on load
+  if(state.metaLastSync){
+    var lastSync=new Date(state.metaLastSync);
+    var minsAgo=(Date.now()-lastSync.getTime())/60000;
+    if(minsAgo>120) syncMetaAds(); // stale — sync immediately
+  } else {
+    syncMetaAds();
+  }
+  // Then every 2 hours
+  _autoSyncInterval = setInterval(function(){
+    if(isMetaConnected()) syncMetaAds();
+  }, 2*60*60*1000);
+  console.log('[WW] Auto-sync started — every 2h');
+}
+
+
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
 </script>
 </body>
