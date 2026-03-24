@@ -4316,19 +4316,36 @@ function analyzeMedia(mediaData, vid, isVideo){
   });
 
   function handleResp(p){
-    p.then(function(r){return r.json();}).then(function(data){
-      var text='';
-      if(ai==='claude') text=data.content&&data.content[0]?data.content[0].text:'';
-      else if(ai==='gemini') text=data.candidates&&data.candidates[0]?data.candidates[0].content.parts.map(function(p){return p.text||'';}).join(''):'';
-      else if(ai==='chatgpt') text=data.choices&&data.choices[0]?data.choices[0].message.content:'';
-      var clean=text.replace(/```json|```/g,'').trim();
-      var res;try{res=JSON.parse(clean);}catch(e){res=fallback;}
-      // Store AI scores for health calculation
-      if(res.emotional_score) res._emotionalScore=res.emotional_score;
-      if(res.quality_score) res._qualityScore=res.quality_score;
-      if(b64) simpleHash(b64).then(function(h){res._imgHash=h;});
-      rerenderGrid(vid);openAIModal(res);
-    }).catch(function(){rerenderGrid(vid);openAIModal(fallback);});
+    p.then(function(r){
+      return r.json().then(function(data){
+        // Show API errors visibly instead of silent fallback
+        if(!r.ok || data.error){
+          var errMsg = data.error ? JSON.stringify(data.error).slice(0,150) : 'HTTP '+r.status;
+          rerenderGrid(vid);
+          openAIModal(Object.assign({},fallback,{analysis:'API error: '+errMsg}));
+          return;
+        }
+        var text='';
+        if(ai==='claude') text=data.content&&data.content[0]?data.content[0].text:'';
+        else if(ai==='gemini') text=data.candidates&&data.candidates[0]?data.candidates[0].content.parts.map(function(part){return part.text||'';}).join(''):'';
+        else if(ai==='chatgpt') text=data.choices&&data.choices[0]?data.choices[0].message.content:'';
+        var clean=text.replace(/```json|```/g,'').trim();
+        var res;
+        try{res=JSON.parse(clean);}
+        catch(e){
+          var m=clean.match(/\{[\s\S]*\}/);
+          if(m)try{res=JSON.parse(m[0]);}catch(e2){res=Object.assign({},fallback,{analysis:'Parse error: '+clean.slice(0,100)});}
+          else res=Object.assign({},fallback,{analysis:'Parse error: '+clean.slice(0,100)});
+        }
+        if(res.emotional_score) res._emotionalScore=res.emotional_score;
+        if(res.quality_score) res._qualityScore=res.quality_score;
+        if(b64) simpleHash(b64).then(function(h){res._imgHash=h;});
+        rerenderGrid(vid);openAIModal(res);
+      });
+    }).catch(function(err){
+      rerenderGrid(vid);
+      openAIModal(Object.assign({},fallback,{analysis:'Network/proxy error: '+err.message+'. Make sure api/claude.js is deployed on Vercel and ANTHROPIC_API_KEY is set in Vercel env vars.'}));
+    });
   }
 
   if(ai==='claude') handleResp(fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:addPrompt}]}]})}));
