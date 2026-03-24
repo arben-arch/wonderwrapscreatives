@@ -955,16 +955,28 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
   </div>
 
   <div class="settings-section">
-    <div class="settings-title">Average Order Value (AOV)</div>
-    <div class="settings-desc">Used to calculate ROAS. <strong>Auto-detected from Meta pixel</strong> if you pass purchase values via your pixel — updates automatically on every sync. Override manually if needed.</div>
-    <div style="display:flex;align-items:center;gap:10px;max-width:380px;flex-wrap:wrap;">
-      <span style="font-size:13px;color:var(--text-muted);">€</span>
-      <input type="number" id="aov-input" class="settings-add-input" placeholder="e.g. 32" min="1" max="9999" step="0.01" style="flex:1;" oninput="saveAOV()" />
-      <span style="font-size:12px;color:var(--text-faint);">per order</span>
+    <div class="settings-title">Revenue & ROAS calculation</div>
+    <div class="settings-desc">ROAS is calculated from <strong>actual purchase revenue</strong> reported by your Meta pixel (<code style="font-size:11px;background:var(--surface3);padding:1px 5px;border-radius:3px;">action_values → purchase</code>). This is per-creative, per-campaign, per-country — accurate by default.</div>
+
+    <div id="revenue-intel-panel">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem;" id="revenue-stats-row">
+        <div class="concept-stat"><div class="concept-stat-key">Total revenue (synced)</div><div class="concept-stat-val" id="rev-total">—</div></div>
+        <div class="concept-stat"><div class="concept-stat-key">Avg order value (real)</div><div class="concept-stat-val" id="rev-aov">—</div></div>
+        <div class="concept-stat"><div class="concept-stat-key">Last sync</div><div class="concept-stat-val empty" id="rev-sync" style="font-size:12px;">Never</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);line-height:1.7;background:var(--surface2);border-radius:var(--r-sm);padding:10px 12px;border:1px solid var(--border);">
+        <strong>How ROAS is calculated:</strong> Revenue ÷ Spend — using the exact purchase value your Meta pixel fires on each order. No fixed multiplier. If your pixel doesn't pass <code style="background:var(--surface3);padding:1px 4px;border-radius:3px;">value</code> in the Purchase event, connect your store or pass it manually in the pixel code: <code style="background:var(--surface3);padding:1px 4px;border-radius:3px;">fbq('track','Purchase',{value:29.99,currency:'EUR'})</code>
+      </div>
     </div>
-    <div id="aov-source-label" style="margin-top:8px;font-size:11px;"></div>
-    <div style="margin-top:6px;font-size:11px;color:var(--text-faint);">
-      ROAS thresholds: <span style="color:#6B3FA0;font-weight:600;">3.5+ Excellent</span> · <span style="color:#16a34a;font-weight:600;">2.5–3.5 Good</span> · <span style="color:#d97706;font-weight:600;">1.5–2.5 Below target</span> · <span style="color:#dc2626;font-weight:600;">&lt;1.5 Poor</span>
+
+    <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+      <div style="font-size:11px;font-weight:600;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;">ROAS performance thresholds</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="background:#f3effe;color:#5B35A0;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;">💜 3.5x+ Excellent</span>
+        <span style="background:var(--green-light);color:var(--green-dark);font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;">🟢 2.5–3.5x Good</span>
+        <span style="background:var(--amber-light);color:var(--amber-dark);font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;">🟡 1.5–2.5x Below target</span>
+        <span style="background:var(--red-light);color:var(--red-dark);font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;">🔴 &lt;1.5x Poor</span>
+      </div>
     </div>
   </div>
 
@@ -1559,35 +1571,39 @@ function getRoasInfo(roas){
   if(roas>=1.5)return{cls:'roas-mid',tier:'mid'};
   return{cls:'roas-low',tier:'low'};
 }
-function saveAOV(){
-  var inp=document.getElementById('aov-input');if(!inp)return;
-  var v=parseFloat(inp.value);
-  if(!isNaN(v)&&v>0){
-    state.aov=v;
-    state.aovFromMeta=false; // manual override
-    save();VIDS.forEach(function(vid){rerenderGrid(vid);});
-    updateAOVDisplay();
-    showToast('AOV updated to €'+v.toFixed(2));
-  }
+// ─── REVENUE INTELLIGENCE (replaces manual AOV) ───
+function calcRoas(perf){
+  // Always use actual pixel revenue — never a fixed multiplier
+  if(!perf) return null;
+  var spend = parseFloat(perf.spend)||0;
+  var revenue = parseFloat(perf.revenue)||0;
+  if(spend<=0) return null;
+  if(revenue>0) return revenue/spend; // real pixel data
+  return null; // no revenue data — don't fake it
 }
 
-function updateAOVDisplay(){
-  var el=document.getElementById('aov-source-label');if(!el)return;
-  if(state.aovFromMeta&&state.aovLastUpdated){
-    var d=new Date(state.aovLastUpdated).toLocaleDateString('en-GB');
-    el.innerHTML='<span style="color:var(--green-dark);font-weight:500;">✓ Auto-detected from Meta pixel · Last updated '+d+'</span>';
-  } else if(state.aov){
-    el.innerHTML='<span style="color:var(--text-faint);">Manually set · Connect Meta API and sync to auto-detect from pixel data</span>';
-  } else {
-    el.innerHTML='<span style="color:var(--amber-dark);">Not set — enter your average order value above</span>';
-  }
+function updateRevenuePanel(){
+  var allPerf = Object.values(state.performance||{});
+  var totalRevenue=0, totalSpend=0, purchaseCount=0;
+  allPerf.forEach(function(p){
+    totalRevenue+=parseFloat(p.revenue)||0;
+    totalSpend+=parseFloat(p.spend)||0;
+    purchaseCount+=parseInt(p.purchases)||0;
+  });
+  var avgAOV = purchaseCount>0&&totalRevenue>0 ? totalRevenue/purchaseCount : null;
+  var revEl=document.getElementById('rev-total');
+  var aovEl=document.getElementById('rev-aov');
+  var syncEl=document.getElementById('rev-sync');
+  if(revEl) revEl.textContent = totalRevenue>0 ? '€'+totalRevenue.toFixed(0) : '—';
+  if(aovEl) aovEl.textContent = avgAOV ? '€'+avgAOV.toFixed(2) : '—';
+  if(syncEl) syncEl.textContent = state.metaLastSync ? new Date(state.metaLastSync).toLocaleDateString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : 'Never synced';
+  // Keep state.aov as the observed average for fallback use only
+  if(avgAOV) state.aov = avgAOV;
 }
 
-function loadAOV(){
-  var inp=document.getElementById('aov-input');
-  if(inp)inp.value=state.aov||32;
-  updateAOVDisplay();
-}
+function loadAOV(){ updateRevenuePanel(); }
+function saveAOV(){ updateRevenuePanel(); }
+function updateAOVDisplay(){ updateRevenuePanel(); }
 var currentView = 'grid';
 function setView(view, btn){
   currentView = view;
@@ -1660,8 +1676,7 @@ function renderFlatGallery(){
       if(!basicMatch) return false;
       if(!roasF) return true;
       var rp=cr.adname?state.performance[cr.adname]:null;
-      var aov=parseFloat(state.aov)||32;
-      var roas=rp&&parseFloat(rp.spend)>0?((parseInt(rp.purchases)||0)*aov)/parseFloat(rp.spend):null;
+      var roas=calcRoas(rp);
       return getRoasInfo(roas).tier===roasF;
     });
 
@@ -1807,8 +1822,7 @@ function applyFilters(){
       var roasOk=true;
       if(f['filter-roas']){
         var rp=cr.adname?state.performance[cr.adname]:null;
-        var aov=parseFloat(state.aov)||32;
-        var roas=rp&&parseFloat(rp.spend)>0?((parseInt(rp.purchases)||0)*aov)/parseFloat(rp.spend):null;
+        var roas=calcRoas(rp);
         var tier=getRoasInfo(roas).tier;
         roasOk=tier===f['filter-roas'];
       }
@@ -2018,10 +2032,8 @@ function makeCard(cr,vid){
     var purch=parseInt(perf.purchases)||0;
     var ctrC=parseFloat(perf.ctr)>2?'good':parseFloat(perf.ctr)>1?'warn':'bad';
     var cpcC=parseFloat(perf.cpc)<0.3?'good':parseFloat(perf.cpc)<0.5?'warn':'bad';
-    // ROAS: use actual pixel revenue if available, else purchases × AOV
-    var aov=parseFloat(state.aov)||32;
-    var revenue=perf.revenue&&perf.revenue>0?perf.revenue:(purch*aov);
-    var roas=spend>0?(revenue/spend):null;
+    // ROAS: real pixel revenue only — no fixed multiplier
+    var roas=calcRoas(perf);
     var roasInfo=getRoasInfo(roas);
     perfHtml='<div class="creative-perf">'+
       '<div class="perf-item"><div class="perf-key">CTR</div><div class="perf-val '+ctrC+'">'+parseFloat(perf.ctr).toFixed(2)+'%</div></div>'+
@@ -2241,9 +2253,9 @@ function openPerfModal(crid,vid){
     var purch=parseInt(perf.purchases)||0,impr=parseInt(perf.impressions)||0,clicks=parseInt(perf.clicks)||0;
     var cpo=purch>0?(spend/purch).toFixed(2):'—';
     var ctrC=ctr>2?'good':ctr>1?'warn':'bad';
-    // ROAS
-    var aov=parseFloat(state.aov)||32;
-    var roas=spend>0?((purch*aov)/spend):null;
+    // ROAS from real pixel revenue
+    var roas=calcRoas(perf);
+    var revenue=perf.revenue&&parseFloat(perf.revenue)>0?parseFloat(perf.revenue):null;
     var roasInfo=getRoasInfo(roas);
     var roasColor=roasInfo.cls==='roas-excellent'?'#6B3FA0':roasInfo.cls==='roas-good'?'#16a34a':roasInfo.cls==='roas-mid'?'#d97706':roasInfo.cls==='roas-low'?'#dc2626':'var(--text-faint)';
     html+='<div style="display:flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:1.25rem;">'+
@@ -2256,7 +2268,7 @@ function openPerfModal(crid,vid){
           (roasInfo.tier==='excellent'?'Excellent performance':roasInfo.tier==='good'?'Good performance':roasInfo.tier==='mid'?'Below target':roasInfo.tier==='low'?'Poor performance':'No data')+
         '</div>'+
         '<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">'+
-          (roas!==null?'Every €1 spent generates €'+roas.toFixed(2)+' in revenue (AOV €'+(aov.toFixed(0))+')':'Upload Meta CSV to calculate ROAS')+
+          (roas!==null?'Every €1 spent generates €'+roas.toFixed(2)+' in revenue (real pixel data)':'No revenue data from pixel — check Meta pixel Purchase event value')+
         '</div>'+
       '</div>'+
     '</div>';
@@ -2958,6 +2970,7 @@ function syncMetaAds(){
     }
     state.metaLastSync=now;
     save();
+    updateRevenuePanel();
 
     if(btn){btn.textContent='⟳ Sync now';btn.disabled=false;}
     var syncedAgo=new Date().toLocaleTimeString();
@@ -3026,7 +3039,6 @@ function renderMetaAds(){
     allCamps.forEach(function(c){campSel.innerHTML+='<option value="'+c+'"'+(cur===c?' selected':'')+'>'+c+'</option>';});
   }
 
-  var aov=parseFloat(state.aov)||32;
   var html='<div style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">'+ads.length+' ads shown · '+ads.filter(function(a){return !isAdInLibrary(a.name);}).length+' not yet in library</div>';
   html+='<div class="meta-ads-grid-inner">';
 
@@ -3034,7 +3046,7 @@ function renderMetaAds(){
 
   ads.forEach(function(ad){
     var inLib=isAdInLibrary(ad.name);
-    var roas=ad.spend>0?((ad.purchases*aov)/ad.spend):null;
+    var roas=ad.revenue&&ad.spend>0?ad.revenue/ad.spend:null;
     var roasInfo=getRoasInfo(roas);
     var statusCls=ad.status==='ACTIVE'?'meta-active':ad.status==='PAUSED'?'meta-paused':'meta-archived';
     var ctrC=ad.ctr>2?'var(--green-dark)':ad.ctr>1?'var(--amber-dark)':'var(--text)';
@@ -3178,7 +3190,6 @@ function getCreativePerf(cr){
 
 function getAllCreativesWithPerf(){
   var results = [];
-  var aov = parseFloat(state.aov)||32;
   VIDS.forEach(function(vid){
     (state.creatives[vid]||[]).forEach(function(cr){
       var perf = getCreativePerf(cr);
@@ -3188,10 +3199,9 @@ function getAllCreativesWithPerf(){
       var clicks= perf ? parseInt(perf.clicks)||0 : 0;
       var ctr   = perf ? parseFloat(perf.ctr)||0 : 0;
       var cpc   = perf ? parseFloat(perf.cpc)||0 : 0;
-      // Use actual pixel revenue if available, otherwise estimate via AOV
-      var revenue = perf&&perf.revenue&&perf.revenue>0 ? perf.revenue : purch*aov;
-      var roas  = spend>0 ? revenue/spend : null;
-      results.push({cr:cr, vid:vid, perf:perf, spend:spend, purch:purch, impr:impr, clicks:clicks, ctr:ctr, cpc:cpc, roas:roas, revenue:revenue, aov:aov});
+      var roas = calcRoas(perf);
+      var revenue = perf&&parseFloat(perf.revenue)>0 ? parseFloat(perf.revenue) : null;
+      results.push({cr:cr, vid:vid, perf:perf, spend:spend, purch:purch, impr:impr, clicks:clicks, ctr:ctr, cpc:cpc, roas:roas, revenue:revenue});
     });
   });
   return results;
@@ -3297,16 +3307,15 @@ function renderInsightByGroup(panel, withPerf, all, field, title, icon, labelMap
     groups[key].impr  += x.impr;
     groups[key].clicks+= x.clicks;
   });
-  var aov = parseFloat(state.aov)||32;
   var sorted = Object.values(groups).sort(function(a,b){
-    var ra = a.spend>0?(a.purch*aov)/a.spend:0;
-    var rb = b.spend>0?(b.purch*aov)/b.spend:0;
+    var ra=a.spend>0&&a.revenue>0?a.revenue/a.spend:0;
+    var rb=b.spend>0&&b.revenue>0?b.revenue/b.spend:0;
     return rb-ra;
   });
   var html = '<div class="insight-header"><div class="insight-title">'+icon+' '+title+'</div><div class="insight-desc">Aggregated performance across all creatives, grouped by '+field+'.</div></div>';
   if(!sorted.length){ panel.innerHTML = html + noDataHtml('No data for this breakdown'); return; }
   sorted.forEach(function(g){
-    var roas = g.spend>0?(g.purch*aov)/g.spend:null;
+    var roas = g.spend>0&&g.revenue>0?g.revenue/g.spend:null;
     var ctr  = g.impr>0?(g.clicks/g.impr*100):0;
     var roasInfo = getRoasInfo(roas);
     var roasColor = roasInfo.cls==='roas-excellent'?'#6B3FA0':roasInfo.cls==='roas-good'?'#16a34a':roasInfo.cls==='roas-mid'?'#d97706':'#dc2626';
@@ -3348,14 +3357,13 @@ function renderInsightByArrayField(panel, withPerf, all, field, title, icon){
   });
   renderInsightByGroup(panel, withPerf, all, field, title, icon, null);
   // Override with multi-value grouping
-  var aov = parseFloat(state.aov)||32;
   var sorted = Object.values(groups).filter(function(g){return g.key!=='(none)';}).sort(function(a,b){
-    var ra=a.spend>0?(a.purch*aov)/a.spend:0, rb=b.spend>0?(b.purch*aov)/b.spend:0; return rb-ra;
+    var ra=a.roas||0, rb=b.roas||0; return rb-ra;
   });
   var html = '<div class="insight-header"><div class="insight-title">'+icon+' '+title+'</div><div class="insight-desc">Creatives grouped by which books appear. A creative can count in multiple groups.</div></div>';
   if(!sorted.length){ panel.innerHTML = html + noDataHtml('No book data — tag books on your creatives via Edit'); return; }
   sorted.forEach(function(g){
-    var roas=g.spend>0?(g.purch*aov)/g.spend:null, ctr=g.impr>0?(g.clicks/g.impr*100):0;
+    var roas=g.spend>0&&g.revenue>0?g.revenue/g.spend:null, ctr=g.impr>0?(g.clicks/g.impr*100):0;
     var roasInfo=getRoasInfo(roas);
     var rc=roasInfo.cls==='roas-excellent'?'#6B3FA0':roasInfo.cls==='roas-good'?'#16a34a':roasInfo.cls==='roas-mid'?'#d97706':'#dc2626';
     html+='<div class="insight-group-card"><div class="insight-group-title"><span>'+icon+'</span>'+g.key+'<span style="font-size:11px;color:var(--text-faint);font-weight:400;margin-left:4px;">'+g.items.length+' creatives</span><div style="margin-left:auto;min-width:44px;height:44px;border-radius:50%;background:'+rc+';display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1;">'+(roas!==null?roas.toFixed(1):'—')+'</span><span style="font-size:8px;color:rgba(255,255,255,0.75);font-weight:600;">ROAS</span></div></div>'+
@@ -3378,12 +3386,11 @@ function renderInsightByKid(panel, withPerf, all){
       groups[key].impr+=x.impr;  groups[key].clicks+=x.clicks;
     });
   });
-  var aov=parseFloat(state.aov)||32;
-  var sorted=Object.values(groups).sort(function(a,b){var ra=a.spend>0?(a.purch*aov)/a.spend:0,rb=b.spend>0?(b.purch*aov)/b.spend:0;return rb-ra;});
+  var sorted=Object.values(groups).sort(function(a,b){var ra=a.spend>0&&a.revenue>0?a.revenue/a.spend:0,rb=b.spend>0&&b.revenue>0?b.revenue/b.spend:0;return rb-ra;});
   var html='<div class="insight-header"><div class="insight-title">👧 Best Performing Kids</div><div class="insight-desc">Which kid profiles drive the most conversions.</div></div>';
   if(!sorted.length){panel.innerHTML=html+noDataHtml('No kid profile data — tag kids on your creatives via Edit');return;}
   sorted.forEach(function(g){
-    var roas=g.spend>0?(g.purch*aov)/g.spend:null,ctr=g.impr>0?(g.clicks/g.impr*100):0;
+    var roas=g.spend>0&&g.revenue>0?g.revenue/g.spend:null,ctr=g.impr>0?(g.clicks/g.impr*100):0;
     var rc=getRoasInfo(roas).cls==='roas-excellent'?'#6B3FA0':getRoasInfo(roas).cls==='roas-good'?'#16a34a':getRoasInfo(roas).cls==='roas-mid'?'#d97706':'#dc2626';
     html+='<div class="insight-group-card"><div class="insight-group-title">👧 '+g.key+'<span style="font-size:11px;color:var(--text-faint);font-weight:400;margin-left:6px;">'+g.desc+'</span><div style="margin-left:auto;min-width:44px;height:44px;border-radius:50%;background:'+rc+';display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1;">'+(roas!==null?roas.toFixed(1):'—')+'</span><span style="font-size:8px;color:rgba(255,255,255,0.75);">ROAS</span></div></div>'+
     '<div class="insight-kpi-row"><div class="insight-kpi"><div class="insight-kpi-val">€'+g.spend.toFixed(0)+'</div><div class="insight-kpi-key">Spend</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+ctr.toFixed(2)+'%</div><div class="insight-kpi-key">CTR</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+g.purch+'</div><div class="insight-kpi-key">Purchases</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+g.items.length+'</div><div class="insight-kpi-key">Creatives</div></div></div></div>';
@@ -3395,12 +3402,11 @@ function renderInsightByConcept(panel, withPerf, all){
   var groups={A:{items:[],spend:0,purch:0,impr:0,clicks:0,label:'Concept A — Real kid + book'},B:{items:[],spend:0,purch:0,impr:0,clicks:0,label:'Concept B — Flat lay'},C:{items:[],spend:0,purch:0,impr:0,clicks:0,label:'Concept C — Parent perspective'}};
   withPerf.forEach(function(x){var c=x.vid.charAt(0);if(groups[c]){groups[c].items.push(x);groups[c].spend+=x.spend;groups[c].purch+=x.purch;groups[c].impr+=x.impr;groups[c].clicks+=x.clicks;}});
   renderInsightByGroup(panel, withPerf, all, '_concept_', 'Performance by Concept', '💡', null);
-  var aov=parseFloat(state.aov)||32;
   var html='<div class="insight-header"><div class="insight-title">💡 Performance by Concept</div><div class="insight-desc">How each creative concept compares on key metrics.</div></div>';
-  var sorted=Object.keys(groups).map(function(k){return Object.assign({key:k},groups[k]);}).filter(function(g){return g.items.length>0;}).sort(function(a,b){var ra=a.spend>0?(a.purch*aov)/a.spend:0,rb=b.spend>0?(b.purch*aov)/b.spend:0;return rb-ra;});
+  var sorted=Object.keys(groups).map(function(k){return Object.assign({key:k},groups[k]);}).filter(function(g){return g.items.length>0;}).sort(function(a,b){var ra=a.spend>0&&a.revenue>0?a.revenue/a.spend:0,rb=b.spend>0&&b.revenue>0?b.revenue/b.spend:0;return rb-ra;});
   if(!sorted.length){panel.innerHTML=html+noDataHtml('No performance data yet');return;}
   sorted.forEach(function(g){
-    var roas=g.spend>0?(g.purch*aov)/g.spend:null,ctr=g.impr>0?(g.clicks/g.impr*100):0;
+    var roas=g.spend>0&&g.revenue>0?g.revenue/g.spend:null,ctr=g.impr>0?(g.clicks/g.impr*100):0;
     var rc=getRoasInfo(roas).cls==='roas-excellent'?'#6B3FA0':getRoasInfo(roas).cls==='roas-good'?'#16a34a':getRoasInfo(roas).cls==='roas-mid'?'#d97706':'#dc2626';
     var top=g.items.sort(function(a,b){return (b.roas||0)-(a.roas||0);})[0];
     html+='<div class="insight-group-card"><div class="insight-group-title"><span class="concept-badge">'+g.key+'</span>'+g.label+'<span style="font-size:11px;color:var(--text-faint);font-weight:400;margin-left:6px;">'+g.items.length+' creatives</span><div style="margin-left:auto;min-width:44px;height:44px;border-radius:50%;background:'+rc+';display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1;">'+(roas!==null?roas.toFixed(1):'—')+'</span><span style="font-size:8px;color:rgba(255,255,255,0.75);">ROAS</span></div></div>'+
@@ -3523,14 +3529,13 @@ function resyncWithFilters(){
 
 // ─── SUGGESTIONS / CREATIVE INTELLIGENCE ───
 function buildCreativeDataPayload(){
-  var aov = parseFloat(state.aov)||32;
   var creatives = [];
   VIDS.forEach(function(vid){
     (state.creatives[vid]||[]).forEach(function(cr){
       var p = cr.adname?state.performance[cr.adname]:null;
       var spend = p?parseFloat(p.spend)||0:0;
       var purch = p?parseInt(p.purchases)||0:0;
-      var roas = spend>0?(purch*aov)/spend:null;
+      var roas = calcRoas(perf);
       creatives.push({
         name: cr.name,
         adname: cr.adname||'(no ad name)',
@@ -3605,7 +3610,6 @@ function runSuggestionsAnalysis(){
 
   var creatives = buildCreativeDataPayload();
   var prompt = getPromptFor('suggestions');
-  var aov = parseFloat(state.aov)||32;
 
   var dataText = 'WONDERWRAPS CREATIVE PERFORMANCE DATA\n'+
     'Date range: '+(state.metaLastSync?'last sync '+new Date(state.metaLastSync).toLocaleDateString():'unknown')+'\n'+
@@ -3651,7 +3655,6 @@ function renderSuggestionsMarkdown(text){
 // ─── HEALTH SCORE ───────────────────────────────────
 function calcHealthScore(cr){
   var perf = cr.adname ? state.performance[cr.adname] : null;
-  var aov = parseFloat(state.aov)||32;
   var scores = [];
 
   // ROAS component (40% weight)
@@ -3694,8 +3697,6 @@ function getHealthInfo(score){
 // ─── SUGGESTED NEXT ACTION ──────────────────────────
 function getSuggestedAction(cr){
   var perf = cr.adname ? state.performance[cr.adname] : null;
-  var aov = parseFloat(state.aov)||32;
-
   if(!perf || parseFloat(perf.spend)<5){
     if(cr.status==='draft') return {cls:'ap-test', label:'Launch →', reason:'Not yet running'};
     return {cls:'ap-test', label:'Needs data', reason:'<€5 spend — too early to judge'};
