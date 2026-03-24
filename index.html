@@ -2310,10 +2310,10 @@ function openPerfModal(crid,vid){
     var ctr=parseFloat(perf.ctr)||0, cpc=parseFloat(perf.cpc)||0, spend=parseFloat(perf.spend)||0;
     var purch=parseInt(perf.purchases)||0, impr=parseInt(perf.impressions)||0, clicks=parseInt(perf.clicks)||0;
     var revenue=parseFloat(perf.revenue)||0;
-    var cpm=metaAd?parseFloat(metaAd.cpm)||0:0;
-    var reach=metaAd?parseInt(metaAd.reach)||0:0;
-    var freq=metaAd?parseFloat(metaAd.frequency)||0:0;
-    var roasCSV=metaAd?parseFloat(metaAd.roasFromCSV)||0:0;
+    var roasCSV=metaAd?parseFloat(metaAd.roasFromCSV)||0:(parseFloat(cr.roasFromCSV)||0);
+    var cpm=metaAd?parseFloat(metaAd.cpm)||0:(parseFloat(cr.cpm)||0);
+    var reach=metaAd?parseInt(metaAd.reach)||0:(parseInt(cr.reach)||0);
+    var freq=metaAd?parseFloat(metaAd.frequency)||0:(parseFloat(cr.frequency)||0);
     var displayRoas=roas!==null?roas:(roasCSV>0?roasCSV:null);
     var cpo=purch>0?(spend/purch):null;
     var ctr1kCost=impr>0?(spend/impr*1000):null; // CPM calculated
@@ -3371,17 +3371,46 @@ function confirmAddMetaAd(){
   var funnel=document.getElementById('meta-add-funnel')?document.getElementById('meta-add-funnel').value:'';
   var format=document.getElementById('meta-add-format')?document.getElementById('meta-add-format').value:'';
   if(!state.creatives[vid])state.creatives[vid]=[];
+
+  // Auto-detect language from ad name if possible
+  var lang='';
+  if(ad.name){
+    var n=ad.name.toLowerCase();
+    if(n.includes('_ar')||n.includes('arabic')) lang='arabic';
+    else if(n.includes('_de')||n.includes('german')) lang='german';
+    else if(n.includes('_fr')||n.includes('french')) lang='french';
+    else if(n.includes('_es')||n.includes('spanish')) lang='spanish';
+    else lang='english';
+  }
+
+  // Write performance data immediately so Analytics tab shows it right away
+  state.performance[ad.name]={
+    spend:ad.spend||0, impressions:ad.impressions||0, clicks:ad.clicks||0,
+    ctr:ad.ctr||0, cpc:ad.cpc||0, purchases:ad.purchases||0,
+    revenue:ad.revenue||0
+  };
+
   state.creatives[vid].push({
     id:'cr-'+Date.now(), name:ad.name, adname:ad.name,
     img:ad.thumb||null, video:null,
     author:state.currentUser||'arben',
-    status:'published', funnel:funnel, format:format,
-    hook:'', prodtype:'', language:'', books:[], kids:[], products:[], audiences:[],
-    fromMeta:true, metaAdId:ad.id
+    status:ad.status==='ACTIVE'?'published':'paused',
+    funnel:funnel, format:format,
+    hook:'', prodtype:'', language:lang,
+    books:[], kids:[], products:[], audiences:[],
+    // Store all Meta fields for reference
+    fromMeta:true, metaAdId:ad.id,
+    campaignName:ad.campaignName||'',
+    dateStart:ad.dateStart||'', dateEnd:ad.dateEnd||'',
+    roasFromCSV:ad.roasFromCSV||0,
+    cpm:ad.cpm||0, reach:ad.reach||0, frequency:ad.frequency||0,
+    costPerResult:ad.costPerResult||0
   });
+
   save();rerenderGrid(vid);updateStats();
   closeMetaAddModal();
   renderMetaAds();
+  updateRevenuePanel();
   showToast('Added "'+ad.name+'" to '+vid);
 }
 
@@ -4232,14 +4261,25 @@ function bulkImportToLibrary(){
     if(!state.creatives[vid])state.creatives[vid]=[];
     state.creatives[vid].push({
       id:'cr-'+Date.now()+'-'+imported,
-      name:ad.name,adname:ad.name,
-      img:ad.thumb||null,video:null,
+      name:ad.name, adname:ad.name,
+      img:ad.thumb||null, video:null,
       author:state.currentUser||'arben',
-      status:'published',
-      funnel:'',format:'',hook:'',prodtype:'',language:'',
-      books:[],kids:[],products:[],audiences:[],
-      fromMeta:true,metaAdId:ad.id
+      status:ad.status==='ACTIVE'?'published':'paused',
+      funnel:'', format:'', hook:'', prodtype:'',
+      language:'',
+      books:[], kids:[], products:[], audiences:[],
+      fromMeta:true, metaAdId:ad.id,
+      campaignName:ad.campaignName||'',
+      dateStart:ad.dateStart||'', dateEnd:ad.dateEnd||'',
+      roasFromCSV:ad.roasFromCSV||0,
+      cpm:ad.cpm||0, reach:ad.reach||0, frequency:ad.frequency||0
     });
+    // Write performance immediately
+    state.performance[ad.name]={
+      spend:ad.spend||0, impressions:ad.impressions||0, clicks:ad.clicks||0,
+      ctr:ad.ctr||0, cpc:ad.cpc||0, purchases:ad.purchases||0,
+      revenue:ad.revenue||0
+    };
     imported++;
   });
   save();VIDS.forEach(function(v){rerenderGrid(v);});updateStats();
