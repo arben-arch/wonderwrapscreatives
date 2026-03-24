@@ -2060,6 +2060,58 @@ function renderPerfPills(vid){
   pills.innerHTML='<span class="perf-pill '+cc+'">CTR '+ctr.toFixed(2)+'%</span><span class="perf-pill">€'+ts.toFixed(0)+' spent</span><span class="perf-pill">'+tp+' purch.</span>';
 }
 
+function renderVariationStats(vid){
+  var bar=document.getElementById('vstats-'+vid);if(!bar)return;
+  var list=state.creatives[vid]||[];
+
+  var funnelFilter=document.getElementById('filter-funnel')?document.getElementById('filter-funnel').value:'';
+  var formatFilter=document.getElementById('filter-format')?document.getElementById('filter-format').value:'';
+  var userFilter=document.getElementById('filter-user')?document.getElementById('filter-user').value:'';
+  var filtered=list.slice();
+  if(funnelFilter)filtered=filtered.filter(function(c){return c.funnel===funnelFilter;});
+  if(formatFilter)filtered=filtered.filter(function(c){return c.format===formatFilter;});
+  if(userFilter)filtered=filtered.filter(function(c){return c.author===userFilter;});
+
+  var ti=0,tc=0,ts=0,tp=0,hasData=false;
+  filtered.forEach(function(cr){
+    if(!cr.adname)return;
+    var p=state.performance[cr.adname];if(!p)return;
+    hasData=true;
+    ti+=parseInt(p.impressions)||0;
+    tc+=parseInt(p.clicks)||0;
+    ts+=parseFloat(p.spend)||0;
+    tp+=parseInt(p.purchases)||0;
+  });
+
+  var ctr=hasData&&ti>0?(tc/ti*100):null;
+  var cpo=hasData&&tp>0?(ts/tp):null;
+  var cpc=hasData&&tc>0?(ts/tc):null;
+
+  function kpi(key,val,cls,isEmpty){
+    return '<div class="concept-stat">'+
+      '<div class="concept-stat-key">'+key+'</div>'+
+      '<div class="concept-stat-val'+(isEmpty?' empty':'')+(cls?' '+cls:'')+'">' +val+'</div>'+
+    '</div>';
+  }
+
+  var ctrC=ctr!==null?(ctr>2?'good':ctr>1?'warn':'bad'):'';
+  var cpoC=cpo!==null?(cpo<20?'good':cpo<35?'warn':'bad'):'';
+  var cpcC=cpc!==null?(cpc<0.3?'good':cpc<0.5?'warn':'bad'):'';
+
+  bar.innerHTML='<div class="concept-stats-grid">'+
+    kpi('Spend',         hasData&&ts>0?'€'+ts.toFixed(0):'—','',   !hasData)+
+    kpi('Impressions',   hasData&&ti>0?ti.toLocaleString():'—','', !hasData)+
+    kpi('CTR',           ctr!==null?ctr.toFixed(2)+'%':'—',   ctrC, ctr===null)+
+    kpi('CPC',           cpc!==null?'€'+cpc.toFixed(2):'—',   cpcC, cpc===null)+
+    kpi('Purchases',     hasData&&tp>0?tp.toString():'—','',        !hasData)+
+    kpi('Cost/purchase', cpo!==null?'€'+cpo.toFixed(2):'—',   cpoC, cpo===null)+
+  '</div>';
+}
+
+function renderConceptStats(){
+  VIDS.forEach(function(vid){renderVariationStats(vid);});
+}
+
 // ─── STATS ───
 function updateStats(){
   var t=0;Object.values(state.creatives).forEach(function(l){t+=l.length;});
@@ -2260,10 +2312,14 @@ function getAIState(){
     prompts:{claude:DEFAULT_REVIEW_PROMPT, gemini:DEFAULT_GEMINI_PROMPT, chatgpt:DEFAULT_CHATGPT_PROMPT},
     keys:{gemini:'', chatgpt:''}
   };
-  // Ensure all three prompt keys exist
-  if(!state.aiConfig.prompts.claude) state.aiConfig.prompts.claude=DEFAULT_REVIEW_PROMPT;
-  if(!state.aiConfig.prompts.gemini) state.aiConfig.prompts.gemini=DEFAULT_GEMINI_PROMPT;
-  if(!state.aiConfig.prompts.chatgpt) state.aiConfig.prompts.chatgpt=DEFAULT_CHATGPT_PROMPT;
+  if(!state.aiConfig.prompts) state.aiConfig.prompts={};
+  if(!state.aiConfig.keys) state.aiConfig.keys={};
+  // Force-fix any undefined/bad values from old state
+  var defs={claude:DEFAULT_REVIEW_PROMPT, gemini:DEFAULT_GEMINI_PROMPT, chatgpt:DEFAULT_CHATGPT_PROMPT};
+  ['claude','gemini','chatgpt'].forEach(function(ai){
+    if(!state.aiConfig.prompts[ai]||state.aiConfig.prompts[ai]==='undefined'||state.aiConfig.prompts[ai].length<20)
+      state.aiConfig.prompts[ai]=defs[ai];
+  });
   return state.aiConfig;
 }
 
@@ -2279,11 +2335,13 @@ function switchAITab(ai){
 }
 
 function loadAISettings(){
-  var cfg=getAIState();
+  var cfg=getAIState(); // getAIState now fixes bad values before we read them
   var defaults={claude:DEFAULT_REVIEW_PROMPT, gemini:DEFAULT_GEMINI_PROMPT, chatgpt:DEFAULT_CHATGPT_PROMPT};
   ['claude','gemini','chatgpt'].forEach(function(ai){
     var ta=document.getElementById('prompt-'+ai);
-    if(ta) ta.value=cfg.prompts[ai]||defaults[ai];
+    var val=cfg.prompts[ai];
+    if(!val||val==='undefined'||val.length<20) val=defaults[ai];
+    if(ta) ta.value=val;
   });
   ['gemini','chatgpt'].forEach(function(ai){
     var inp=document.getElementById('key-'+ai);
