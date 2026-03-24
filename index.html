@@ -311,7 +311,21 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 .ai-analysis-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);margin-bottom:5px;}
 .ai-analysis-text{font-size:12px;color:var(--text-muted);line-height:1.6;}
 
-/* ─── ANALYTICS MODAL ─────────────────── */
+/* ─── ANALYTICS MODAL (rich) ─────────── */
+.pa-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:1.125rem;}
+.pa-kpi-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-sm);padding:0.625rem 0.75rem;}
+.pa-kpi-val{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;line-height:1;margin-bottom:3px;letter-spacing:-0.3px;}
+.pa-kpi-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-faint);}
+.pa-kpi-sub{font-size:9.5px;color:var(--text-faint);margin-top:3px;line-height:1.3;}
+.pa-analysis-block{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-md);padding:1rem;margin-bottom:1rem;}
+.pa-analysis-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);}
+.pa-section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-faint);margin-bottom:7px;margin-top:1rem;}
+.pa-details-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.pa-detail-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-xs);padding:0.5rem 0.625rem;}
+.pa-detail-key{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-faint);margin-bottom:2px;}
+.pa-detail-val{font-size:12px;font-weight:500;color:var(--text);}
+
+/* ─── ANALYTICS MODAL (old compat) ─────────── */
 .analytics-status-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
 .analytics-status-label{font-size:12px;color:var(--text-muted);font-weight:500;}
 .analytics-status-select{padding:6px 10px;border:1.5px solid var(--border-med);border-radius:var(--r-sm);font-family:'DM Sans',sans-serif;font-size:12px;background:var(--surface);outline:none;cursor:pointer;}
@@ -2243,91 +2257,166 @@ function saveEdit(){
 function openPerfModal(crid,vid){
   var cr=(state.creatives[vid]||[]).find(function(c){return c.id===crid;});if(!cr)return;
   var perf=cr.adname?state.performance[cr.adname]:null;
+  var metaAd=cr.adname?Object.values(state.metaAds||{}).find(function(a){return a.name===cr.adname;}):null;
   var author=TEAM.find(function(u){return u.id===cr.author;});
   document.getElementById('perf-modal-title').textContent=cr.name;
+
   var html='';
 
-  // Status + funnel header
-  html+='<div style="display:flex;gap:10px;align-items:center;margin-bottom:1rem;flex-wrap:wrap;">';
-  if(cr.funnel)html+='<span class="funnel-badge '+FUNNEL_CLS[cr.funnel]+'" style="font-size:11px;padding:4px 10px;">'+FUNNEL_FULL[cr.funnel]+'</span>';
-  if(cr.format)html+='<span class="ctag format" style="font-size:11px;padding:4px 10px;">'+cr.format+'</span>';
-  if(cr.hook)html+='<span class="ctag" style="font-size:11px;padding:4px 10px;">'+cr.hook+'</span>';
-  if(cr.prodtype)html+='<span class="ctag prod" style="font-size:11px;padding:4px 10px;">'+cr.prodtype.replace('_',' ')+'</span>';
+  // ── HERO: thumbnail + ROAS circle ──
+  var hasImg=cr.img||cr.video;
+  var initials=(cr.name||'?').split(/\s+/).slice(0,2).map(function(w){return w.charAt(0).toUpperCase();}).join('');
+  var roas=calcRoas(perf);
+  var roasInfo=getRoasInfo(roas);
+  var roasColor=roasInfo.cls==='roas-excellent'?'#5B35A0':roasInfo.cls==='roas-good'?'#16a34a':roasInfo.cls==='roas-mid'?'#d97706':roasInfo.cls==='roas-low'?'#dc2626':'#94a3b8';
+  var roasTier=roasInfo.tier==='excellent'?'Excellent':roasInfo.tier==='good'?'Good':roasInfo.tier==='mid'?'Below target':roasInfo.tier==='low'?'Poor':'No data';
+
+  html+='<div style="display:flex;gap:1rem;margin-bottom:1.5rem;">';
+  // Thumb
+  html+='<div style="width:88px;height:88px;border-radius:10px;overflow:hidden;flex-shrink:0;">';
+  if(cr.img)html+='<img src="'+cr.img+'" style="width:100%;height:100%;object-fit:cover;" />';
+  else html+='<div style="width:100%;height:100%;background:linear-gradient(135deg,#1a0533,#3b1d7a);display:flex;align-items:center;justify-content:center;"><span style="font-family:Syne,sans-serif;font-size:24px;font-weight:800;color:rgba(255,255,255,0.9);">'+initials+'</span></div>';
+  html+='</div>';
+  // Title block
+  html+='<div style="flex:1;min-width:0;">';
+  html+='<div style="font-family:Syne,sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;letter-spacing:-0.3px;">'+cr.name+'</div>';
+  if(cr.adname)html+='<div style="font-family:monospace;font-size:10px;background:var(--purple-light);color:var(--purple);padding:3px 8px;border-radius:4px;display:inline-block;margin-bottom:8px;">'+cr.adname+'</div>';
+  html+='<div style="display:flex;gap:5px;flex-wrap:wrap;">';
+  if(cr.funnel)html+='<span class="funnel-badge '+FUNNEL_CLS[cr.funnel]+'">'+FUNNEL_FULL[cr.funnel]+'</span>';
+  if(cr.format)html+='<span class="ctag format">'+cr.format+'</span>';
+  if(cr.hook)html+='<span class="ctag">'+cr.hook+'</span>';
+  if(cr.language)html+='<span class="ctag" style="background:#f0fdf4;color:#166534;">'+cr.language+'</span>';
+  html+='</div></div>';
+  // ROAS circle
+  html+='<div style="flex-shrink:0;text-align:center;">';
+  html+='<div style="width:64px;height:64px;border-radius:50%;background:'+roasColor+';display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 12px '+roasColor+'44;">';
+  html+='<span style="font-family:Syne,sans-serif;font-size:17px;font-weight:800;color:#fff;line-height:1;">'+(roas!==null?roas.toFixed(1):'—')+'</span>';
+  html+='<span style="font-size:7px;color:rgba(255,255,255,0.75);font-weight:700;letter-spacing:0.06em;">ROAS</span>';
+  html+='</div>';
+  html+='<div style="font-size:10px;font-weight:600;color:'+roasColor+';margin-top:4px;">'+roasTier+'</div>';
+  html+='</div></div>';
+
+  // ── STATUS + AUTHOR ROW ──
+  html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border);">';
+  html+='<select class="analytics-status-select" onchange="updateStatus(\''+vid+'\',\''+crid+'\',this.value)" style="flex:1;max-width:160px;">';
+  Object.keys(STATUSES).forEach(function(k){html+='<option value="'+k+'"'+(cr.status===k?' selected':'')+'>'+STATUSES[k].label+'</option>';});
+  html+='</select>';
+  if(author)html+='<div style="font-size:12px;color:var(--text-muted);">By <strong>'+author.name+'</strong></div>';
+  if(cr.emotionalScore)html+='<div style="font-size:11px;background:var(--purple-light);color:var(--purple);padding:3px 8px;border-radius:20px;font-weight:600;">❤ Emotion '+cr.emotionalScore+'/10</div>';
+  if(cr.qualityScore)html+='<div style="font-size:11px;background:var(--surface3);color:var(--text-muted);padding:3px 8px;border-radius:20px;font-weight:600;">✦ Quality '+cr.qualityScore+'/10</div>';
   html+='</div>';
 
-  // Status selector
-  html+='<div class="analytics-status-row"><span class="analytics-status-label">Ad status</span>'+
-    '<select class="analytics-status-select" onchange="updateStatus(\''+vid+'\',\''+crid+'\',this.value)">';
-  Object.keys(STATUSES).forEach(function(k){html+='<option value="'+k+'"'+(cr.status===k?' selected':'')+'>'+STATUSES[k].label+'</option>';});
-  html+='</select></div>';
-
-  if(author)html+='<div style="font-size:12px;color:var(--text-muted);margin-bottom:0.75rem;">Suggested by: <strong>'+author.name+'</strong></div>';
-  if(cr.adname)html+='<div style="font-family:monospace;font-size:11px;background:var(--purple-light);color:var(--purple);padding:6px 10px;border-radius:6px;margin-bottom:1rem;">'+cr.adname+'</div>';
-
-  // Taxonomy summary
-  var taxRows='';
-  if(cr.language)taxRows+='<div class="analytics-detail-item"><div class="analytics-detail-key">Language</div><div class="analytics-detail-val" style="font-size:12px;text-transform:capitalize;">'+cr.language+'</div></div>';
-  if(cr.books&&cr.books.length)taxRows+='<div class="analytics-detail-item"><div class="analytics-detail-key">Books</div><div class="analytics-detail-val" style="font-size:12px;">'+cr.books.join(', ')+'</div></div>';
-  if(cr.products&&cr.products.length)taxRows+='<div class="analytics-detail-item"><div class="analytics-detail-key">Products</div><div class="analytics-detail-val" style="font-size:12px;">'+cr.products.join(', ')+'</div></div>';
-  if(cr.audiences&&cr.audiences.length)taxRows+='<div class="analytics-detail-item"><div class="analytics-detail-key">Audiences</div><div class="analytics-detail-val" style="font-size:12px;">'+cr.audiences.join(', ')+'</div></div>';
-  if(cr.kids&&cr.kids.length){
-    var kidNames=cr.kids.map(function(kid_id){var k=state.kids.find(function(k){return k.id===kid_id;});return k?k.name:kid_id;});
-    taxRows+='<div class="analytics-detail-item"><div class="analytics-detail-key">Kids featured</div><div class="analytics-detail-val" style="font-size:12px;">'+kidNames.join(', ')+'</div></div>';
-  }
-  if(taxRows)html+='<div class="analytics-section-title">Creative details</div><div class="analytics-detail-grid" style="margin-bottom:1rem;">'+taxRows+'</div>';
-
   if(perf){
-    var ctr=parseFloat(perf.ctr)||0,cpc=parseFloat(perf.cpc)||0,spend=parseFloat(perf.spend)||0;
-    var purch=parseInt(perf.purchases)||0,impr=parseInt(perf.impressions)||0,clicks=parseInt(perf.clicks)||0;
-    var cpo=purch>0?(spend/purch).toFixed(2):'—';
-    var ctrC=ctr>2?'good':ctr>1?'warn':'bad';
-    // ROAS from real pixel revenue
-    var roas=calcRoas(perf);
-    var revenue=perf.revenue&&parseFloat(perf.revenue)>0?parseFloat(perf.revenue):null;
-    var roasInfo=getRoasInfo(roas);
-    var roasColor=roasInfo.cls==='roas-excellent'?'#6B3FA0':roasInfo.cls==='roas-good'?'#16a34a':roasInfo.cls==='roas-mid'?'#d97706':roasInfo.cls==='roas-low'?'#dc2626':'var(--text-faint)';
-    html+='<div style="display:flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:1.25rem;">'+
-      '<div style="width:56px;height:56px;border-radius:50%;background:'+roasColor+';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">'+
-        '<span style="font-family:Syne,sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1;">'+(roas!==null?roas.toFixed(1):'—')+'</span>'+
-        '<span style="font-size:8px;color:rgba(255,255,255,0.75);font-weight:600;letter-spacing:0.05em;">ROAS</span>'+
-      '</div>'+
-      '<div>'+
-        '<div style="font-family:Syne,sans-serif;font-size:14px;font-weight:600;color:'+roasColor+';">'+
-          (roasInfo.tier==='excellent'?'Excellent performance':roasInfo.tier==='good'?'Good performance':roasInfo.tier==='mid'?'Below target':roasInfo.tier==='low'?'Poor performance':'No data')+
-        '</div>'+
-        '<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">'+
-          (roas!==null?'Every €1 spent generates €'+roas.toFixed(2)+' in revenue (real pixel data)':'No revenue data from pixel — check Meta pixel Purchase event value')+
-        '</div>'+
-      '</div>'+
-    '</div>';
-    html+='<div class="analytics-big-grid" style="grid-template-columns:repeat(3,1fr);">'+
-      '<div class="analytics-big-card"><div class="analytics-big-val perf-val '+ctrC+'">'+ctr.toFixed(2)+'%</div><div class="analytics-big-key">CTR</div></div>'+
-      '<div class="analytics-big-card"><div class="analytics-big-val">€'+spend.toFixed(0)+'</div><div class="analytics-big-key">Spend</div></div>'+
-      '<div class="analytics-big-card"><div class="analytics-big-val">'+purch+'</div><div class="analytics-big-key">Purchases</div></div>'+
-    '</div>';
-    html+='<div class="analytics-detail-grid">'+
-      '<div class="analytics-detail-item"><div class="analytics-detail-key">Impressions</div><div class="analytics-detail-val">'+impr.toLocaleString()+'</div></div>'+
-      '<div class="analytics-detail-item"><div class="analytics-detail-key">Clicks</div><div class="analytics-detail-val">'+clicks.toLocaleString()+'</div></div>'+
-      '<div class="analytics-detail-item"><div class="analytics-detail-key">CPC</div><div class="analytics-detail-val">€'+cpc.toFixed(2)+'</div></div>'+
-      '<div class="analytics-detail-item"><div class="analytics-detail-key">Cost/purchase</div><div class="analytics-detail-val">'+(cpo!=='—'?'€'+cpo:'—')+'</div></div>'+
-    '</div>';
-    html+='<div class="analytics-section-title">Signal</div>';
-    var sigs=[];
-    if(roas!==null&&roas>=3.5)sigs.push({c:'good',t:'ROAS of '+roas.toFixed(2)+'x exceeds the 3.5x target — scale this creative'});
-    else if(roas!==null&&roas<1.5)sigs.push({c:'bad',t:'ROAS of '+roas.toFixed(2)+'x is below breakeven — pause or rework'});
-    else if(roas!==null)sigs.push({c:'warn',t:'ROAS of '+roas.toFixed(2)+'x — improving hook or audience could push this above 3.5x'});
-    if(ctr>3)sigs.push({c:'good',t:'CTR of '+ctr.toFixed(2)+'% — creative is stopping the scroll'});
-    else if(ctr<1)sigs.push({c:'bad',t:'CTR of '+ctr.toFixed(2)+'% — weak hook or thumbnail, needs rework'});
-    if(purch===0&&spend>20)sigs.push({c:'bad',t:'No purchases after €'+spend.toFixed(0)+' spend — check landing page or audience match'});
-    if(cpc<0.2)sigs.push({c:'good',t:'CPC of €'+cpc.toFixed(2)+' — very efficient, audience is well matched'});
-    if(!sigs.length)sigs.push({c:'warn',t:'Not enough data yet to draw conclusions'});
-    sigs.forEach(function(s){html+='<div style="padding:8px 12px;border-radius:8px;font-size:12px;margin-bottom:6px;background:'+(s.c==='good'?'var(--green-light)':s.c==='bad'?'var(--red-light)':'var(--amber-light)')+';">'+s.t+'</div>';});
-  } else {
-    html+='<div class="analytics-no-data">';
-    if(!cr.adname)html+='<div style="margin-bottom:8px;">⚠️ No Meta ad name set.</div><div style="font-size:12px;color:var(--text-faint);">Click Edit to add a Meta ad name for tracking.</div>';
-    else html+='<div style="margin-bottom:8px;">No performance data yet.</div><div style="font-size:12px;color:var(--text-faint);">Upload a Meta CSV in Settings → Analytics to see data here.</div>';
+    var ctr=parseFloat(perf.ctr)||0, cpc=parseFloat(perf.cpc)||0, spend=parseFloat(perf.spend)||0;
+    var purch=parseInt(perf.purchases)||0, impr=parseInt(perf.impressions)||0, clicks=parseInt(perf.clicks)||0;
+    var revenue=parseFloat(perf.revenue)||0;
+    var cpm=metaAd?parseFloat(metaAd.cpm)||0:0;
+    var reach=metaAd?parseInt(metaAd.reach)||0:0;
+    var freq=metaAd?parseFloat(metaAd.frequency)||0:0;
+    var roasCSV=metaAd?parseFloat(metaAd.roasFromCSV)||0:0;
+    var displayRoas=roas!==null?roas:(roasCSV>0?roasCSV:null);
+    var cpo=purch>0?(spend/purch):null;
+    var ctr1kCost=impr>0?(spend/impr*1000):null; // CPM calculated
+    var convRate=clicks>0?(purch/clicks*100):null;
+    var dateStart=metaAd?metaAd.dateStart:'';
+    var dateEnd=metaAd?metaAd.dateEnd:'';
+
+    // ── KPI GRID (8 metrics) ──
+    function kpiCard(label,val,sub,color){
+      return '<div class="pa-kpi-card">'+'<div class="pa-kpi-val"'+(color?' style="color:'+color+'"':'')+'>'+val+'</div>'+'<div class="pa-kpi-label">'+label+'</div>'+(sub?'<div class="pa-kpi-sub">'+sub+'</div>':'')+'</div>';
+    }
+    var ctrColor=ctr>=3?'#16a34a':ctr>=1.5?'#d97706':ctr>0?'#dc2626':'#94a3b8';
+    var cpcColor=cpc<=0.3?'#16a34a':cpc<=0.6?'#d97706':'#dc2626';
+    var roasColorDisp=displayRoas!==null?(displayRoas>=3.5?'#5B35A0':displayRoas>=2.5?'#16a34a':displayRoas>=1.5?'#d97706':'#dc2626'):'#94a3b8';
+
+    html+='<div class="pa-kpi-grid">';
+    html+=kpiCard('ROAS',displayRoas!==null?displayRoas.toFixed(2)+'x':'—',revenue>0?'€'+revenue.toFixed(0)+' revenue':null,roasColorDisp);
+    html+=kpiCard('Spend','€'+spend.toFixed(0),dateStart&&dateEnd?dateStart+' → '+dateEnd:null,null);
+    html+=kpiCard('Purchases',purch,cpo?'€'+cpo.toFixed(2)+' per purchase':null,null);
+    html+=kpiCard('CTR',ctr.toFixed(2)+'%',ctr>=2?'Above benchmark':'Below 2% benchmark',ctrColor);
+    html+=kpiCard('Impressions',impr>1000?(impr/1000).toFixed(1)+'k':impr+'',reach>0?'Reach: '+(reach/1000).toFixed(1)+'k':null,null);
+    html+=kpiCard('Clicks',clicks.toLocaleString(),convRate?convRate.toFixed(1)+'% conv. rate':null,null);
+    html+=kpiCard('CPC','€'+cpc.toFixed(2),cpc<=0.3?'Efficient':'Above €0.30',cpcColor);
+    html+=kpiCard('CPM',cpm>0?'€'+cpm.toFixed(2):(ctr1kCost?'€'+ctr1kCost.toFixed(2):'—'),freq>0?'Freq: '+freq.toFixed(1)+'x':null,null);
     html+='</div>';
+
+    // ── PERFORMANCE ANALYSIS (auto-generated) ──
+    html+='<div class="pa-analysis-block">';
+    html+='<div class="pa-analysis-title">📊 Performance analysis</div>';
+
+    var insights=[];
+    // ROAS insight
+    if(displayRoas!==null){
+      if(displayRoas>=3.5) insights.push({t:'success',icon:'💜',text:'ROAS of '+displayRoas.toFixed(2)+'x exceeds the 3.5x target. This creative is profitable. Consider increasing budget or duplicating to new audiences.'});
+      else if(displayRoas>=2.5) insights.push({t:'warning',icon:'🟡',text:'ROAS of '+displayRoas.toFixed(2)+'x is close to target. A CTR improvement or audience refinement could push this above 3.5x.'});
+      else if(displayRoas>=1.5) insights.push({t:'warning',icon:'⚠️',text:'ROAS of '+displayRoas.toFixed(2)+'x is below target but not catastrophic. Test a stronger hook or different audience before pausing.'});
+      else insights.push({t:'danger',icon:'🔴',text:'ROAS of '+displayRoas.toFixed(2)+'x — spending more than earning. Pause unless still in early testing phase.'});
+    }
+    // CTR insight
+    if(ctr>0){
+      if(ctr>=3) insights.push({t:'success',icon:'✅',text:'CTR of '+ctr.toFixed(2)+'% is strong — the creative hook is working. The issue (if any) is post-click, not the ad itself.'});
+      else if(ctr>=1.5) insights.push({t:'neutral',icon:'📌',text:'CTR of '+ctr.toFixed(2)+'% is average. The hook engages some of the audience. Testing a more emotionally direct opening could improve this.'});
+      else insights.push({t:'danger',icon:'❌',text:'CTR of '+ctr.toFixed(2)+'% is weak — the scroll stop is failing. Prioritise reworking the first frame or headline.'});
+    }
+    // Conversion rate insight
+    if(convRate!==null&&clicks>5){
+      if(convRate>=3) insights.push({t:'success',icon:'💰',text:'Conversion rate of '+convRate.toFixed(1)+'% — strong post-click intent. Ad and landing page are well aligned.'});
+      else if(convRate<1) insights.push({t:'warning',icon:'🔗',text:'Conversion rate of '+convRate.toFixed(1)+'% — clicks are not converting. Possible disconnect between ad creative and landing page offer.'});
+    }
+    // Spend vs results
+    if(spend>50&&purch===0) insights.push({t:'danger',icon:'🚨',text:'€'+spend.toFixed(0)+' spent with 0 purchases. Something is broken — check pixel firing, landing page, or audience targeting.'});
+    // Frequency
+    if(freq>3) insights.push({t:'warning',icon:'🔁',text:'Frequency of '+freq.toFixed(1)+'x — audience is seeing this ad repeatedly. Creative fatigue likely. Refresh or expand audience.'});
+    // CPM
+    if(cpm>0&&cpm>15) insights.push({t:'warning',icon:'💸',text:'CPM of €'+cpm.toFixed(2)+' is high. Competition for this audience is expensive. Test a broader or lookalike audience to reduce cost.'});
+    else if(cpm>0&&cpm<5) insights.push({t:'success',icon:'📉',text:'CPM of €'+cpm.toFixed(2)+' — cost to reach 1,000 people is very low. Good audience efficiency.'});
+    // Health score
+    var hs=calcHealthScore(cr);
+    if(hs!==null) insights.push({t:'neutral',icon:'❤',text:'Health score: '+hs.toFixed(1)+'/10 — composite of ROAS, CTR'+(cr.qualityScore?', quality':'')+(cr.emotionalScore?', emotional score':'')+'.'});
+
+    if(!insights.length) insights.push({t:'neutral',icon:'⏳',text:'Not enough data yet. Need more spend or conversions to draw conclusions.'});
+
+    var bgMap={success:'var(--green-light)',warning:'var(--amber-light)',danger:'var(--red-light)',neutral:'var(--surface2)'};
+    var colorMap={success:'var(--green-dark)',warning:'var(--amber-dark)',danger:'var(--red-dark)',neutral:'var(--text-muted)'};
+    insights.forEach(function(ins){
+      html+='<div style="display:flex;gap:10px;padding:10px 12px;border-radius:var(--r-sm);background:'+bgMap[ins.t]+';margin-bottom:6px;">';
+      html+='<span style="font-size:14px;flex-shrink:0;margin-top:1px;">'+ins.icon+'</span>';
+      html+='<span style="font-size:12px;color:'+colorMap[ins.t]+';line-height:1.6;">'+ins.text+'</span>';
+      html+='</div>';
+    });
+    html+='</div>';
+
+    // ── CREATIVE DETAILS ──
+    var taxRows='';
+    if(cr.books&&cr.books.length)taxRows+='<div class="pa-detail-item"><div class="pa-detail-key">Books</div><div class="pa-detail-val">'+cr.books.join(', ')+'</div></div>';
+    if(cr.kids&&cr.kids.length){var kn=cr.kids.map(function(k){var kd=state.kids.find(function(x){return x.id===k;});return kd?kd.name:k;});taxRows+='<div class="pa-detail-item"><div class="pa-detail-key">Kids</div><div class="pa-detail-val">'+kn.join(', ')+'</div></div>';}
+    if(cr.products&&cr.products.length)taxRows+='<div class="pa-detail-item"><div class="pa-detail-key">Products</div><div class="pa-detail-val">'+cr.products.join(', ')+'</div></div>';
+    if(cr.prodtype)taxRows+='<div class="pa-detail-item"><div class="pa-detail-key">Production</div><div class="pa-detail-val">'+cr.prodtype.replace('_',' ')+'</div></div>';
+    if(taxRows)html+='<div class="pa-section-label">Creative details</div><div class="pa-details-grid">'+taxRows+'</div>';
+
+  } else {
+    // ── NO DATA STATE ──
+    html+='<div style="text-align:center;padding:2.5rem 1rem;">';
+    html+='<div style="font-size:36px;margin-bottom:12px;">📭</div>';
+    if(!cr.adname){
+      html+='<div style="font-family:Syne,sans-serif;font-size:14px;font-weight:600;margin-bottom:6px;">No Meta ad name set</div>';
+      html+='<div style="font-size:12px;color:var(--text-faint);margin-bottom:1rem;">Click Edit on this creative to set the Meta ad name so performance data can be matched.</div>';
+      html+='<button class="btn btn-primary btn-sm" onclick="closePerfModal();openEditModal(\''+crid+'\',\''+vid+'\');">Edit creative →</button>';
+    } else {
+      html+='<div style="font-family:Syne,sans-serif;font-size:14px;font-weight:600;margin-bottom:6px;">No performance data yet</div>';
+      html+='<div style="font-size:12px;color:var(--text-faint);margin-bottom:6px;">Ad name: <code style="background:var(--purple-light);color:var(--purple);padding:1px 5px;border-radius:3px;">'+cr.adname+'</code></div>';
+      html+='<div style="font-size:12px;color:var(--text-faint);">Upload a Meta CSV on the Meta Ads tab or sync via API to see data here.</div>';
+    }
+    html+='</div>';
+    // Still show creative details
+    var taxRows2='';
+    if(cr.books&&cr.books.length)taxRows2+='<div class="pa-detail-item"><div class="pa-detail-key">Books</div><div class="pa-detail-val">'+cr.books.join(', ')+'</div></div>';
+    if(cr.language)taxRows2+='<div class="pa-detail-item"><div class="pa-detail-key">Language</div><div class="pa-detail-val">'+cr.language+'</div></div>';
+    if(cr.emotionalScore)taxRows2+='<div class="pa-detail-item"><div class="pa-detail-key">Emotional score</div><div class="pa-detail-val" style="color:var(--purple);">'+cr.emotionalScore+'/10</div></div>';
+    if(cr.qualityScore)taxRows2+='<div class="pa-detail-item"><div class="pa-detail-key">Quality score</div><div class="pa-detail-val">'+cr.qualityScore+'/10</div></div>';
+    if(taxRows2)html+='<div class="pa-section-label" style="margin-top:1rem;">Creative details</div><div class="pa-details-grid">'+taxRows2+'</div>';
   }
+
   document.getElementById('perf-modal-body').innerHTML=html;
   document.getElementById('perf-modal').classList.add('open');
 }
