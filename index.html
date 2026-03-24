@@ -109,8 +109,11 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 .rsd-bad{background:var(--red);}
 
 /* PROMPT EDITOR */
-.prompt-textarea{width:100%;padding:10px 12px;border:1px solid var(--border-med);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.6;color:var(--text);background:var(--surface2);outline:none;resize:vertical;min-height:140px;}
+.prompt-textarea{width:100%;padding:10px 12px;border:1px solid var(--border-med);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.6;color:var(--text);background:var(--surface2);outline:none;resize:vertical;min-height:220px;}
 .prompt-textarea:focus{border-color:var(--purple);background:#fff;}
+.ai-tab-btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:6px 14px;border-radius:var(--r-sm);border:none;background:transparent;cursor:pointer;color:var(--text-muted);transition:all 0.15s;display:flex;align-items:center;gap:5px;}
+.ai-tab-btn:hover{color:var(--text);}
+.ai-tab-btn.active{background:var(--surface);color:var(--purple);box-shadow:var(--shadow-sm);font-weight:600;}
 
 /* VARIATION CARD */
 .variation-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:16px;box-shadow:var(--shadow-sm);overflow:hidden;}
@@ -376,6 +379,26 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 .btn-ghost:hover{background:var(--surface2);}
 .btn-sm{font-size:11px;padding:5px 12px;}
 
+/* META ADS PAGE */
+.meta-ad-card{background:var(--surface);border:1px solid var(--border-med);border-radius:var(--r-md);overflow:hidden;transition:box-shadow 0.2s;}
+.meta-ad-card:hover{box-shadow:var(--shadow-md);}
+.meta-ad-card.in-library{border-left:3px solid var(--green);opacity:0.75;}
+.meta-ad-thumb{width:100%;height:160px;background:var(--surface2);object-fit:cover;display:block;}
+.meta-ad-thumb-placeholder{width:100%;height:160px;background:var(--purple-light);display:flex;align-items:center;justify-content:center;font-size:32px;}
+.meta-ad-body{padding:0.75rem;}
+.meta-ad-name{font-size:12px;font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.meta-ad-campaign{font-size:10px;color:var(--text-faint);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.meta-ad-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:8px;}
+.meta-ad-stat{display:flex;flex-direction:column;background:var(--surface2);border-radius:var(--r-sm);padding:4px 6px;}
+.meta-ad-stat-key{font-size:8px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);}
+.meta-ad-stat-val{font-size:11px;font-weight:600;color:var(--text);}
+.meta-ad-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.meta-status-pill{font-size:9px;font-weight:600;padding:2px 7px;border-radius:20px;}
+.meta-active{background:var(--green-light);color:var(--green-dark);}
+.meta-paused{background:var(--amber-light);color:var(--amber-dark);}
+.meta-archived{background:var(--surface2);color:var(--text-faint);border:1px solid var(--border-med);}
+.meta-ads-grid-inner{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;font-size:13px;padding:10px 20px;border-radius:20px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;}
@@ -522,6 +545,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
   </div>
   <div class="nav-right">
     <button class="nav-tab active" onclick="showPage('library',this)">Library</button>
+    <button class="nav-tab" onclick="showPage('meta',this)">Meta Ads <span id="meta-unseen-badge" style="display:none;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:20px;margin-left:4px;"></span></button>
     <button class="nav-tab" onclick="showPage('settings',this)">Settings & Analytics</button>
     <div class="nav-user" id="nav-user-display"></div>
   </div>
@@ -683,6 +707,51 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 </div>
 </div>
 
+<!-- META ADS PAGE -->
+<div class="page" id="page-meta">
+<div class="main">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:12px;">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;">Meta Ads</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Live creatives from your Meta ad account — add any to the library</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div id="meta-sync-status" style="font-size:11px;color:var(--text-faint);"></div>
+      <button class="btn btn-primary btn-sm" onclick="syncMetaAds()" id="meta-sync-btn">⟳ Sync now</button>
+    </div>
+  </div>
+
+  <!-- Not connected state -->
+  <div id="meta-not-connected" style="text-align:center;padding:4rem 2rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);">
+    <div style="font-size:40px;margin-bottom:1rem;">🔌</div>
+    <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:600;margin-bottom:8px;">Meta API not connected</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:1.5rem;max-width:400px;margin-left:auto;margin-right:auto;">Go to Settings → Meta API to connect your ad account. Once connected, all your running ads will appear here.</div>
+    <button class="btn btn-primary" onclick="showPage('settings',document.querySelector('.nav-tab:last-child'));setTimeout(function(){document.getElementById('meta-api-section').scrollIntoView({behavior:'smooth'});},200)">Go to Settings →</button>
+  </div>
+
+  <!-- Filters for meta ads page -->
+  <div id="meta-filters" style="display:none;margin-bottom:1.25rem;display:none;">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <select class="filter-select" id="meta-filter-campaign" onchange="renderMetaAds()"><option value="">All campaigns</option></select>
+      <select class="filter-select" id="meta-filter-status" onchange="renderMetaAds()">
+        <option value="">All statuses</option>
+        <option value="ACTIVE">Active</option>
+        <option value="PAUSED">Paused</option>
+        <option value="ARCHIVED">Archived</option>
+      </select>
+      <select class="filter-select" id="meta-filter-inlibrary" onchange="renderMetaAds()">
+        <option value="">All ads</option>
+        <option value="no">Not in library</option>
+        <option value="yes">Already in library</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Ads grid -->
+  <div id="meta-ads-grid" style="display:none;"></div>
+</div>
+</div>
+
 <!-- SETTINGS PAGE -->
 <div class="page" id="page-settings">
 <div class="settings-main">
@@ -739,9 +808,45 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
     </div>
   </div>
 
+  <div class="settings-section" id="meta-api-section">
+    <div class="settings-title">Meta Ads API</div>
+    <div class="settings-desc">Connect your Meta ad account to sync performance data automatically — no more CSV exports. You'll need a long-lived access token from Meta Business Manager.</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;">
+      <div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:6px;">App ID</div>
+        <input class="settings-add-input" id="meta-app-id" placeholder="123456789012345" style="width:100%;" oninput="saveMetaConfig()" />
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:6px;">Ad Account ID</div>
+        <input class="settings-add-input" id="meta-account-id" placeholder="act_123456789" style="width:100%;" oninput="saveMetaConfig()" />
+      </div>
+    </div>
+    <div style="margin-bottom:1rem;">
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:6px;">Access Token (long-lived)</div>
+      <div style="display:flex;gap:8px;">
+        <input type="password" class="settings-add-input" id="meta-access-token" placeholder="EAAxxxx..." style="flex:1;" oninput="saveMetaConfig()" />
+        <button class="btn btn-ghost btn-sm" onclick="toggleKeyVisibility('meta-access-token')">Show</button>
+      </div>
+      <div style="font-size:11px;color:var(--text-faint);margin-top:4px;">
+        Get a long-lived token: <a href="https://developers.facebook.com/tools/explorer/" target="_blank" style="color:var(--purple);">Graph API Explorer</a> → generate token → exchange for 60-day token using <code style="font-size:10px;background:var(--surface2);padding:1px 4px;border-radius:3px;">fb_exchange_token</code>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="testMetaConnection()">Test connection</button>
+      <button class="btn btn-ghost btn-sm" onclick="syncMetaAds()">Sync ads now</button>
+      <div id="meta-connection-status" style="font-size:12px;"></div>
+    </div>
+
+    <div style="margin-top:1.25rem;padding:0.875rem 1rem;background:var(--surface2);border-radius:var(--r-sm);border:1px solid var(--border);font-size:12px;color:var(--text-muted);line-height:1.7;">
+      <strong>How it works:</strong> Once connected, the dashboard pulls your ad data directly via Meta's Marketing API every time you open the Meta Ads tab or click Sync. Performance data (spend, impressions, CTR, CPC, purchases) maps automatically to creatives using the <code style="background:var(--purple-light);color:var(--purple);padding:1px 4px;border-radius:3px;">WW_</code> naming convention. You can still upload a CSV below as a fallback.
+    </div>
+  </div>
+
   <div class="settings-section">
-    <div class="settings-title">Upload Meta Ads export</div>
-    <div class="settings-desc">Export daily from Meta at Ad level as CSV. <strong>Ads Manager → Ads level → Export → CSV.</strong></div>
+    <div class="settings-title">Upload Meta Ads export <span style="font-size:11px;font-weight:400;color:var(--text-faint);margin-left:6px;">(CSV fallback)</span></div>
+    <div class="settings-desc">If Meta API isn't connected, export daily from Meta at Ad level as CSV. <strong>Ads Manager → Ads level → Export → CSV.</strong></div>
     <div class="upload-zone" id="csv-zone" onclick="document.getElementById('csv-input').click()">
       <div class="upload-zone-icon">📊</div>
       <div class="upload-zone-text">Drop Meta CSV export here</div>
@@ -757,12 +862,98 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
   </div>
 
   <div class="settings-section">
-    <div class="settings-title">AI review prompt</div>
-    <div class="settings-desc">This prompt is used every time you click "AI Review" on a concept or individual creative. Customize it to focus on what matters most to your team — image quality, hook strength, text clarity, kid likeness, etc.</div>
-    <textarea class="prompt-textarea" id="review-prompt-editor" onblur="saveReviewPrompt()"></textarea>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
-      <button class="btn btn-ghost btn-sm" onclick="resetReviewPrompt()">Reset to default</button>
-      <button class="btn btn-primary btn-sm" onclick="saveReviewPrompt();showToast('Prompt saved')">Save prompt</button>
+    <div class="settings-title">AI providers &amp; review prompts</div>
+    <div class="settings-desc">Choose which AI to use for image review and video review. Each AI has its own prompt and API key. Videos default to Gemini.</div>
+
+    <!-- AI selector tabs -->
+    <div style="display:flex;gap:4px;background:var(--surface2);border:1px solid var(--border-med);border-radius:var(--r-md);padding:3px;margin-bottom:1.25rem;width:fit-content;">
+      <button class="ai-tab-btn active" id="ai-tab-claude" onclick="switchAITab('claude')">
+        <span style="font-size:11px;">🟣</span> Claude
+      </button>
+      <button class="ai-tab-btn" id="ai-tab-gemini" onclick="switchAITab('gemini')">
+        <span style="font-size:11px;">🔵</span> Gemini
+      </button>
+      <button class="ai-tab-btn" id="ai-tab-chatgpt" onclick="switchAITab('chatgpt')">
+        <span style="font-size:11px;">🟢</span> ChatGPT
+      </button>
+    </div>
+
+    <!-- Claude panel -->
+    <div class="ai-tab-panel" id="ai-panel-claude">
+      <div style="background:var(--purple-light);border-radius:var(--r-sm);padding:8px 12px;margin-bottom:1rem;font-size:12px;color:var(--purple);">
+        Claude is built-in — no API key needed. Best for image analysis.
+      </div>
+      <div style="margin-bottom:0.75rem;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:6px;">Review prompt for images</div>
+        <textarea class="prompt-textarea" id="prompt-claude" rows="12" onblur="saveAIPrompt('claude')"></textarea>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+        <button class="btn btn-ghost btn-sm" onclick="resetAIPrompt('claude')">Reset to default</button>
+        <button class="btn btn-primary btn-sm" onclick="saveAIPrompt('claude');showToast('Claude prompt saved')">Save prompt</button>
+      </div>
+    </div>
+
+    <!-- Gemini panel -->
+    <div class="ai-tab-panel" id="ai-panel-gemini" style="display:none;">
+      <div style="margin-bottom:0.875rem;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:6px;">Gemini API key</div>
+        <div style="display:flex;gap:8px;">
+          <input type="password" class="settings-add-input" id="key-gemini" placeholder="AIza..." style="flex:1;" oninput="saveAPIKey('gemini')" />
+          <button class="btn btn-ghost btn-sm" onclick="toggleKeyVisibility('key-gemini')">Show</button>
+        </div>
+        <div style="font-size:11px;color:var(--text-faint);margin-top:4px;">Get your key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--purple);">aistudio.google.com</a></div>
+      </div>
+      <div style="background:#eff6ff;border-radius:var(--r-sm);padding:8px 12px;margin-bottom:1rem;font-size:12px;color:#1d4ed8;">
+        🎬 Default for videos — Gemini can analyze video content directly.
+      </div>
+      <div style="margin-bottom:0.75rem;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:6px;">Review prompt for images &amp; videos</div>
+        <textarea class="prompt-textarea" id="prompt-gemini" rows="12" onblur="saveAIPrompt('gemini')"></textarea>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+        <button class="btn btn-ghost btn-sm" onclick="resetAIPrompt('gemini')">Reset to default</button>
+        <button class="btn btn-primary btn-sm" onclick="saveAIPrompt('gemini');showToast('Gemini prompt saved')">Save prompt</button>
+      </div>
+    </div>
+
+    <!-- ChatGPT panel -->
+    <div class="ai-tab-panel" id="ai-panel-chatgpt" style="display:none;">
+      <div style="margin-bottom:0.875rem;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:6px;">OpenAI API key</div>
+        <div style="display:flex;gap:8px;">
+          <input type="password" class="settings-add-input" id="key-chatgpt" placeholder="sk-..." style="flex:1;" oninput="saveAPIKey('chatgpt')" />
+          <button class="btn btn-ghost btn-sm" onclick="toggleKeyVisibility('key-chatgpt')">Show</button>
+        </div>
+        <div style="font-size:11px;color:var(--text-faint);margin-top:4px;">Get your key at <a href="https://platform.openai.com/api-keys" target="_blank" style="color:var(--purple);">platform.openai.com</a></div>
+      </div>
+      <div style="margin-bottom:0.75rem;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:6px;">Review prompt for images</div>
+        <textarea class="prompt-textarea" id="prompt-chatgpt" rows="12" onblur="saveAIPrompt('chatgpt')"></textarea>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+        <button class="btn btn-ghost btn-sm" onclick="resetAIPrompt('chatgpt')">Reset to default</button>
+        <button class="btn btn-primary btn-sm" onclick="saveAIPrompt('chatgpt');showToast('ChatGPT prompt saved')">Save prompt</button>
+      </div>
+    </div>
+
+    <!-- Default AI selectors -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+      <div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:6px;">Default AI for images</div>
+        <select class="field-select" id="default-ai-image" onchange="saveDefaultAI()">
+          <option value="claude">Claude</option>
+          <option value="gemini">Gemini</option>
+          <option value="chatgpt">ChatGPT</option>
+        </select>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-bottom:6px;">Default AI for videos</div>
+        <select class="field-select" id="default-ai-video" onchange="saveDefaultAI()">
+          <option value="gemini" selected>Gemini</option>
+          <option value="claude">Claude</option>
+          <option value="chatgpt">ChatGPT</option>
+        </select>
+      </div>
     </div>
   </div>
 
@@ -910,6 +1101,46 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 
 <div class="toast" id="toast"></div>
 
+<!-- ADD META AD TO LIBRARY MODAL -->
+<div class="modal-overlay" id="meta-add-modal">
+  <div class="modal-box sm">
+    <div class="modal-header"><span class="modal-badge" style="background:#1877f2;">Meta</span><span class="modal-title">Add to Library</span><button class="modal-close-btn" onclick="closeMetaAddModal()">×</button></div>
+    <div class="modal-body">
+      <div id="meta-add-preview" style="margin-bottom:1rem;"></div>
+      <div class="field-row">
+        <div class="field"><div class="field-label">Concept</div>
+          <select class="field-select" id="meta-add-concept" onchange="updateMetaAddVidList()">
+            <option value="A">A — Real kid + open book</option>
+            <option value="B">B — Flat lay formula</option>
+            <option value="C">C — Parent perspective</option>
+          </select>
+        </div>
+        <div class="field"><div class="field-label">Variation</div>
+          <select class="field-select" id="meta-add-vid"></select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><div class="field-label">Funnel stage</div>
+          <select class="field-select" id="meta-add-funnel">
+            <option value="">Select...</option>
+            <option value="tofu">Top of Funnel</option>
+            <option value="mofu">Middle of Funnel</option>
+            <option value="bofu">Bottom of Funnel</option>
+            <option value="retargeting">Retargeting</option>
+          </select>
+        </div>
+        <div class="field"><div class="field-label">Format</div>
+          <select class="field-select" id="meta-add-format"></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeMetaAddModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmAddMetaAd()">Add to Library</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ─── CONSTANTS ───
 var TEAM=[
@@ -1000,7 +1231,7 @@ function doLogin(userId,silent){
   var d=document.getElementById('nav-user-display');
   d.innerHTML='<div class="nav-avatar" style="background:'+user.color+'">'+user.name.charAt(0)+'</div>'+
     '<span>'+user.name+'</span><span class="nav-logout" onclick="logout()">Sign out</span>';
-  populateSelects();populateUserFilter();populateConceptFilter();renderAll();renderConceptStats();initView();
+  populateSelects();populateUserFilter();populateConceptFilter();renderAll();renderConceptStats();updateMetaBadge();initView();
 }
 
 function logout(){
@@ -1235,9 +1466,11 @@ function showPage(id,btn){
   document.getElementById('page-'+id).classList.add('active');
   if(btn)btn.classList.add('active');
   if(id==='settings'){
-    renderTaxonomyLists();renderKidCards();renderTeamList();loadAOV();
-    var ta=document.getElementById('review-prompt-editor');
-    if(ta)ta.value=getReviewPrompt();
+    renderTaxonomyLists();renderKidCards();renderTeamList();loadAOV();loadAISettings();loadMetaConfig();
+  }
+  if(id==='meta'){
+    renderMetaAds();
+    if(isMetaConnected()&&(!state.metaAds||!Object.keys(state.metaAds).length))syncMetaAds();
   }
 }
 
@@ -1381,40 +1614,32 @@ function handleMedia(file,vid){
   var reader=new FileReader();
   reader.onload=function(e){
     modalMedia=e.target.result;
-    if(modalIsVideo)openAIModalDirect();
-    else analyzeWithClaude(modalMedia,vid);
+    if(modalIsVideo)analyzeMedia(modalMedia,vid,true);
+    else analyzeMedia(modalMedia,vid,false);
   };
   reader.readAsDataURL(file);
 }
 
-function analyzeWithClaude(imgData,vid){
+function analyzeMedia(mediaData,vid,isVideo){
   var grid=document.getElementById('grid-'+vid);
   var addZone=grid?grid.querySelector('.add-creative-zone'):null;
-  if(addZone){addZone.classList.add('analyzing');addZone.innerHTML='<div class="analyzing-inner"><div class="analyzing-spinner"></div><div class="analyzing-text">Claude is analyzing...</div><div class="analyzing-sub">Generating name, ad name and tags</div></div>';}
+  var ai=getDefaultAI(isVideo?'video':'image');
+  var aiLabel=ai.charAt(0).toUpperCase()+ai.slice(1);
+  if(addZone){addZone.classList.add('analyzing');addZone.innerHTML='<div class="analyzing-inner"><div class="analyzing-spinner"></div><div class="analyzing-text">'+aiLabel+' is analyzing...</div><div class="analyzing-sub">Generating name, ad name and tags</div></div>';}
   var varCard=document.querySelector('[data-vid="'+vid+'"]');
   var varTitle=varCard?varCard.querySelector('.var-title-text').textContent:vid;
   var conceptLetter=vid.charAt(0);
   var num=(state.creatives[vid]||[]).length+1;
   var pn=num<10?'0'+num:''+num;
-  var b64=imgData.split(',')[1];
-  fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',max_tokens:1000,
-      messages:[{role:'user',content:[
-        {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
-        {type:'text',text:'You are analyzing a Facebook ad creative for WonderWraps — personalized children\'s books where kids are illustrated as cartoon characters.\n\nVariation: '+vid+' "'+varTitle+'"\nCreative number: '+num+'\nAvailable hooks: '+state.lists.hooks.join(', ')+'\nAvailable formats: '+state.lists.formats.join(', ')+'\n\nAnalyze and respond ONLY with JSON:\n{"creative_name":"Short name max 6 words","meta_ad_name":"WW_'+conceptLetter+'_'+vid+'_'+pn+'_[CamelCaseDesc]","funnel_stage":"tofu or mofu or bofu or retargeting","format":"one of the available formats","hook":"one of the available hooks","production_type":"ai_generated or professional or ugc or mixed","analysis":"2-3 sentences: emotional angle, Facebook ad strength/weakness, one improvement suggestion"}'}
-      ]}]
-    })
-  }).then(function(r){return r.json();}).then(function(data){
-    var text=data.content&&data.content[0]?data.content[0].text:'';
-    var clean=text.replace(/```json|```/g,'').trim();
-    var res;try{res=JSON.parse(clean);}catch(e){res={creative_name:varTitle+' v'+num,meta_ad_name:'WW_'+conceptLetter+'_'+vid+'_'+pn+'_Creative'+num,analysis:'Could not analyze. Edit manually.'};}
-    rerenderGrid(vid);openAIModal(res);
-  }).catch(function(){
-    rerenderGrid(vid);
-    openAIModal({creative_name:varTitle+' v'+num,meta_ad_name:'WW_'+conceptLetter+'_'+vid+'_'+pn+'_Creative'+num,analysis:'Analysis unavailable. Edit manually.'});
-  });
+  var key=getKeyFor(ai);
+  if(ai!=='claude'&&!key){rerenderGrid(vid);openAIModal({creative_name:varTitle+' v'+num,meta_ad_name:'WW_'+conceptLetter+'_'+vid+'_'+pn+'_Creative'+num,analysis:'No '+aiLabel+' API key. Go to Settings → AI providers.'});return;}
+  var b64=mediaData.split(',')[1];
+  var addPrompt='You are analyzing a Facebook ad creative for WonderWraps — personalized children\'s books where kids are illustrated as cartoon characters.\n\nVariation: '+vid+' "'+varTitle+'"\nCreative number: '+num+'\nAvailable hooks: '+state.lists.hooks.join(', ')+'\nAvailable formats: '+state.lists.formats.join(', ')+'\n\nAnalyze and respond ONLY with JSON:\n{"creative_name":"Short name max 6 words","meta_ad_name":"WW_'+conceptLetter+'_'+vid+'_'+pn+'_[CamelCaseDesc]","funnel_stage":"tofu or mofu or bofu or retargeting","format":"one of the available formats","hook":"one of the available hooks","production_type":"ai_generated or professional or ugc or mixed","analysis":"2-3 sentences: emotional angle, Facebook ad strength/weakness, one improvement suggestion"}';
+  var fallback={creative_name:varTitle+' v'+num,meta_ad_name:'WW_'+conceptLetter+'_'+vid+'_'+pn+'_Creative'+num,analysis:'Analysis failed. Edit manually.'};
+  function handleResp(p){p.then(function(r){return r.json();}).then(function(data){var text='';if(ai==='claude')text=data.content&&data.content[0]?data.content[0].text:'';else if(ai==='gemini')text=data.candidates&&data.candidates[0]?data.candidates[0].content.parts.map(function(p){return p.text||'';}).join(''):'';else if(ai==='chatgpt')text=data.choices&&data.choices[0]?data.choices[0].message.content:'';var clean=text.replace(/```json|```/g,'').trim();var res;try{res=JSON.parse(clean);}catch(e){res=fallback;}rerenderGrid(vid);openAIModal(res);}).catch(function(){rerenderGrid(vid);openAIModal(fallback);});}
+  if(ai==='claude') handleResp(fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:addPrompt}]}]})}));
+  else if(ai==='gemini') handleResp(fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key='+key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{inline_data:{mime_type:isVideo?'video/mp4':'image/jpeg',data:b64}},{text:addPrompt}]}]})}));
+  else if(ai==='chatgpt') handleResp(fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'gpt-4o',max_tokens:1000,messages:[{role:'user',content:[{type:'image_url',image_url:{url:'data:image/jpeg;base64,'+b64}},{type:'text',text:addPrompt}]}]})}));
 }
 
 function openAIModal(res){
@@ -1423,17 +1648,13 @@ function openAIModal(res){
   document.getElementById('ai-name').textContent=res.creative_name||'';
   document.getElementById('ai-adname').textContent=res.meta_ad_name||'';
   document.getElementById('ai-analysis').textContent=res.analysis||'';
-  // Set AI suggested fields
   setSelectVal('ai-funnel',res.funnel_stage||'');
   setSelectVal('ai-format',res.format||'');
   setSelectVal('ai-hook',res.hook||'');
   setSelectVal('ai-prodtype',res.production_type||'');
   document.getElementById('ai-modal').classList.add('open');
 }
-function openAIModalDirect(){
-  var num=(state.creatives[currentVid]||[]).length+1;
-  openAIModal({creative_name:'Video creative '+num,meta_ad_name:'WW_'+currentVid.charAt(0)+'_'+currentVid+'_'+String(num).padStart(2,'0')+'_Video',analysis:'Video creative uploaded. Edit fields above then save.'});
-}
+
 function closeAIModal(){document.getElementById('ai-modal').classList.remove('open');currentVid=null;modalMedia=null;modalIsVideo=false;}
 
 function setSelectVal(id,val){
@@ -1468,8 +1689,6 @@ function renderAll(){
   VIDS.forEach(function(vid){rerenderGrid(vid);applyHeroImg(vid);applyNotes(vid);});
   renderUploadHistory();updateStats();renderAnalytics();
   renderConceptStats();
-  var ta=document.getElementById('review-prompt-editor');
-  if(ta)ta.value=getReviewPrompt();
 }
 
 function rerenderGrid(vid){
@@ -2027,150 +2246,219 @@ function closeLight(){
   content.innerHTML='';
   document.getElementById('lightbox').classList.remove('open');
 }
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLight();closeAIModal();closePerfModal();closeEditModal();closeReviewModal();}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLight();closeAIModal();closePerfModal();closeEditModal();closeReviewModal();closeMetaAddModal();}});
 
 // ─── CONCEPT STATS BAR ───
-var DEFAULT_REVIEW_PROMPT='You are a Facebook ad creative expert reviewing WonderWraps ad creatives. WonderWraps makes personalized children\'s books where the child is illustrated as a cartoon character.\n\nReview this creative and assess:\n1. Visual quality — is the image sharp, well-composed, scroll-stopping?\n2. Kid likeness — does the cartoon character convincingly match a real child?\n3. Emotional impact — does it trigger an emotional reaction in parents?\n4. Hook strength — is the first impression compelling enough to stop the scroll?\n5. Text/copy — if there is text overlay, is it clear and punchy?\n6. Overall recommendation — keep as is, minor tweak, or needs rework?\n\nBe concise and specific. Flag real issues only.';
+var DEFAULT_REVIEW_PROMPT='You are a senior Facebook ad creative strategist reviewing creatives for WonderWraps — a brand that makes personalized children\'s books where a real child\'s photo is transformed into a cartoon character who stars in the story.\n\nYour job is to review this ad creative and give a sharp, honest performance assessment.\n\nAnalyze these dimensions:\n\n1. SCROLL-STOP POWER\nDoes the visual immediately grab attention in a fast-moving feed? Is there a clear visual hook in the first frame? Rate: strong / weak / missing.\n\n2. KID LIKENESS & EMOTION\nIf a child is visible — does the cartoon character look convincingly like a real child? Is there genuine emotion (joy, surprise, delight) visible? This is WonderWraps\' core product promise.\n\n3. PARENT PSYCHOLOGY\nDoes this creative trigger the emotional response of a parent wanting to gift something magical? Does it create desire, urgency, or a "my kid would love this" reaction?\n\n4. TEXT & COPY CLARITY\nIf there is text overlay: is it readable, benefit-focused, and concise? Does it support the visual rather than compete with it?\n\n5. CALL TO ACTION\nIs there a clear next step implied? Does the viewer know what WonderWraps does within 2 seconds of seeing this?\n\n6. FACEBOOK AD MECHANICS\nAspect ratio appropriate? Any elements cropped awkwardly? Would this pass Meta\'s ad review? Any text-heavy areas that might hurt delivery?\n\nRespond with your analysis and a single concrete suggestion for the most impactful improvement.';
+var DEFAULT_GEMINI_PROMPT='You are a video ad expert and creative director reviewing a Facebook/Instagram video ad for WonderWraps — a brand that creates personalized children\'s books. Parents upload a photo of their child, and the child becomes the illustrated cartoon hero of a printed storybook.\n\nReview this video ad with the eye of a performance marketer. Assess:\n\n1. HOOK (first 3 seconds)\nIs the opening frame impossible to scroll past? Does it create instant curiosity or emotional pull? Describe exactly what happens and whether it works.\n\n2. PACING & RETENTION\nDoes the edit keep attention through the full video? Are there dead moments where a viewer would scroll away? Note the timestamp of any weak points.\n\n3. PRODUCT DEMONSTRATION\nIs it clear what WonderWraps does? Does the viewer see the transformation (real photo → cartoon character → printed book)? This is the magic moment — is it shown effectively?\n\n4. EMOTIONAL ARC\nVideo ads need an emotional journey. Does this one build from curiosity → desire → action? Or does it feel flat?\n\n5. SOUND & CAPTIONS\nIs the video watchable without sound (most Meta views are muted)? Are captions present and well-timed? Does any music or sound design add to the emotion?\n\n6. CTA & LANDING\nDoes the video end with a clear call to action? Is the brand visible? Would a viewer know exactly what to do next?\n\n7. OVERALL VERDICT\nRate this video: Ready to scale / Needs minor edits / Needs rework / Do not run.\n\nGive one specific, actionable improvement that would have the highest impact on conversion.';
+var DEFAULT_CHATGPT_PROMPT='You are a direct-response advertising expert reviewing a Facebook ad creative for WonderWraps.\n\nWonderWraps makes personalized children\'s books. Parents upload one photo of their child, and within days receive a beautifully printed book where their child is the cartoon hero of the story. The product is €29–39, targeted at parents of children aged 2–8, and grandparents buying gifts.\n\nReview this creative from a pure performance marketing lens:\n\nVISUAL HOOK SCORE (1-10)\nHow immediately compelling is this in a social media feed? A 10 means no one scrolls past this. Explain your score.\n\nCLARITY SCORE (1-10)  \nCan someone understand what WonderWraps does within 2 seconds of seeing this? Explain your score.\n\nEMOTIONAL TRIGGER\nWhich parent emotion does this activate? (Pride / Nostalgia / Guilt / FOMO / Delight / None clearly)\nIs this the right emotion to drive a purchase decision?\n\nAUDIENCE FIT\nIs this creative clearly targeted? Would a mother of a 4-year-old immediately recognize this is for her? Or is it generic?\n\nCONVERSION LIKELIHOOD\nGiven what you see, what is the likely CTR range for this creative? (Below 1% / 1-2% / 2-4% / Above 4%)\nWhat is likely preventing it from hitting the top range?\n\nSINGLE BIGGEST FIX\nOne change — to the visual, copy, or structure — that would most improve performance. Be specific: not "add a CTA" but "add white text in the lower third reading: \'Your child is the hero — order today.\'"\n\nBe direct. Skip pleasantries.';
 
-function getReviewPrompt(){return state.reviewPrompt||DEFAULT_REVIEW_PROMPT;}
-
-function saveReviewPrompt(){
-  var ta=document.getElementById('review-prompt-editor');
-  if(ta){state.reviewPrompt=ta.value;save();showToast('Prompt saved');}
+// ─── MULTI-AI SETTINGS ───
+function getAIState(){
+  if(!state.aiConfig) state.aiConfig={
+    defaultImage:'claude', defaultVideo:'gemini',
+    prompts:{claude:DEFAULT_REVIEW_PROMPT, gemini:DEFAULT_GEMINI_PROMPT, chatgpt:DEFAULT_CHATGPT_PROMPT},
+    keys:{gemini:'', chatgpt:''}
+  };
+  // Ensure all three prompt keys exist
+  if(!state.aiConfig.prompts.claude) state.aiConfig.prompts.claude=DEFAULT_REVIEW_PROMPT;
+  if(!state.aiConfig.prompts.gemini) state.aiConfig.prompts.gemini=DEFAULT_GEMINI_PROMPT;
+  if(!state.aiConfig.prompts.chatgpt) state.aiConfig.prompts.chatgpt=DEFAULT_CHATGPT_PROMPT;
+  return state.aiConfig;
 }
-function resetReviewPrompt(){
-  state.reviewPrompt=DEFAULT_REVIEW_PROMPT;save();
-  var ta=document.getElementById('review-prompt-editor');
-  if(ta)ta.value=DEFAULT_REVIEW_PROMPT;
-  showToast('Prompt reset to default');
-}
 
-function renderVariationStats(vid){
-  var bar=document.getElementById('vstats-'+vid);if(!bar)return;
-  var list=state.creatives[vid]||[];
+function getPromptFor(ai){ return getAIState().prompts[ai]||DEFAULT_REVIEW_PROMPT; }
+function getKeyFor(ai){ return getAIState().keys[ai]||''; }
+function getDefaultAI(type){ return type==='video'?getAIState().defaultVideo:getAIState().defaultImage; }
 
-  var funnelFilter=document.getElementById('filter-funnel')?document.getElementById('filter-funnel').value:'';
-  var formatFilter=document.getElementById('filter-format')?document.getElementById('filter-format').value:'';
-  var userFilter=document.getElementById('filter-user')?document.getElementById('filter-user').value:'';
-  var filtered=list.slice();
-  if(funnelFilter)filtered=filtered.filter(function(c){return c.funnel===funnelFilter;});
-  if(formatFilter)filtered=filtered.filter(function(c){return c.format===formatFilter;});
-  if(userFilter)filtered=filtered.filter(function(c){return c.author===userFilter;});
-
-  var ti=0,tc=0,ts=0,tp=0,hasData=false;
-  filtered.forEach(function(cr){
-    if(!cr.adname)return;
-    var p=state.performance[cr.adname];if(!p)return;
-    hasData=true;
-    ti+=parseInt(p.impressions)||0;
-    tc+=parseInt(p.clicks)||0;
-    ts+=parseFloat(p.spend)||0;
-    tp+=parseInt(p.purchases)||0;
+function switchAITab(ai){
+  ['claude','gemini','chatgpt'].forEach(function(a){
+    document.getElementById('ai-tab-'+a).classList.toggle('active',a===ai);
+    document.getElementById('ai-panel-'+a).style.display=(a===ai)?'':'none';
   });
-
-  var ctr=hasData&&ti>0?(tc/ti*100):null;
-  var cpo=hasData&&tp>0?(ts/tp):null;
-  var cpc=hasData&&tc>0?(ts/tc):null;
-
-  function kpi(key,val,cls,isEmpty){
-    return '<div class="concept-stat">'+
-      '<div class="concept-stat-key">'+key+'</div>'+
-      '<div class="concept-stat-val'+(isEmpty?' empty':'')+(cls?' '+cls:'')+'">'+val+'</div>'+
-    '</div>';
-  }
-
-  var ctrC=ctr!==null?(ctr>2?'good':ctr>1?'warn':'bad'):'';
-  var cpoC=cpo!==null?(cpo<20?'good':cpo<35?'warn':'bad'):'';
-  var cpcC=cpc!==null?(cpc<0.3?'good':cpc<0.5?'warn':'bad'):'';
-
-  bar.innerHTML='<div class="concept-stats-grid">'+
-    kpi('Spend',         hasData&&ts>0?'€'+ts.toFixed(0):'—','',   !hasData)+
-    kpi('Impressions',   hasData&&ti>0?ti.toLocaleString():'—','', !hasData)+
-    kpi('CTR',           ctr!==null?ctr.toFixed(2)+'%':'—',   ctrC,ctr===null)+
-    kpi('CPC',           cpc!==null?'€'+cpc.toFixed(2):'—',   cpcC,cpc===null)+
-    kpi('Purchases',     hasData&&tp>0?tp.toString():'—','',        !hasData)+
-    kpi('Cost/purchase', cpo!==null?'€'+cpo.toFixed(2):'—',   cpoC,cpo===null)+
-  '</div>';
 }
 
-function renderConceptStats(){
-  VIDS.forEach(function(vid){renderVariationStats(vid);});
+function loadAISettings(){
+  var cfg=getAIState();
+  var defaults={claude:DEFAULT_REVIEW_PROMPT, gemini:DEFAULT_GEMINI_PROMPT, chatgpt:DEFAULT_CHATGPT_PROMPT};
+  ['claude','gemini','chatgpt'].forEach(function(ai){
+    var ta=document.getElementById('prompt-'+ai);
+    if(ta) ta.value=cfg.prompts[ai]||defaults[ai];
+  });
+  ['gemini','chatgpt'].forEach(function(ai){
+    var inp=document.getElementById('key-'+ai);
+    if(inp) inp.value=cfg.keys[ai]||'';
+  });
+  var imgSel=document.getElementById('default-ai-image');
+  if(imgSel) imgSel.value=cfg.defaultImage||'claude';
+  var vidSel=document.getElementById('default-ai-video');
+  if(vidSel) vidSel.value=cfg.defaultVideo||'gemini';
 }
 
-// ─── AI REVIEW ───
-function reviewConcept(concept,btn){
-  var cVids=VIDS.filter(function(v){return v.charAt(0)===concept;});
-  var allCreatives=[];
-  cVids.forEach(function(vid){(state.creatives[vid]||[]).forEach(function(cr){allCreatives.push({cr:cr,vid:vid});});});
-  var withImg=allCreatives.filter(function(x){return x.cr.img;});
-  if(!withImg.length){showToast('No image creatives to review in Concept '+concept);return;}
+function saveAIPrompt(ai){
+  var ta=document.getElementById('prompt-'+ai); if(!ta) return;
+  getAIState().prompts[ai]=ta.value; save();
+}
 
-  if(btn)btn.classList.add('running');
-  document.getElementById('review-modal-title').textContent='AI Review — Concept '+concept+' ('+withImg.length+' creatives)';
-  document.getElementById('review-modal-body').innerHTML='<div style="text-align:center;padding:2rem;"><div class="analyzing-spinner" style="margin:0 auto 12px;"></div><div style="font-size:13px;color:var(--text-muted);">Claude is reviewing '+withImg.length+' creatives...</div></div>';
-  document.getElementById('review-modal').classList.add('open');
+function resetAIPrompt(ai){
+  var defaults={claude:DEFAULT_REVIEW_PROMPT, gemini:DEFAULT_GEMINI_PROMPT, chatgpt:DEFAULT_CHATGPT_PROMPT};
+  var def=defaults[ai]||DEFAULT_REVIEW_PROMPT;
+  getAIState().prompts[ai]=def; save();
+  var ta=document.getElementById('prompt-'+ai);
+  if(ta) ta.value=def;
+  showToast(ai.charAt(0).toUpperCase()+ai.slice(1)+' prompt reset');
+}
 
-  var prompt=getReviewPrompt();
-  var reviews=[];var pending=withImg.length;
+function saveAPIKey(ai){
+  var inp=document.getElementById('key-'+ai); if(!inp) return;
+  getAIState().keys[ai]=inp.value; save();
+}
 
-  withImg.forEach(function(x){
-    var cr=x.cr;
-    var b64=cr.img.split(',')[1];
+function saveDefaultAI(){
+  var imgSel=document.getElementById('default-ai-image');
+  var vidSel=document.getElementById('default-ai-video');
+  if(imgSel) getAIState().defaultImage=imgSel.value;
+  if(vidSel) getAIState().defaultVideo=vidSel.value;
+  save(); showToast('Default AI updated');
+}
+
+function toggleKeyVisibility(id){
+  var inp=document.getElementById(id); if(!inp) return;
+  inp.type=inp.type==='password'?'text':'password';
+}
+
+// Legacy shims so old references still work
+function getReviewPrompt(){ return getPromptFor('claude'); }
+function saveReviewPrompt(){}
+function resetReviewPrompt(){}
+
+// ─── UNIFIED AI CALL ───
+function callAI(ai, mediaData, isVideo, contextText, onSuccess, onError){
+  var prompt = getPromptFor(ai);
+  var fullText = prompt + '\n\n' + contextText + '\n\nRespond ONLY with JSON: {"rating":"ok|warn|bad","summary":"One sentence summary","issues":"Specific issues found or none","suggestion":"One concrete actionable suggestion"}';
+
+  if(ai==='claude'){
+    var b64=mediaData.split(',')[1];
     fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
+      method:'POST', headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',max_tokens:600,
+        model:'claude-sonnet-4-20250514', max_tokens:600,
         messages:[{role:'user',content:[
           {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
-          {type:'text',text:prompt+'\n\nCreative name: '+cr.name+'\nVariation: '+x.vid+'\nFormat: '+(cr.format||'unknown')+'\nHook: '+(cr.hook||'none')+'\nFunnel: '+(cr.funnel||'unknown')+'\n\nRespond ONLY with JSON: {"rating":"ok|warn|bad","summary":"One sentence summary","issues":"Specific issues found or none","suggestion":"One concrete actionable suggestion"}'}
+          {type:'text',text:fullText}
         ]}]
       })
     }).then(function(r){return r.json();}).then(function(data){
       var text=data.content&&data.content[0]?data.content[0].text:'';
-      var clean=text.replace(/```json|```/g,'').trim();
-      var res;try{res=JSON.parse(clean);}catch(e){res={rating:'warn',summary:'Could not parse response',issues:'',suggestion:'Try again'};}
-      // Store review on creative
-      cr.aiReview=res;
-      reviews.push({cr:cr,vid:x.vid,res:res});
-      pending--;
-      if(pending===0){save();renderReviewResults(reviews,btn);}
-    }).catch(function(){
-      reviews.push({cr:cr,vid:x.vid,res:{rating:'warn',summary:'Analysis failed',issues:'',suggestion:'Check connection and retry'}});
-      pending--;
-      if(pending===0){save();renderReviewResults(reviews,btn);}
-    });
+      onSuccess(parseAIResponse(text));
+    }).catch(onError);
+
+  } else if(ai==='gemini'){
+    var key=getKeyFor('gemini');
+    if(!key){onError('No Gemini API key set — go to Settings → AI providers to add it.');return;}
+    var mimeType=isVideo?'video/mp4':'image/jpeg';
+    var b64=mediaData.split(',')[1];
+    fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key='+key,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[
+        {inline_data:{mime_type:mimeType,data:b64}},
+        {text:fullText}
+      ]}]})
+    }).then(function(r){return r.json();}).then(function(data){
+      var text='';
+      if(data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts)
+        text=data.candidates[0].content.parts.map(function(p){return p.text||'';}).join('');
+      onSuccess(parseAIResponse(text));
+    }).catch(onError);
+
+  } else if(ai==='chatgpt'){
+    var key=getKeyFor('chatgpt');
+    if(!key){onError('No OpenAI API key set — go to Settings → AI providers to add it.');return;}
+    var b64=mediaData.split(',')[1];
+    fetch('https://api.openai.com/v1/chat/completions',{
+      method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:JSON.stringify({
+        model:'gpt-4o', max_tokens:600,
+        messages:[{role:'user',content:[
+          {type:'image_url',image_url:{url:'data:image/jpeg;base64,'+b64}},
+          {type:'text',text:fullText}
+        ]}]
+      })
+    }).then(function(r){return r.json();}).then(function(data){
+      var text=data.choices&&data.choices[0]?data.choices[0].message.content:'';
+      onSuccess(parseAIResponse(text));
+    }).catch(onError);
+  }
+}
+
+function parseAIResponse(text){
+  var clean=text.replace(/```json|```/g,'').trim();
+  try{return JSON.parse(clean);}
+  catch(e){return {rating:'warn',summary:'Could not parse AI response',issues:'',suggestion:'Try again'};}
+}
+
+// ─── REVIEW FUNCTIONS ───
+function reviewConcept(concept,btn){
+  var cVids=VIDS.filter(function(v){return v.charAt(0)===concept;});
+  var allCreatives=[];
+  cVids.forEach(function(vid){(state.creatives[vid]||[]).forEach(function(cr){allCreatives.push({cr:cr,vid:vid});});});
+  var reviewable=allCreatives.filter(function(x){return x.cr.img||x.cr.video;});
+  if(!reviewable.length){showToast('No creatives to review in Concept '+concept);return;}
+
+  if(btn)btn.classList.add('running');
+  document.getElementById('review-modal-title').textContent='AI Review — Concept '+concept+' ('+reviewable.length+' creatives)';
+  document.getElementById('review-modal-body').innerHTML='<div style="text-align:center;padding:2rem;"><div class="analyzing-spinner" style="margin:0 auto 12px;"></div><div style="font-size:13px;color:var(--text-muted);">Reviewing '+reviewable.length+' creatives...</div></div>';
+  document.getElementById('review-modal').classList.add('open');
+
+  var reviews=[]; var pending=reviewable.length;
+
+  reviewable.forEach(function(x){
+    var cr=x.cr;
+    var isVideo=!!cr.video;
+    var media=isVideo?cr.video:cr.img;
+    var ai=getDefaultAI(isVideo?'video':'image');
+    var ctx='Creative name: '+cr.name+'\nVariation: '+x.vid+'\nFormat: '+(cr.format||'unknown')+'\nHook: '+(cr.hook||'none')+'\nFunnel: '+(cr.funnel||'unknown')+'\nType: '+(isVideo?'video':'image');
+
+    callAI(ai, media, isVideo, ctx,
+      function(res){
+        cr.aiReview=res; reviews.push({cr:cr,vid:x.vid,res:res,ai:ai}); pending--;
+        if(pending===0){save();renderReviewResults(reviews,btn);}
+      },
+      function(err){
+        var msg=typeof err==='string'?err:'Analysis failed';
+        reviews.push({cr:cr,vid:x.vid,res:{rating:'warn',summary:msg,issues:'',suggestion:'Check API key in Settings'},ai:ai});
+        pending--;
+        if(pending===0){save();renderReviewResults(reviews,btn);}
+      }
+    );
   });
 }
 
 function reviewSingle(crid,vid){
   var cr=(state.creatives[vid]||[]).find(function(c){return c.id===crid;});
-  if(!cr||!cr.img){showToast('This creative has no image to review');return;}
+  if(!cr||(!cr.img&&!cr.video)){showToast('No media to review on this creative');return;}
 
-  document.getElementById('review-modal-title').textContent='AI Review — '+cr.name;
-  document.getElementById('review-modal-body').innerHTML='<div style="text-align:center;padding:2rem;"><div class="analyzing-spinner" style="margin:0 auto 12px;"></div><div style="font-size:13px;color:var(--text-muted);">Claude is reviewing this creative...</div></div>';
+  var isVideo=!!cr.video;
+  var media=isVideo?cr.video:cr.img;
+  var ai=getDefaultAI(isVideo?'video':'image');
+
+  document.getElementById('review-modal-title').textContent='AI Review — '+cr.name+' ('+ai.charAt(0).toUpperCase()+ai.slice(1)+')';
+  document.getElementById('review-modal-body').innerHTML='<div style="text-align:center;padding:2rem;"><div class="analyzing-spinner" style="margin:0 auto 12px;"></div><div style="font-size:13px;color:var(--text-muted);">Analyzing with '+ai+'...</div></div>';
   document.getElementById('review-modal').classList.add('open');
 
-  var prompt=getReviewPrompt();
-  var b64=cr.img.split(',')[1];
-  fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',max_tokens:600,
-      messages:[{role:'user',content:[
-        {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
-        {type:'text',text:prompt+'\n\nCreative name: '+cr.name+'\nVariation: '+vid+'\nFormat: '+(cr.format||'unknown')+'\nHook: '+(cr.hook||'none')+'\nFunnel: '+(cr.funnel||'unknown')+'\n\nRespond ONLY with JSON: {"rating":"ok|warn|bad","summary":"One sentence summary","issues":"Specific issues found or none","suggestion":"One concrete actionable suggestion"}'}
-      ]}]
-    })
-  }).then(function(r){return r.json();}).then(function(data){
-    var text=data.content&&data.content[0]?data.content[0].text:'';
-    var clean=text.replace(/```json|```/g,'').trim();
-    var res;try{res=JSON.parse(clean);}catch(e){res={rating:'warn',summary:'Could not parse response',issues:'',suggestion:'Try again'};}
-    cr.aiReview=res;save();
-    renderReviewResults([{cr:cr,vid:vid,res:res}],null);
-    rerenderGrid(vid);
-  }).catch(function(){
-    renderReviewResults([{cr:cr,vid:vid,res:{rating:'warn',summary:'Analysis failed',issues:'',suggestion:'Check connection and retry'}}],null);
-  });
+  var ctx='Creative name: '+cr.name+'\nVariation: '+vid+'\nFormat: '+(cr.format||'unknown')+'\nHook: '+(cr.hook||'none')+'\nFunnel: '+(cr.funnel||'unknown')+'\nType: '+(isVideo?'video':'image');
+
+  callAI(ai, media, isVideo, ctx,
+    function(res){
+      cr.aiReview=res; save();
+      renderReviewResults([{cr:cr,vid:vid,res:res,ai:ai}],null);
+      rerenderGrid(vid);
+    },
+    function(err){
+      var msg=typeof err==='string'?err:'Analysis failed';
+      renderReviewResults([{cr:cr,vid:vid,res:{rating:'warn',summary:msg,issues:'',suggestion:'Check API key in Settings'},ai:ai}],null);
+    }
+  );
 }
 
 function renderReviewResults(reviews,btn){
@@ -2185,23 +2473,22 @@ function renderReviewResults(reviews,btn){
     '<div style="flex:1;min-width:80px;background:var(--red-light);border-radius:var(--r-md);padding:0.875rem;text-align:center;"><div style="font-family:Syne,sans-serif;font-size:22px;font-weight:700;color:var(--red-dark);">'+bad+'</div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--red-dark);">Needs work</div></div>'+
   '</div>';
 
-  // Sort: bad first, warn second, ok last
   reviews.sort(function(a,b){var o={bad:0,warn:1,ok:2};return o[a.res.rating]-o[b.res.rating];});
-
   reviews.forEach(function(r){
     var cls=r.res.rating==='ok'?'rsd-ok':r.res.rating==='warn'?'rsd-warn':'rsd-bad';
     var bg=r.res.rating==='ok'?'var(--green-light)':r.res.rating==='warn'?'var(--amber-light)':'var(--red-light)';
-    var imgHtml=r.cr.img?'<img src="'+r.cr.img+'" style="width:60px;height:60px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid var(--border-med);" />':'';
+    var thumb=r.cr.img?'<img src="'+r.cr.img+'" style="width:60px;height:60px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid var(--border-med);" />':
+              r.cr.video?'<div style="width:60px;height:60px;background:#000;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px;">🎬</div>':'';
+    var aiBadge=r.ai?'<span style="font-size:9px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:1px 6px;color:var(--text-faint);margin-left:6px;">'+r.ai+'</span>':'';
     html+='<div class="review-item" style="background:'+bg+'20;">'+
-      '<div style="display:flex;gap:10px;align-items:flex-start;">'+imgHtml+
+      '<div style="display:flex;gap:10px;align-items:flex-start;">'+thumb+
       '<div style="flex:1;">'+
-        '<div class="review-item-top"><div class="review-status-dot '+cls+'"></div><div class="review-item-name">'+r.cr.name+'</div><span style="font-size:10px;color:var(--text-faint);margin-left:auto;">'+r.vid+'</span></div>'+
+        '<div class="review-item-top"><div class="review-status-dot '+cls+'"></div><div class="review-item-name">'+r.cr.name+'</div>'+aiBadge+'<span style="font-size:10px;color:var(--text-faint);margin-left:auto;">'+r.vid+'</span></div>'+
         '<div class="review-item-text" style="margin-bottom:6px;">'+r.res.summary+'</div>'+
         (r.res.issues&&r.res.issues!=='none'?'<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;"><strong>Issues:</strong> '+r.res.issues+'</div>':'')+
         '<div style="font-size:11px;color:var(--purple);font-weight:500;">→ '+r.res.suggestion+'</div>'+
       '</div></div></div>';
   });
-
   document.getElementById('review-modal-body').innerHTML=html;
   VIDS.forEach(function(vid){rerenderGrid(vid);});
 }
@@ -2229,6 +2516,272 @@ makeCard=function(cr,vid){
   }
   return div;
 };
+
+// ─── META API ───
+var META_API = 'https://graph.facebook.com/v19.0';
+var metaAddTarget = null; // currently selected meta ad for add-to-library
+
+function saveMetaConfig(){
+  if(!state.metaConfig) state.metaConfig={};
+  var appId = document.getElementById('meta-app-id'); if(appId) state.metaConfig.appId=appId.value.trim();
+  var accId = document.getElementById('meta-account-id'); if(accId) state.metaConfig.accountId=accId.value.trim();
+  var tok = document.getElementById('meta-access-token'); if(tok) state.metaConfig.accessToken=tok.value.trim();
+  save();
+}
+
+function loadMetaConfig(){
+  var cfg = state.metaConfig||{};
+  var appId = document.getElementById('meta-app-id'); if(appId) appId.value=cfg.appId||'';
+  var accId = document.getElementById('meta-account-id'); if(accId) accId.value=cfg.accountId||'';
+  var tok = document.getElementById('meta-access-token'); if(tok) tok.value=cfg.accessToken||'';
+}
+
+function isMetaConnected(){
+  var cfg=state.metaConfig||{};
+  return !!(cfg.accessToken&&cfg.accountId);
+}
+
+function testMetaConnection(){
+  var cfg=state.metaConfig||{};
+  if(!cfg.accessToken){showMetaStatus('⚠ No access token set','var(--amber-dark)');return;}
+  var el=document.getElementById('meta-connection-status');
+  if(el){el.textContent='Testing...';el.style.color='var(--text-muted)';}
+  var accId=cfg.accountId||'me';
+  fetch(META_API+'/'+accId+'?fields=name,account_status&access_token='+cfg.accessToken)
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(data.error){showMetaStatus('✗ '+data.error.message,'var(--red-dark)');}
+    else{showMetaStatus('✓ Connected — '+data.name,'var(--green-dark)');state.metaConfig.connected=true;save();}
+  }).catch(function(){showMetaStatus('✗ Connection failed — check token','var(--red-dark)');});
+}
+
+function showMetaStatus(msg,color){
+  var el=document.getElementById('meta-connection-status');
+  if(el){el.textContent=msg;el.style.color=color||'var(--text)';}
+}
+
+function syncMetaAds(){
+  if(!isMetaConnected()){
+    showToast('Connect Meta API in Settings first');
+    showPage('settings',document.querySelectorAll('.nav-tab')[2]);
+    setTimeout(function(){var s=document.getElementById('meta-api-section');if(s)s.scrollIntoView({behavior:'smooth'});},200);
+    return;
+  }
+  var cfg=state.metaConfig;
+  var btn=document.getElementById('meta-sync-btn');
+  if(btn){btn.textContent='⟳ Syncing...';btn.disabled=true;}
+  var syncEl=document.getElementById('meta-sync-status');
+  if(syncEl)syncEl.textContent='Fetching ads...';
+
+  // Fields we need from Meta
+  var fields='name,status,adset_id,campaign_id,creative{thumbnail_url,body,title,image_url,video_id},insights{spend,impressions,clicks,ctr,cpc,actions,action_values}';
+  var url=META_API+'/'+cfg.accountId+'/ads?fields='+encodeURIComponent(fields)+'&limit=200&access_token='+cfg.accessToken;
+
+  fetch(url).then(function(r){return r.json();}).then(function(data){
+    if(data.error){
+      showToast('Meta error: '+data.error.message);
+      if(btn){btn.textContent='⟳ Sync now';btn.disabled=false;}
+      return;
+    }
+    var ads=data.data||[];
+    // Also fetch campaign names for grouping
+    var campIds=[...new Set(ads.map(function(a){return a.campaign_id;}).filter(Boolean))];
+
+    // Process and store ads
+    if(!state.metaAds) state.metaAds={};
+    var now=new Date().toISOString();
+    ads.forEach(function(ad){
+      var insights=ad.insights&&ad.insights.data&&ad.insights.data[0]?ad.insights.data[0]:{};
+      var purchases=0;
+      if(insights.actions) insights.actions.forEach(function(a){if(a.action_type==='purchase'||a.action_type==='offsite_conversion.fb_pixel_purchase')purchases+=parseInt(a.value)||0;});
+      state.metaAds[ad.id]={
+        id:ad.id, name:ad.name, status:ad.status,
+        campaignId:ad.campaign_id||'', adsetId:ad.adset_id||'',
+        thumb:ad.creative?ad.creative.thumbnail_url||ad.creative.image_url||'':'',
+        videoId:ad.creative?ad.creative.video_id||'':'',
+        spend:parseFloat(insights.spend)||0,
+        impressions:parseInt(insights.impressions)||0,
+        clicks:parseInt(insights.clicks)||0,
+        ctr:parseFloat(insights.ctr)||0,
+        cpc:parseFloat(insights.cpc)||0,
+        purchases:purchases,
+        synced:now
+      };
+      // Auto-update performance data for library creatives matching by name
+      if(ad.name&&ad.name.startsWith('WW_')){
+        state.performance[ad.name]={
+          impressions:parseInt(insights.impressions)||0,
+          clicks:parseInt(insights.clicks)||0,
+          ctr:parseFloat(insights.ctr)||0,
+          cpc:parseFloat(insights.cpc)||0,
+          spend:parseFloat(insights.spend)||0,
+          purchases:purchases
+        };
+      }
+    });
+    state.metaLastSync=now;
+    save();
+
+    if(btn){btn.textContent='⟳ Sync now';btn.disabled=false;}
+    var syncedAgo=new Date().toLocaleTimeString();
+    if(syncEl)syncEl.textContent='Last sync: '+syncedAgo+' · '+ads.length+' ads';
+    updateMetaBadge();
+    renderMetaAds();
+    VIDS.forEach(function(vid){rerenderGrid(vid);});
+    showToast('Synced '+ads.length+' ads from Meta');
+  }).catch(function(e){
+    showToast('Sync failed — check connection');
+    if(btn){btn.textContent='⟳ Sync now';btn.disabled=false;}
+    console.error(e);
+  });
+}
+
+function updateMetaBadge(){
+  var badge=document.getElementById('meta-unseen-badge');
+  if(!badge)return;
+  var ads=Object.values(state.metaAds||{});
+  var notInLib=ads.filter(function(ad){return !isAdInLibrary(ad.name);}).length;
+  if(notInLib>0){badge.textContent=notInLib;badge.style.display='';}
+  else{badge.style.display='none';}
+}
+
+function isAdInLibrary(adName){
+  if(!adName)return false;
+  var found=false;
+  VIDS.forEach(function(vid){
+    (state.creatives[vid]||[]).forEach(function(cr){if(cr.adname===adName)found=true;});
+  });
+  return found;
+}
+
+function renderMetaAds(){
+  var notConn=document.getElementById('meta-not-connected');
+  var grid=document.getElementById('meta-ads-grid');
+  var filters=document.getElementById('meta-filters');
+
+  if(!isMetaConnected()||!state.metaAds||!Object.keys(state.metaAds).length){
+    if(notConn)notConn.style.display='';
+    if(grid)grid.style.display='none';
+    if(filters)filters.style.display='none';
+    return;
+  }
+
+  if(notConn)notConn.style.display='none';
+  if(grid)grid.style.display='';
+  if(filters)filters.style.display='';
+
+  var ads=Object.values(state.metaAds);
+  var statusF=document.getElementById('meta-filter-status')?document.getElementById('meta-filter-status').value:'';
+  var libF=document.getElementById('meta-filter-inlibrary')?document.getElementById('meta-filter-inlibrary').value:'';
+  var campF=document.getElementById('meta-filter-campaign')?document.getElementById('meta-filter-campaign').value:'';
+
+  if(statusF)ads=ads.filter(function(a){return a.status===statusF;});
+  if(libF==='yes')ads=ads.filter(function(a){return isAdInLibrary(a.name);});
+  if(libF==='no')ads=ads.filter(function(a){return !isAdInLibrary(a.name);});
+  if(campF)ads=ads.filter(function(a){return a.campaignId===campF;});
+
+  // Populate campaign filter
+  var allCamps=[...new Set(Object.values(state.metaAds).map(function(a){return a.campaignId;}))].filter(Boolean);
+  var campSel=document.getElementById('meta-filter-campaign');
+  if(campSel){
+    var cur=campSel.value;
+    campSel.innerHTML='<option value="">All campaigns</option>';
+    allCamps.forEach(function(c){campSel.innerHTML+='<option value="'+c+'"'+(cur===c?' selected':'')+'>'+c+'</option>';});
+  }
+
+  var aov=parseFloat(state.aov)||32;
+  var html='<div style="font-size:12px;color:var(--text-muted);margin-bottom:1rem;">'+ads.length+' ads shown · '+ads.filter(function(a){return !isAdInLibrary(a.name);}).length+' not yet in library</div>';
+  html+='<div class="meta-ads-grid-inner">';
+
+  ads.sort(function(a,b){return (b.spend||0)-(a.spend||0);});
+
+  ads.forEach(function(ad){
+    var inLib=isAdInLibrary(ad.name);
+    var roas=ad.spend>0?((ad.purchases*aov)/ad.spend):null;
+    var roasInfo=getRoasInfo(roas);
+    var statusCls=ad.status==='ACTIVE'?'meta-active':ad.status==='PAUSED'?'meta-paused':'meta-archived';
+    var ctrC=ad.ctr>2?'var(--green-dark)':ad.ctr>1?'var(--amber-dark)':'var(--text)';
+
+    html+='<div class="meta-ad-card'+(inLib?' in-library':'')+'" id="meta-card-'+ad.id+'">';
+    // Thumb
+    if(ad.thumb)html+='<img class="meta-ad-thumb" src="'+ad.thumb+'" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'" /><div class="meta-ad-thumb-placeholder" style="display:none;">📺</div>';
+    else html+='<div class="meta-ad-thumb-placeholder">📺</div>';
+    html+='<div class="meta-ad-body">';
+    html+='<div class="meta-ad-name" title="'+ad.name+'">'+ad.name+'</div>';
+    html+='<div class="meta-ad-campaign">Campaign: '+ad.campaignId+'</div>';
+    html+='<div class="meta-ad-stats">';
+    html+='<div class="meta-ad-stat"><div class="meta-ad-stat-key">Spend</div><div class="meta-ad-stat-val">€'+ad.spend.toFixed(0)+'</div></div>';
+    html+='<div class="meta-ad-stat"><div class="meta-ad-stat-key">CTR</div><div class="meta-ad-stat-val" style="color:'+ctrC+'">'+ad.ctr.toFixed(2)+'%</div></div>';
+    html+='<div class="meta-ad-stat"><div class="meta-ad-stat-key">ROAS</div><div class="meta-ad-stat-val" style="color:'+(roas!==null?(roasInfo.cls==='roas-excellent'?'#6B3FA0':roasInfo.cls==='roas-good'?'#16a34a':roasInfo.cls==='roas-mid'?'#d97706':'#dc2626'):'var(--text-faint)')+';">'+(roas!==null?roas.toFixed(1)+'x':'—')+'</div></div>';
+    html+='</div>';
+    html+='<div class="meta-ad-footer">';
+    html+='<span class="meta-status-pill '+statusCls+'">'+ad.status+'</span>';
+    if(inLib){
+      html+='<span style="font-size:10px;color:var(--green-dark);font-weight:500;">✓ In library</span>';
+    } else {
+      html+='<button class="btn btn-primary btn-sm" style="font-size:10px;padding:4px 10px;" onclick="openMetaAddModal(\''+ad.id+'\')">+ Add to library</button>';
+    }
+    html+='</div></div></div>';
+  });
+
+  html+='</div>';
+  if(grid)grid.innerHTML=html;
+}
+
+// Add Meta ad to library modal
+function openMetaAddModal(adId){
+  var ad=(state.metaAds||{})[adId];if(!ad)return;
+  metaAddTarget=ad;
+  // Preview
+  var prev=document.getElementById('meta-add-preview');
+  if(prev){
+    prev.innerHTML='<div style="background:var(--surface2);border-radius:var(--r-sm);padding:0.75rem;margin-bottom:0.5rem;display:flex;gap:10px;align-items:center;">'+
+      (ad.thumb?'<img src="'+ad.thumb+'" style="width:60px;height:60px;object-fit:cover;border-radius:6px;flex-shrink:0;" />':'<div style="width:60px;height:60px;background:var(--purple-light);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;">📺</div>')+
+      '<div><div style="font-size:12px;font-weight:500;margin-bottom:2px;">'+ad.name+'</div>'+
+      '<div style="font-size:11px;color:var(--text-faint);">Spend: €'+ad.spend.toFixed(0)+' · CTR: '+ad.ctr.toFixed(2)+'% · Purchases: '+ad.purchases+'</div></div></div>';
+  }
+  updateMetaAddVidList();
+  // Populate format select
+  populateSelectFromList('meta-add-format',state.lists.formats,'format');
+  document.getElementById('meta-add-modal').classList.add('open');
+}
+
+function updateMetaAddVidList(){
+  var concept=document.getElementById('meta-add-concept')?document.getElementById('meta-add-concept').value:'A';
+  var sel=document.getElementById('meta-add-vid');if(!sel)return;
+  sel.innerHTML='';
+  VIDS.filter(function(v){return v.charAt(0)===concept;}).forEach(function(vid){
+    var varCard=document.querySelector('[data-vid="'+vid+'"]');
+    var title=varCard?varCard.querySelector('.var-title-text').textContent:vid;
+    sel.innerHTML+='<option value="'+vid+'">'+vid+' — '+title+'</option>';
+  });
+}
+
+function confirmAddMetaAd(){
+  if(!metaAddTarget)return;
+  var ad=metaAddTarget;
+  var vid=document.getElementById('meta-add-vid')?document.getElementById('meta-add-vid').value:'A1';
+  var funnel=document.getElementById('meta-add-funnel')?document.getElementById('meta-add-funnel').value:'';
+  var format=document.getElementById('meta-add-format')?document.getElementById('meta-add-format').value:'';
+  if(!state.creatives[vid])state.creatives[vid]=[];
+  state.creatives[vid].push({
+    id:'cr-'+Date.now(), name:ad.name, adname:ad.name,
+    img:ad.thumb||null, video:null,
+    author:state.currentUser||'arben',
+    status:'published', funnel:funnel, format:format,
+    hook:'', prodtype:'', language:'', books:[], kids:[], products:[], audiences:[],
+    fromMeta:true, metaAdId:ad.id
+  });
+  save();rerenderGrid(vid);updateStats();
+  closeMetaAddModal();
+  renderMetaAds();
+  showToast('Added "'+ad.name+'" to '+vid);
+}
+
+function closeMetaAddModal(){
+  document.getElementById('meta-add-modal').classList.remove('open');
+  metaAddTarget=null;
+}
 
 // ─── TOAST ───
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
