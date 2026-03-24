@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════
-   WONDERWRAPS CREATIVE AD LIBRARY — v3.0
+   WONDERWRAPS CREATIVE AD LIBRARY — v3.5
    Design: Refined utilitarian. Data-first.
    ═══════════════════════════════════════════ */
 
@@ -588,7 +588,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 <nav>
   <div class="nav-left">
     <div class="logo">W</div>
-    <div class="nav-brand"><div class="nav-title">WonderWraps</div><div class="nav-sub">Creative Ad Library <span class="nav-version">v3.0</span></div></div>
+    <div class="nav-brand"><div class="nav-title">WonderWraps</div><div class="nav-sub">Creative Ad Library <span class="nav-version">v3.5</span></div></div>
   </div>
   <div class="nav-right">
     <button class="nav-tab active" onclick="showPage('library',this)">Library</button>
@@ -2193,16 +2193,39 @@ function openEditModal(crid,vid){
   var kidsHtml=makeKidTags(cr.kids||[]);
   var audHtml=makeMSTags('edit-audiences',state.lists.audiences,cr.audiences||[]);
 
-  // Hero image or video thumbnail at top
-  var heroHtml='';
-  if(cr.img){
-    heroHtml='<div style="margin-bottom:1.25rem;border-radius:var(--r-md);overflow:hidden;max-height:240px;"><img src="'+cr.img+'" style="width:100%;max-height:240px;object-fit:cover;display:block;" /></div>';
-  } else if(cr.video){
-    heroHtml='<div style="margin-bottom:1.25rem;border-radius:var(--r-md);overflow:hidden;background:#000;max-height:240px;display:flex;align-items:center;justify-content:center;"><video src="'+cr.video+'" style="max-width:100%;max-height:240px;" controls></video></div>';
-  }
+  // Hero image / video / placeholder + upload option
+  var initials=(cr.name||'?').split(/\s+/).slice(0,2).map(function(w){return w.charAt(0).toUpperCase();}).join('');
+  var heroHtml='<div style="margin-bottom:1.25rem;">'+
+    '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-faint);margin-bottom:8px;">Thumbnail</div>'+
+    '<div style="display:flex;gap:12px;align-items:flex-start;">'+
+      // Thumbnail preview
+      '<div id="edit-thumb-preview" style="width:100px;height:100px;border-radius:var(--r-md);overflow:hidden;flex-shrink:0;cursor:pointer;position:relative;" onclick="document.getElementById(\'edit-thumb-input\').click()" title="Click to upload new image">'+
+        (cr.img
+          ? '<img src="'+cr.img+'" style="width:100%;height:100%;object-fit:cover;" id="edit-thumb-img" />'
+          : cr.video
+            ? '<video src="'+cr.video+'" style="width:100%;height:100%;object-fit:cover;"></video>'
+            : '<div style="width:100%;height:100%;background:linear-gradient(135deg,#1a0533,#3b1d7a);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;"><span style="font-family:Syne,sans-serif;font-size:26px;font-weight:800;color:rgba(255,255,255,0.85);">'+initials+'</span><span style="font-size:8px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.1em;">No image</span></div>'
+        )+
+        '<div style="position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background 0.2s;border-radius:var(--r-md);font-size:11px;font-weight:600;color:#fff;opacity:0;" id="edit-thumb-hover" onmouseenter="this.style.background=\'rgba(0,0,0,0.5)\';this.style.opacity=\'1\'" onmouseleave="this.style.background=\'rgba(0,0,0,0)\';this.style.opacity=\'0\'">Change</div>'+
+      '</div>'+
+      // Info + buttons
+      '<div style="flex:1;">'+
+        '<div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;line-height:1.5;">Upload a new photo to replace the thumbnail. After upload, click <strong>Analyze with AI</strong> to auto-fill book, language, hook and other fields.</div>'+
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
+          '<label class="btn btn-ghost btn-sm" style="cursor:pointer;display:flex;align-items:center;gap:5px;">'+
+            '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg> Upload image'+
+            '<input type="file" id="edit-thumb-input" accept="image/*,video/*" style="display:none;" onchange="handleEditThumbUpload(this)" />'+
+          '</label>'+
+          '<button class="btn btn-ghost btn-sm" id="edit-analyze-btn" onclick="analyzeEditThumb()" style="display:'+(cr.img||cr.video?'flex':'none')+';align-items:center;gap:5px;">'+
+            '🤖 Analyze with AI'+
+          '</button>'+
+        '</div>'+
+        '<div id="edit-analyze-status" style="font-size:11px;color:var(--purple);margin-top:6px;display:none;"></div>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
 
-  var html=heroHtml+
-  '<div class="modal-section"><div class="modal-section-title">Identity</div>'+
+  var html=heroHtml++
     '<div class="field-row">'+
       '<div class="field"><div class="field-label">Funnel stage</div><select class="field-select" id="edit-funnel"><option value="">Select...</option><option value="tofu">Top of Funnel (TOF)</option><option value="mofu">Middle of Funnel (MOF)</option><option value="bofu">Bottom of Funnel (BOF)</option><option value="retargeting">Retargeting</option></select></div>'+
       '<div class="field"><div class="field-label">Format</div><select class="field-select" id="edit-format"></select></div>'+
@@ -2286,7 +2309,117 @@ function getSelectedTags(groupId){
   return selected;
 }
 
-function closeEditModal(){document.getElementById('edit-modal').classList.remove('open');editVid=null;editCrid=null;}
+function closeEditModal(){document.getElementById('edit-modal').classList.remove('open');editVid=null;editCrid=null;_editThumbData=null;}
+
+// Store new thumb data temporarily during edit session
+var _editThumbData = null;
+
+function handleEditThumbUpload(inp){
+  if(!inp.files[0]) return;
+  var file = inp.files[0];
+  var isVideo = file.type.startsWith('video/');
+  var reader = new FileReader();
+  reader.onload = function(e){
+    _editThumbData = {data: e.target.result, isVideo: isVideo};
+    // Update preview
+    var preview = document.getElementById('edit-thumb-preview');
+    if(preview){
+      var existing = preview.querySelector('img,video,div:first-child');
+      // Replace content with new image
+      preview.innerHTML = isVideo
+        ? '<video src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;"></video>'
+        : '<img src="'+e.target.result+'" style="width:100%;height:100%;object-fit:cover;" id="edit-thumb-img" />';
+      // Re-add hover overlay
+      var hover = document.createElement('div');
+      hover.id='edit-thumb-hover';
+      hover.style.cssText='position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background 0.2s;border-radius:var(--r-md);';
+      hover.onmouseenter=function(){this.style.background='rgba(0,0,0,0.45)';};
+      hover.onmouseleave=function(){this.style.background='rgba(0,0,0,0)';};
+      preview.appendChild(hover);
+    }
+    // Show analyze button
+    var btn = document.getElementById('edit-analyze-btn');
+    if(btn) btn.style.display='flex';
+    showToast('Image uploaded — click Analyze with AI to tag it');
+  };
+  reader.readAsDataURL(file);
+}
+
+function analyzeEditThumb(){
+  var cr=(state.creatives[editVid]||[]).find(function(c){return c.id===editCrid;});
+  if(!cr) return;
+  var mediaData = _editThumbData ? _editThumbData.data : cr.img;
+  if(!mediaData){ showToast('No image to analyze'); return; }
+
+  var btn=document.getElementById('edit-analyze-btn');
+  var status=document.getElementById('edit-analyze-status');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Analyzing...';}
+  if(status){status.style.display='';status.textContent='Claude is analyzing...';}
+
+  var isVideo = _editThumbData ? _editThumbData.isVideo : false;
+  var vid=editVid;
+  var varCard=document.querySelector('[data-vid="'+vid+'"]');
+  var varTitle=varCard?varCard.querySelector('.var-title-text').textContent:vid;
+  var conceptLetter=vid.charAt(0);
+  var num=(state.creatives[vid]||[]).length;
+  var pn=num<10?'0'+num:''+num;
+
+  var prompt=buildAddPrompt(vid,varTitle,num,pn,conceptLetter);
+  var b64=mediaData.split(',')[1];
+  if(!b64){
+    if(btn){btn.disabled=false;btn.innerHTML='🤖 Analyze with AI';}
+    if(status){status.textContent='Cannot analyze — image data not available';}
+    return;
+  }
+
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1200,
+      messages:[{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
+        {type:'text',text:prompt}
+      ]}]
+    })
+  }).then(function(r){return r.json();}).then(function(data){
+    var text=data.content&&data.content[0]?data.content[0].text:'';
+    var clean=text.replace(/```json|```/g,'').trim();
+    var res;try{res=JSON.parse(clean);}catch(e){res={};}
+
+    // Auto-populate fields from AI analysis
+    var filled=[];
+    if(res.funnel_stage){setSelectVal('edit-funnel',res.funnel_stage);filled.push('funnel');}
+    if(res.format){setSelectVal('edit-format',res.format);filled.push('format');}
+    if(res.hook){setSelectVal('edit-hook',res.hook);filled.push('hook');}
+    if(res.production_type){setSelectVal('edit-prodtype',res.production_type);filled.push('production');}
+    if(res.language){setSelectVal('edit-language',res.language);filled.push('language');}
+
+    // Books
+    if(res.book_detected&&res.book_detected!=='null'){
+      var booksContainer=document.getElementById('edit-books');
+      if(booksContainer){
+        booksContainer.querySelectorAll('.ms-tag').forEach(function(t){
+          if(t.textContent.trim()===res.book_detected){t.classList.add('on');t.classList.remove('off');}
+        });
+        filled.push('book');
+      }
+    }
+
+    // Emotional + quality stored for later save
+    if(res.emotional_score) window._editEmotionalScore=res.emotional_score;
+    if(res.quality_score) window._editQualityScore=res.quality_score;
+
+    if(btn){btn.disabled=false;btn.innerHTML='🤖 Re-analyze';}
+    if(status){
+      status.textContent='✓ Auto-filled: '+filled.join(', ')+(res.analysis?' — '+res.analysis.slice(0,80)+'...':'');
+      status.style.color='var(--green-dark)';
+    }
+  }).catch(function(){
+    if(btn){btn.disabled=false;btn.innerHTML='🤖 Analyze with AI';}
+    if(status){status.textContent='Analysis failed — check connection';status.style.color='var(--red-dark)';}
+  });
+}
 
 function saveEdit(){
   var list=state.creatives[editVid]||[];
@@ -2302,6 +2435,15 @@ function saveEdit(){
   cr.kids=getSelectedTags('edit-kids');
   cr.products=getSelectedTags('edit-products');
   cr.audiences=getSelectedTags('edit-audiences');
+  // Save new thumbnail if uploaded
+  if(_editThumbData){
+    if(_editThumbData.isVideo){cr.video=_editThumbData.data;cr.img=null;}
+    else{cr.img=_editThumbData.data;cr.video=null;}
+    _editThumbData=null;
+  }
+  // Save AI scores if re-analyzed
+  if(window._editEmotionalScore){cr.emotionalScore=window._editEmotionalScore;window._editEmotionalScore=null;}
+  if(window._editQualityScore){cr.qualityScore=window._editQualityScore;window._editQualityScore=null;}
   save();rerenderGrid(editVid);closeEditModal();showToast('Creative updated');
 }
 
