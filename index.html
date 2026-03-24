@@ -73,14 +73,44 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 .filter-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:1px solid var(--border-med);background:transparent;cursor:pointer;color:var(--text-muted);transition:all 0.15s;}
 .filter-btn:hover{border-color:var(--purple);color:var(--purple);}
 .filter-btn.active{background:var(--purple);color:#fff;border-color:var(--purple);}
-.filter-select{font-family:'DM Sans',sans-serif;font-size:11px;padding:5px 10px;border-radius:20px;border:1px solid var(--border-med);background:var(--surface);color:var(--text-muted);cursor:pointer;outline:none;}
+.filter-select{font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 12px;border-radius:20px;border:1px solid var(--border-med);background:var(--surface);color:var(--text-muted);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23a0a0a0'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:26px;}
+.filter-select:focus{border-color:var(--purple);}
+.filter-select.active{border-color:var(--purple);color:var(--purple);background-color:var(--purple-light);}
+.filter-clear-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;border:1px solid var(--red-light);background:var(--red-light);cursor:pointer;color:var(--red-dark);transition:all 0.15s;}
+.filter-clear-btn:hover{background:var(--red);color:#fff;border-color:var(--red);}
 
 /* CONCEPT */
 .concept-section{margin-bottom:2.5rem;}
-.concept-header{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;padding-bottom:0.875rem;border-bottom:1px solid var(--border-med);}
+.concept-header{display:flex;align-items:center;gap:10px;padding-bottom:0.875rem;border-bottom:1px solid var(--border-med);}
 .concept-badge{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;background:var(--purple);color:#fff;letter-spacing:0.05em;}
 .concept-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;}
 .concept-meta{font-size:11px;color:var(--text-faint);margin-left:auto;}
+.concept-review-btn{font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid var(--purple);background:transparent;color:var(--purple);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.concept-review-btn:hover{background:var(--purple);color:#fff;}
+.concept-review-btn.running{background:var(--purple-light);color:var(--purple);cursor:wait;}
+
+/* CONCEPT STATS BAR */
+
+/* AI REVIEW */
+.ai-review-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;cursor:pointer;position:absolute;bottom:6px;left:6px;}
+.air-ok{background:#dcfce7;color:#15803d;}
+.air-warn{background:#fef3c7;color:#92400e;}
+.air-bad{background:#fee2e2;color:#991b1b;}
+.air-none{background:rgba(0,0,0,0.5);color:#fff;}
+
+/* AI REVIEW MODAL */
+.review-item{padding:0.875rem 1rem;border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:8px;background:var(--surface2);}
+.review-item-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.review-item-name{font-size:12px;font-weight:500;color:var(--text);}
+.review-item-text{font-size:12px;color:var(--text-muted);line-height:1.5;}
+.review-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.rsd-ok{background:var(--green);}
+.rsd-warn{background:var(--amber);}
+.rsd-bad{background:var(--red);}
+
+/* PROMPT EDITOR */
+.prompt-textarea{width:100%;padding:10px 12px;border:1px solid var(--border-med);border-radius:var(--r-md);font-family:'DM Sans',sans-serif;font-size:12px;line-height:1.6;color:var(--text);background:var(--surface2);outline:none;resize:vertical;min-height:140px;}
+.prompt-textarea:focus{border-color:var(--purple);background:#fff;}
 
 /* VARIATION CARD */
 .variation-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:16px;box-shadow:var(--shadow-sm);overflow:hidden;}
@@ -109,17 +139,27 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 
 /* VARIATION HERO */
 .variation-hero{display:flex;gap:1.25rem;padding:1.25rem;border-bottom:1px solid var(--border);align-items:flex-start;}
-.variation-hero-img-wrap{width:120px;height:120px;flex-shrink:0;border-radius:var(--r-md);overflow:hidden;background:var(--purple-light);border:2px dashed var(--purple-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.variation-hero-img-wrap{width:100px;height:100px;flex-shrink:0;border-radius:var(--r-md);overflow:hidden;background:var(--purple-light);border:2px dashed var(--purple-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
 .variation-hero-img-wrap:hover{border-color:var(--purple);background:#e8dff5;}
 .variation-hero-img-wrap img{width:100%;height:100%;object-fit:cover;display:none;}
 .variation-hero-img-wrap img.loaded{display:block;}
 .variation-hero-placeholder{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;}
-.variation-hero-placeholder svg{width:20px;height:20px;fill:var(--purple);opacity:0.5;}
+.variation-hero-placeholder svg{width:18px;height:18px;fill:var(--purple);opacity:0.5;}
 .variation-hero-placeholder span{font-size:10px;color:var(--purple);font-weight:500;}
-.variation-hero-info{flex:1;}
-.variation-hero-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;margin-bottom:6px;}
-.variation-hero-notes{font-size:12px;color:var(--text-muted);line-height:1.6;border:none;background:transparent;width:100%;resize:none;font-family:'DM Sans',sans-serif;outline:none;}
-.variation-hero-notes:focus{color:var(--text);}
+.variation-hero-info{flex:1;min-width:0;}
+.variation-hero-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;margin-bottom:4px;}
+.variation-stats-bar{padding:0 1.25rem 1.25rem;}
+.variation-hero-notes{font-size:12px;color:var(--text-muted);line-height:1.5;border:none;background:transparent;width:100%;resize:none;font-family:'DM Sans',sans-serif;outline:none;overflow:hidden;height:20px;white-space:nowrap;text-overflow:ellipsis;}
+.variation-hero-notes:focus{color:var(--text);height:auto;white-space:normal;}
+.variation-stats-bar{margin-top:0.75rem;}
+.concept-stats-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
+.concept-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:0.5rem 0.75rem;display:flex;flex-direction:column;gap:2px;}
+.concept-stat-key{font-size:9px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);font-weight:500;}
+.concept-stat-val{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);line-height:1;}
+.concept-stat-val.good{color:var(--green-dark);}
+.concept-stat-val.warn{color:var(--amber-dark);}
+.concept-stat-val.bad{color:var(--red-dark);}
+.concept-stat-val.empty{color:var(--text-faint);font-size:13px;font-weight:400;}
 
 /* CREATIVES GRID */
 .creatives-grid-wrap{padding:1.25rem;}
@@ -342,6 +382,115 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 .divider{border:none;border-top:1px solid var(--border);margin:2rem 0;}
 
 @media(max-width:768px){.stats-row{grid-template-columns:repeat(2,1fr);}.main,.settings-main{padding:1rem;}nav{padding:0 1rem;}.analytics-grid,.settings-list-grid{grid-template-columns:1fr;}.analytics-big-grid{grid-template-columns:1fr 1fr;}.field-row{grid-template-columns:1fr;}}
+
+/* ── KID PHOTO ── */
+.kid-card{background:var(--surface);border:1px solid var(--border-med);border-radius:var(--r-md);padding:0.75rem;position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
+.kid-avatar-wrap{width:56px;height:56px;border-radius:50%;overflow:hidden;background:var(--purple-light);border:2px dashed var(--purple-mid);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.kid-avatar-wrap:hover{border-color:var(--purple);}
+.kid-avatar-wrap img{width:100%;height:100%;object-fit:cover;display:none;}
+.kid-avatar-wrap img.loaded{display:block;}
+.kid-avatar-initials{font-family:"Syne",sans-serif;font-size:18px;font-weight:700;color:var(--purple);opacity:0.5;}
+.kid-card-name{font-size:12px;font-weight:600;margin-bottom:0;}
+.kid-card-meta{font-size:10px;color:var(--text-faint);}
+.kid-card-remove{position:absolute;top:6px;right:6px;cursor:pointer;font-size:12px;color:var(--text-faint);}
+.kid-card-remove:hover{color:var(--red);}
+.kid-add-form{display:grid;grid-template-columns:1fr 1fr auto auto;gap:6px;align-items:center;}
+
+/* Kid tag with avatar */
+.kid-ms-tag{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:3px 8px 3px 4px;border-radius:20px;cursor:pointer;user-select:none;transition:all 0.12s;}
+.kid-ms-tag.off{background:var(--surface);border:1px solid var(--border-med);color:var(--text-muted);}
+.kid-ms-tag.on{background:var(--purple);color:#fff;border:1px solid var(--purple);}
+.kid-ms-avatar{width:20px;height:20px;border-radius:50%;overflow:hidden;flex-shrink:0;background:var(--purple-light);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--purple);}
+.kid-ms-avatar img{width:100%;height:100%;object-fit:cover;display:none;}
+.kid-ms-avatar img.loaded{display:block;}
+
+/* Kid filter option avatar */
+.filter-kid-option{display:flex;align-items:center;gap:6px;}
+
+/* ── VIEW TOGGLE ── */
+.view-toggle{display:flex;gap:2px;background:var(--surface2);border:1px solid var(--border-med);border-radius:var(--r-sm);padding:2px;}
+.view-btn{background:transparent;border:none;border-radius:5px;padding:5px 8px;cursor:pointer;color:var(--text-faint);display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.view-btn:hover{color:var(--purple);}
+.view-btn.active{background:var(--surface);color:var(--purple);box-shadow:var(--shadow-sm);}
+.view-btn svg{width:14px;height:14px;fill:currentColor;}
+
+/* Flat gallery */
+.flat-concept-label{grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:0.5rem 0 0.25rem;border-bottom:1px solid var(--border);margin-bottom:4px;}
+.flat-concept-label .concept-badge{font-size:10px;padding:2px 9px;}
+.flat-concept-label-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--text);}
+.flat-concept-label-count{font-size:11px;color:var(--text-faint);}
+.flat-vid-label{grid-column:1/-1;display:flex;align-items:center;gap:6px;margin-top:8px;margin-bottom:2px;}
+.flat-vid-chip{font-size:10px;font-weight:600;color:var(--purple);background:var(--purple-light);padding:2px 8px;border-radius:20px;}
+.flat-vid-name{font-size:11px;color:var(--text-muted);}
+
+/* Grid view (default) */
+.creatives-grid.view-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;}
+/* Large grid */
+.creatives-grid.view-large{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.creatives-grid.view-large .creative-media-wrap{height:240px;}
+/* List view */
+.creatives-grid.view-list{display:flex;flex-direction:column;gap:8px;}
+.creatives-grid.view-list .creative-card{display:flex;flex-direction:row;align-items:center;}
+.creatives-grid.view-list .creative-media-wrap{width:80px;height:80px;flex-shrink:0;border-radius:var(--r-sm) 0 0 var(--r-sm);}
+.creatives-grid.view-list .creative-body{flex:1;padding:0.5rem 0.75rem;}
+.creatives-grid.view-list .creative-tags{padding:0 0.75rem 0.5rem;flex-wrap:wrap;}
+.creatives-grid.view-list .creative-perf{border-top:none;border-left:1px solid var(--border);padding:0.5rem 1rem;min-width:220px;display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.creatives-grid.view-list .funnel-badge{top:auto;bottom:6px;}
+.creatives-grid.view-list .add-creative-zone{min-height:80px;flex-direction:row;gap:12px;}
+/* Compact list */
+.creatives-grid.view-compact{display:flex;flex-direction:column;gap:4px;}
+.creatives-grid.view-compact .creative-card{display:flex;flex-direction:row;align-items:center;border-radius:var(--r-sm);}
+.creatives-grid.view-compact .creative-media-wrap{width:48px;height:48px;flex-shrink:0;border-radius:var(--r-sm) 0 0 var(--r-sm);}
+.creatives-grid.view-compact .creative-body{flex:1;padding:0 0.75rem;}
+.creatives-grid.view-compact .creative-name{font-size:12px;}
+.creatives-grid.view-compact .creative-ad-id{display:none;}
+.creatives-grid.view-compact .creative-tags,.creatives-grid.view-compact .creative-perf,.creatives-grid.view-compact .no-data{display:none;}
+.creatives-grid.view-compact .funnel-badge{top:4px;right:4px;font-size:8px;padding:1px 5px;}
+.creatives-grid.view-compact .add-creative-zone{min-height:48px;flex-direction:row;gap:8px;font-size:11px;}
+.creatives-grid.view-compact .add-creative-zone svg{width:14px;height:14px;}
+.creatives-grid.view-compact .add-creative-zone .zone-sub{display:none;}
+
+/* ── MOBILE RESPONSIVE ── */
+@media(max-width:900px){
+  .stats-row{grid-template-columns:repeat(3,1fr);}
+  .concept-stats-grid{grid-template-columns:repeat(3,1fr);}
+  .analytics-big-grid{grid-template-columns:1fr 1fr 1fr;}
+  .field-row{grid-template-columns:1fr;}
+  .kid-add-form{grid-template-columns:1fr 1fr;gap:6px;}
+  .kid-add-form button{grid-column:1/-1;}
+  .login-user-grid{grid-template-columns:1fr 1fr 1fr;}
+  .settings-list-grid{grid-template-columns:1fr;}
+  .analytics-detail-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:640px){
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .concept-stats-grid{grid-template-columns:repeat(2,1fr);}
+  nav{padding:0 1rem;height:auto;flex-wrap:wrap;gap:8px;padding:8px 1rem;}
+  .nav-right{flex-wrap:wrap;gap:6px;}
+  .nav-tab{font-size:11px;padding:4px 10px;}
+  .main,.settings-main{padding:1rem 0.75rem;}
+  .controls-row{flex-direction:column;align-items:flex-start;}
+  .filter-bar{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .filter-select{width:100%;border-radius:var(--r-sm);}
+  .filter-clear-btn{grid-column:1/-1;}
+  .variation-hero{flex-direction:column;}
+  .variation-hero-img-wrap{width:100%;height:160px;border-radius:var(--r-md);}
+  .login-box{width:calc(100vw - 2rem);padding:1.5rem;}
+  .login-user-grid{grid-template-columns:1fr 1fr;}
+  .modal-box{border-radius:var(--r-lg) var(--r-lg) 0 0;max-height:95vh;}
+  .modal-overlay{align-items:flex-end;padding:0;}
+  .concept-stats-grid{grid-template-columns:repeat(3,1fr);}
+  .ai-preview-row{flex-direction:column;}
+  .ai-preview-thumb{width:100%;height:160px;border-radius:var(--r-md);}
+  .analytics-big-grid{grid-template-columns:1fr 1fr;}
+  .analytics-detail-grid{grid-template-columns:1fr;}
+  .creatives-grid.view-grid{grid-template-columns:repeat(2,1fr);}
+  .creatives-grid.view-large{grid-template-columns:1fr;}
+  .edit-section-grid{grid-template-columns:1fr;}
+  .variation-header{flex-wrap:wrap;gap:6px;}
+  .var-perf-pills{display:none;}
+  .concept-header{flex-wrap:wrap;gap:8px;}
+}
 </style>
 </head>
 <body>
@@ -380,54 +529,101 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
     <div class="stat-card"><div class="stat-label">In Progress</div><div class="stat-value amber">1</div></div>
   </div>
   <div class="controls-row">
-    <div class="legend">
-      <div class="legend-item"><div class="legend-bar" style="background:var(--green)"></div>Approved</div>
-      <div class="legend-item"><div class="legend-bar" style="background:var(--amber)"></div>Needs fix</div>
-      <div class="legend-item"><div class="legend-bar" style="background:var(--purple)"></div>In progress</div>
-    </div>
     <div class="filter-bar">
-      <button class="filter-btn active" onclick="filterAll(this)">All</button>
-      <button class="filter-btn" onclick="filterConcept(this,'A')">Concept A</button>
-      <button class="filter-btn" onclick="filterConcept(this,'B')">Concept B</button>
-      <button class="filter-btn" onclick="filterConcept(this,'C')">Concept C</button>
-      <button class="filter-btn" onclick="filterVarStatus(this,'approved')">Approved</button>
-      <button class="filter-btn" onclick="filterVarStatus(this,'in-progress')">In progress</button>
-      <select class="filter-select" id="filter-user" onchange="filterByUser(this.value)"><option value="">All team</option></select>
-      <select class="filter-select" id="filter-funnel" onchange="filterByFunnel(this.value)"><option value="">All funnel stages</option><option value="tofu">Top of Funnel</option><option value="mofu">Middle of Funnel</option><option value="bofu">Bottom of Funnel</option><option value="retargeting">Retargeting</option></select>
-      <select class="filter-select" id="filter-format" onchange="filterByFormat(this.value)"><option value="">All formats</option></select>
+      <select class="filter-select" id="filter-concept" onchange="applyFilters()">
+        <option value="">All concepts</option>
+      </select>
+      <select class="filter-select" id="filter-var-status" onchange="applyFilters()">
+        <option value="">All statuses</option>
+        <option value="approved">Approved</option>
+        <option value="needs-fix">Needs fix</option>
+        <option value="in-progress">In progress</option>
+      </select>
+      <select class="filter-select" id="filter-funnel" onchange="applyFilters()">
+        <option value="">All funnel stages</option>
+        <option value="tofu">Top of Funnel</option>
+        <option value="mofu">Middle of Funnel</option>
+        <option value="bofu">Bottom of Funnel</option>
+        <option value="retargeting">Retargeting</option>
+      </select>
+      <select class="filter-select" id="filter-format" onchange="applyFilters()"></select>
+      <select class="filter-select" id="filter-user" onchange="applyFilters()"><option value="">All team</option></select>
+      <select class="filter-select" id="filter-kid" onchange="applyFilters()"><option value="">All kids</option></select>
+      <select class="filter-select" id="filter-book" onchange="applyFilters()"><option value="">All books</option></select>
+      <select class="filter-select" id="filter-language" onchange="applyFilters()">
+        <option value="">All languages</option>
+        <option value="english">English</option>
+        <option value="arabic">Arabic</option>
+        <option value="french">French</option>
+        <option value="german">German</option>
+        <option value="spanish">Spanish</option>
+        <option value="portuguese">Portuguese</option>
+        <option value="italian">Italian</option>
+        <option value="dutch">Dutch</option>
+        <option value="turkish">Turkish</option>
+        <option value="hebrew">Hebrew</option>
+      </select>
+      <select class="filter-select" id="filter-product" onchange="applyFilters()"><option value="">All products</option></select>
+      <button class="filter-clear-btn" id="filter-clear-btn" onclick="clearFilters()" style="display:none">&#10005; Clear filters</button>
     </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div class="view-toggle">
+        <button class="view-btn active" id="vbtn-grid" onclick="setView('grid',this)" title="Grid">
+          <svg viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+        </button>
+        <button class="view-btn" id="vbtn-large" onclick="setView('large',this)" title="Large grid">
+          <svg viewBox="0 0 16 16"><rect x="1" y="1" width="6.5" height="14" rx="1"/><rect x="8.5" y="1" width="6.5" height="14" rx="1"/></svg>
+        </button>
+        <button class="view-btn" id="vbtn-list" onclick="setView('list',this)" title="List">
+          <svg viewBox="0 0 16 16"><rect x="1" y="2" width="14" height="3" rx="1"/><rect x="1" y="7" width="14" height="3" rx="1"/><rect x="1" y="12" width="14" height="3" rx="1"/></svg>
+        </button>
+        <button class="view-btn" id="vbtn-compact" onclick="setView('compact',this)" title="Compact">
+          <svg viewBox="0 0 16 16"><rect x="1" y="2" width="14" height="2" rx="0.5"/><rect x="1" y="6" width="14" height="2" rx="0.5"/><rect x="1" y="10" width="14" height="2" rx="0.5"/><rect x="1" y="14" width="14" height="2" rx="0.5"/></svg>
+        </button>
+        <button class="view-btn" id="vbtn-all" onclick="setView('all',this)" title="All creatives flat">
+          <svg viewBox="0 0 16 16"><rect x="1" y="1" width="4" height="4" rx="0.5"/><rect x="6" y="1" width="4" height="4" rx="0.5"/><rect x="11" y="1" width="4" height="4" rx="0.5"/><rect x="1" y="6" width="4" height="4" rx="0.5"/><rect x="6" y="6" width="4" height="4" rx="0.5"/><rect x="11" y="6" width="4" height="4" rx="0.5"/><rect x="1" y="11" width="4" height="4" rx="0.5"/><rect x="6" y="11" width="4" height="4" rx="0.5"/><rect x="11" y="11" width="4" height="4" rx="0.5"/></svg>
+        </button>
+      </div>
+      <button class="filter-btn" onclick="expandAll()">Expand all</button>
+      <button class="filter-btn" onclick="collapseAll()">Collapse all</button>
+    </div>
+  </div>
+
+  <!-- FLAT GALLERY VIEW (all creatives, no concept/variation tabs) -->
+  <div id="flat-gallery" style="display:none;">
+    <div id="flat-gallery-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:2rem;"></div>
   </div>
 
   <!-- CONCEPT A -->
   <div class="concept-section" data-concept="A">
-    <div class="concept-header"><span class="concept-badge">A</span><span class="concept-title">Real kid + open book same frame</span><span class="concept-meta">4 variations</span></div>
+    <div class="concept-header"><span class="concept-badge">A</span><span class="concept-title">Real kid + open book same frame</span><span class="concept-meta">4 variations</span><button class="concept-review-btn" onclick="reviewConcept('A',this)">AI Review all</button></div>
     <div id="vars-A">
       <div class="variation-card approved expanded" data-concept="A" data-status="approved" data-vid="A1">
         <div class="variation-header" onclick="toggleVar(this)"><span class="var-id">A1</span><span class="var-title-text">Blonde girl — bedtime scene</span><div class="var-perf-pills" id="pp-A1"></div><span class="var-status status-approved">Approved</span><span class="var-creative-count" id="cnt-A1">0 creatives</span><span class="chevron">▾</span></div>
         <div class="variation-body">
-          <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-A1" onclick="document.getElementById('hero-file-A1').click()"><img id="hero-img-A1" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-A1" accept="image/*" onchange="setHeroImg(this,'A1')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-A1" rows="4" placeholder="What makes this variation unique..." onblur="saveNotes('A1',this.value)">Book held toward camera, cartoon likeness in yellow outfit. Focus: likeness match + emotional reaction visible simultaneously.</textarea></div></div>
-          <div class="creatives-grid-wrap"><div class="creatives-grid" id="grid-A1"></div></div>
+          <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-A1" onclick="document.getElementById('hero-file-A1').click()"><img id="hero-img-A1" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-A1" accept="image/*" onchange="setHeroImg(this,'A1')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-A1" rows="1" placeholder="What makes this variation unique..." onblur="saveNotes('A1',this.value)">Book held toward camera, cartoon likeness in yellow outfit. Focus: likeness match + emotional reaction visible simultaneously.</textarea></div></div><div class="variation-stats-bar" id="vstats-A1"></div>
+          <div class="creatives-grid-wrap"><div class="creatives-grid view-grid" id="grid-A1"></div></div>
         </div>
       </div>
       <div class="variation-card approved" data-concept="A" data-status="approved" data-vid="A2">
         <div class="variation-header" onclick="toggleVar(this)"><span class="var-id">A2</span><span class="var-title-text">Lucas — unboxing reaction</span><div class="var-perf-pills" id="pp-A2"></div><span class="var-status status-priority">Priority test</span><span class="var-creative-count" id="cnt-A2">0 creatives</span><span class="chevron">▾</span></div>
         <div class="variation-body">
-          <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-A2" onclick="document.getElementById('hero-file-A2').click()"><img id="hero-img-A2" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-A2" accept="image/*" onchange="setHeroImg(this,'A2')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-A2" rows="4" placeholder="What makes this variation unique..." onblur="saveNotes('A2',this.value)">Dark-haired boy, mouth wide open seeing book cover with cartoon astronaut likeness. Key: shock/joy micro-expression is the hero.</textarea></div></div>
-          <div class="creatives-grid-wrap"><div class="creatives-grid" id="grid-A2"></div></div>
+          <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-A2" onclick="document.getElementById('hero-file-A2').click()"><img id="hero-img-A2" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-A2" accept="image/*" onchange="setHeroImg(this,'A2')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-A2" rows="1" placeholder="What makes this variation unique..." onblur="saveNotes('A2',this.value)">Dark-haired boy, mouth wide open seeing book cover with cartoon astronaut likeness. Key: shock/joy micro-expression is the hero.</textarea></div></div><div class="variation-stats-bar" id="vstats-A2"></div>
+          <div class="creatives-grid-wrap"><div class="creatives-grid view-grid" id="grid-A2"></div></div>
         </div>
       </div>
       <div class="variation-card approved" data-concept="A" data-status="approved" data-vid="A3">
         <div class="variation-header" onclick="toggleVar(this)"><span class="var-id">A3</span><span class="var-title-text">Red-haired girl — mirror moment</span><div class="var-perf-pills" id="pp-A3"></div><span class="var-status status-approved">Approved</span><span class="var-creative-count" id="cnt-A3">0 creatives</span><span class="chevron">▾</span></div>
         <div class="variation-body">
-          <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-A3" onclick="document.getElementById('hero-file-A3').click()"><img id="hero-img-A3" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-A3" accept="image/*" onchange="setHeroImg(this,'A3')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-A3" rows="4" placeholder="What makes this variation unique..." onblur="saveNotes('A3',this.value)">Girl holding book beside her face in mirror. Key: hair, freckles, outfit must all match between real and cartoon.</textarea></div></div>
-          <div class="creatives-grid-wrap"><div class="creatives-grid" id="grid-A3"></div></div>
+          <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-A3" onclick="document.getElementById('hero-file-A3').click()"><img id="hero-img-A3" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-A3" accept="image/*" onchange="setHeroImg(this,'A3')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-A3" rows="1" placeholder="What makes this variation unique..." onblur="saveNotes('A3',this.value)">Girl holding book beside her face in mirror. Key: hair, freckles, outfit must all match between real and cartoon.</textarea></div></div><div class="variation-stats-bar" id="vstats-A3"></div>
+          <div class="creatives-grid-wrap"><div class="creatives-grid view-grid" id="grid-A3"></div></div>
         </div>
       </div>
       <div class="variation-card approved" data-concept="A" data-status="approved" data-vid="A4">
         <div class="variation-header" onclick="toggleVar(this)"><span class="var-id">A4</span><span class="var-title-text">Blonde girl — princess over-shoulder</span><div class="var-perf-pills" id="pp-A4"></div><span class="var-status status-priority">Priority test</span><span class="var-creative-count" id="cnt-A4">0 creatives</span><span class="chevron">▾</span></div>
         <div class="variation-body">
-          <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-A4" onclick="document.getElementById('hero-file-A4').click()"><img id="hero-img-A4" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-A4" accept="image/*" onchange="setHeroImg(this,'A4')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-A4" rows="4" placeholder="What makes this variation unique..." onblur="saveNotes('A4',this.value)">Over-shoulder angle, girl turning back laughing, cartoon princess on open page. Key: the over-shoulder look-back is the scroll stopper.</textarea></div></div>
-          <div class="creatives-grid-wrap"><div class="creatives-grid" id="grid-A4"></div></div>
+          <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-A4" onclick="document.getElementById('hero-file-A4').click()"><img id="hero-img-A4" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-A4" accept="image/*" onchange="setHeroImg(this,'A4')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-A4" rows="1" placeholder="What makes this variation unique..." onblur="saveNotes('A4',this.value)">Over-shoulder angle, girl turning back laughing, cartoon princess on open page. Key: the over-shoulder look-back is the scroll stopper.</textarea></div></div><div class="variation-stats-bar" id="vstats-A4"></div>
+          <div class="creatives-grid-wrap"><div class="creatives-grid view-grid" id="grid-A4"></div></div>
         </div>
       </div>
     </div>
@@ -435,24 +631,24 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 
   <!-- CONCEPT B -->
   <div class="concept-section" data-concept="B">
-    <div class="concept-header"><span class="concept-badge">B</span><span class="concept-title">That's literally it — flat lay formula</span><span class="concept-meta">1 variation</span></div>
+    <div class="concept-header"><span class="concept-badge">B</span><span class="concept-title">That's literally it — flat lay formula</span><span class="concept-meta">1 variation</span><button class="concept-review-btn" onclick="reviewConcept('B',this)">AI Review all</button></div>
     <div class="variation-card in-progress" data-concept="B" data-status="in-progress" data-vid="B1">
       <div class="variation-header" onclick="toggleVar(this)"><span class="var-id">B1</span><span class="var-title-text">Three step flat lay</span><div class="var-perf-pills" id="pp-B1"></div><span class="var-status status-progress">Going to designer</span><span class="var-creative-count" id="cnt-B1">0 creatives</span><span class="chevron">▾</span></div>
       <div class="variation-body">
-        <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-B1" onclick="document.getElementById('hero-file-B1').click()"><img id="hero-img-B1" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-B1" accept="image/*" onchange="setHeroImg(this,'B1')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-B1" rows="4" placeholder="What makes this variation unique..." onblur="saveNotes('B1',this.value)">Real photo → open book with cartoon → delivery box. "That's literally it." tagline. Key: simplicity and process clarity is the entire value.</textarea></div></div>
-        <div class="creatives-grid-wrap"><div class="creatives-grid" id="grid-B1"></div></div>
+        <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-B1" onclick="document.getElementById('hero-file-B1').click()"><img id="hero-img-B1" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-B1" accept="image/*" onchange="setHeroImg(this,'B1')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-B1" rows="1" placeholder="What makes this variation unique..." onblur="saveNotes('B1',this.value)">Real photo → open book with cartoon → delivery box. "That's literally it." tagline. Key: simplicity and process clarity is the entire value.</textarea></div></div><div class="variation-stats-bar" id="vstats-B1"></div>
+          <div class="creatives-grid-wrap"><div class="creatives-grid view-grid" id="grid-B1"></div></div>
       </div>
     </div>
   </div>
 
   <!-- CONCEPT C -->
   <div class="concept-section" data-concept="C">
-    <div class="concept-header"><span class="concept-badge">C</span><span class="concept-title">You upload one photo — parent perspective</span><span class="concept-meta">1 variation</span></div>
+    <div class="concept-header"><span class="concept-badge">C</span><span class="concept-title">You upload one photo — parent perspective</span><span class="concept-meta">1 variation</span><button class="concept-review-btn" onclick="reviewConcept('C',this)">AI Review all</button></div>
     <div class="variation-card in-progress" data-concept="C" data-status="in-progress" data-vid="C1">
       <div class="variation-header" onclick="toggleVar(this)"><span class="var-id">C1</span><span class="var-title-text">Parent at kitchen table</span><div class="var-perf-pills" id="pp-C1"></div><span class="var-status status-progress">Going to designer</span><span class="var-creative-count" id="cnt-C1">0 creatives</span><span class="chevron">▾</span></div>
       <div class="variation-body">
-        <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-C1" onclick="document.getElementById('hero-file-C1').click()"><img id="hero-img-C1" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-C1" accept="image/*" onchange="setHeroImg(this,'C1')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-C1" rows="4" placeholder="What makes this variation unique..." onblur="saveNotes('C1',this.value)">Over-shoulder shot. Phone showing photo upload on left. Finished box on right. Key: makes the process feel effortless for parents.</textarea></div></div>
-        <div class="creatives-grid-wrap"><div class="creatives-grid" id="grid-C1"></div></div>
+        <div class="variation-hero"><div class="variation-hero-img-wrap" id="hero-wrap-C1" onclick="document.getElementById('hero-file-C1').click()"><img id="hero-img-C1" alt="hero"/><div class="variation-hero-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Add hero</span></div></div><input type="file" class="file-input" id="hero-file-C1" accept="image/*" onchange="setHeroImg(this,'C1')"/><div class="variation-hero-info"><div class="variation-hero-title">Key notes</div><textarea class="variation-hero-notes" id="notes-C1" rows="1" placeholder="What makes this variation unique..." onblur="saveNotes('C1',this.value)">Over-shoulder shot. Phone showing photo upload on left. Finished box on right. Key: makes the process feel effortless for parents.</textarea></div></div><div class="variation-stats-bar" id="vstats-C1"></div>
+          <div class="creatives-grid-wrap"><div class="creatives-grid view-grid" id="grid-C1"></div></div>
       </div>
     </div>
   </div>
@@ -488,7 +684,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 
   <div class="settings-section">
     <div class="settings-title">Kid profiles</div>
-    <div class="settings-desc">Add the kid characters used in your creatives so you can tag which kid appears in each creative.</div>
+    <div class="settings-desc">Add kid characters used in your creatives. Upload a photo for each kid so they appear as avatars throughout the dashboard.</div>
     <div class="kid-cards" id="kid-cards"></div>
     <div class="kid-add-form">
       <input class="settings-add-input" id="kid-name" placeholder="Name (e.g. Emma)" />
@@ -530,7 +726,30 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
     <div class="analytics-grid" id="analytics-grid"></div>
   </div>
 
+  <div class="settings-section">
+    <div class="settings-title">AI review prompt</div>
+    <div class="settings-desc">This prompt is used every time you click "AI Review" on a concept or individual creative. Customize it to focus on what matters most to your team — image quality, hook strength, text clarity, kid likeness, etc.</div>
+    <textarea class="prompt-textarea" id="review-prompt-editor" onblur="saveReviewPrompt()"></textarea>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
+      <button class="btn btn-ghost btn-sm" onclick="resetReviewPrompt()">Reset to default</button>
+      <button class="btn btn-primary btn-sm" onclick="saveReviewPrompt();showToast('Prompt saved')">Save prompt</button>
+    </div>
+  </div>
+
 </div>
+</div>
+
+<!-- AI REVIEW MODAL -->
+<div class="modal-overlay" id="review-modal">
+  <div class="modal-box md">
+    <div class="modal-header"><span class="modal-badge">AI Review</span><span class="modal-title" id="review-modal-title">Reviewing creatives...</span><button class="modal-close-btn" onclick="closeReviewModal()">×</button></div>
+    <div class="modal-body" id="review-modal-body">
+      <div style="text-align:center;padding:2rem;">
+        <div class="analyzing-spinner" style="margin:0 auto 12px;"></div>
+        <div style="font-size:13px;color:var(--text-muted);">Claude is reviewing your creatives...</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- AI ADD MODAL (quick fields) -->
@@ -603,6 +822,25 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
               <option value="paused">Paused</option>
             </select>
           </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <div class="field-label">Language</div>
+            <select class="field-select" id="ai-language">
+              <option value="">Select...</option>
+              <option value="english">English</option>
+              <option value="arabic">Arabic</option>
+              <option value="french">French</option>
+              <option value="german">German</option>
+              <option value="spanish">Spanish</option>
+              <option value="portuguese">Portuguese</option>
+              <option value="italian">Italian</option>
+              <option value="dutch">Dutch</option>
+              <option value="turkish">Turkish</option>
+              <option value="hebrew">Hebrew</option>
+            </select>
+          </div>
+          <div class="field"></div>
         </div>
       </div>
 
@@ -677,17 +915,43 @@ var DEFAULT_LISTS={
 };
 
 // ─── STATE ───
-var state={creatives:{},performance:{},uploads:[],heroImgs:{},notes:{},currentUser:null,lists:null,kids:[]};
+var state={creatives:{},performance:{},uploads:[],heroImgs:{},notes:{},currentUser:'arben',lists:null,kids:[]};
 (function(){
-  try{var s=localStorage.getItem('ww-v5');if(s)state=JSON.parse(s);}catch(e){}
+  try{
+    var s=localStorage.getItem('ww-v5');
+    if(s){state=JSON.parse(s);}
+    else{
+      var old=localStorage.getItem('ww-v4')||localStorage.getItem('ww-state');
+      if(old){state=JSON.parse(old);localStorage.setItem('ww-v5',old);}
+    }
+  }catch(e){}
   if(!state.lists)state.lists=JSON.parse(JSON.stringify(DEFAULT_LISTS));
   if(!state.kids)state.kids=[];
   if(!state.uploads||!Array.isArray(state.uploads))state.uploads=[];
-  buildLoginScreen();
-  if(state.currentUser)doLogin(state.currentUser,true);
+  if(!state.currentUser)state.currentUser='arben';
+  document.getElementById('login-screen').style.display='none';
+  doLogin(state.currentUser,true);
 })();
 
-function save(){try{localStorage.setItem('ww-v5',JSON.stringify(state));}catch(e){}}
+function save(){
+  try{
+    localStorage.setItem('ww-v5',JSON.stringify(state));
+  }catch(e){
+    // Storage quota exceeded — save everything except large media
+    try{
+      var slim=JSON.parse(JSON.stringify(state));
+      // Strip base64 images/videos from creatives to free space
+      Object.keys(slim.creatives).forEach(function(vid){
+        (slim.creatives[vid]||[]).forEach(function(cr){
+          if(cr.img&&cr.img.length>5000)cr.img='[stored-locally]';
+          if(cr.video&&cr.video.length>5000)cr.video='[stored-locally]';
+        });
+      });
+      slim.heroImgs={};
+      localStorage.setItem('ww-v5',JSON.stringify(slim));
+    }catch(e2){}
+  }
+}
 
 // ─── LOGIN ───
 function buildLoginScreen(){
@@ -706,7 +970,7 @@ function doLogin(userId,silent){
   var d=document.getElementById('nav-user-display');
   d.innerHTML='<div class="nav-avatar" style="background:'+user.color+'">'+user.name.charAt(0)+'</div>'+
     '<span>'+user.name+'</span><span class="nav-logout" onclick="logout()">Sign out</span>';
-  populateSelects();populateUserFilter();renderAll();
+  populateSelects();populateUserFilter();populateConceptFilter();renderAll();renderConceptStats();initView();
 }
 
 function logout(){
@@ -724,10 +988,60 @@ function populateSelects(){
   });
   // Format
   populateSelectFromList('ai-format',state.lists.formats,'format');
-  // Hook
-  populateSelectFromList('ai-hook',state.lists.hooks,'hook');
+  // Hook with None option
+  var hookSel=document.getElementById('ai-hook');
+  hookSel.innerHTML='<option value="">None</option>';
+  state.lists.hooks.forEach(function(h){var o=document.createElement('option');o.value=h;o.textContent=h;hookSel.appendChild(o);});
   // Format filter
   populateSelectFromList('filter-format',state.lists.formats,'format',true);
+  // Kid filter — from kid profiles
+  populateDynamicFilter('filter-kid','All kids',state.kids.map(function(k){return {val:k.id,label:k.name,photo:k.photo||null};}));
+  // Book filter
+  populateDynamicFilter('filter-book','All books',state.lists.books.map(function(b){return {val:b,label:b};}));
+  // Product filter
+  populateDynamicFilter('filter-product','All products',state.lists.products.map(function(p){return {val:p,label:p};}));
+}
+
+function populateDynamicFilter(id,allLabel,items){
+  var sel=document.getElementById(id);if(!sel)return;
+  sel.innerHTML='<option value="">'+allLabel+'</option>';
+  items.forEach(function(item){
+    var o=document.createElement('option');
+    o.value=item.val;
+    o.textContent=item.label;
+    if(item.photo)o.dataset.photo=item.photo;
+    sel.appendChild(o);
+  });
+  // For kid filter: add avatar display below select if it has photos
+  if(id==='filter-kid'){
+    var wrap=sel.parentElement;
+    var existing=wrap?wrap.querySelector('.kid-filter-avatars'):null;
+    if(existing)existing.remove();
+    var hasPhotos=items.some(function(i){return i.photo;});
+    if(hasPhotos&&wrap){
+      var row=document.createElement('div');
+      row.className='kid-filter-avatars';
+      row.style.cssText='display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;';
+      items.forEach(function(item){
+        var btn=document.createElement('div');
+        btn.title=item.label;
+        btn.style.cssText='width:28px;height:28px;border-radius:50%;overflow:hidden;border:2px solid var(--border-med);cursor:pointer;background:var(--purple-light);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--purple);flex-shrink:0;transition:all 0.15s;';
+        if(item.photo){
+          btn.innerHTML='<img src="'+item.photo+'" style="width:100%;height:100%;object-fit:cover;" />';
+        } else {
+          btn.textContent=item.label.charAt(0);
+        }
+        btn.onclick=function(){
+          sel.value=item.val;
+          applyFilters();
+          row.querySelectorAll('div').forEach(function(b){b.style.borderColor='var(--border-med)';});
+          if(sel.value)btn.style.borderColor='var(--purple)';
+        };
+        row.appendChild(btn);
+      });
+      wrap.appendChild(row);
+    }
+  }
 }
 
 function populateSelectFromList(id,list,placeholder,addAll){
@@ -746,13 +1060,133 @@ function populateUserFilter(){
   TEAM.forEach(function(u){sel.innerHTML+='<option value="'+u.id+'">'+u.name+'</option>';});
 }
 
+function expandAll(){document.querySelectorAll('.variation-card').forEach(function(c){c.classList.add('expanded');});}
+function collapseAll(){document.querySelectorAll('.variation-card').forEach(function(c){c.classList.remove('expanded');});}
+
+
+// ─── VIEW TOGGLE ───
+var currentView = 'grid';
+function setView(view, btn){
+  currentView = view;
+  document.querySelectorAll('.view-btn').forEach(function(b){b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+
+  var isAll = view === 'all';
+  // Show/hide structured view vs flat gallery
+  document.getElementById('flat-gallery').style.display = isAll ? '' : 'none';
+  document.querySelectorAll('.concept-section').forEach(function(s){s.style.display = isAll ? 'none' : '';});
+  // Expand/collapse buttons only relevant in structured view
+  document.querySelectorAll('[onclick="expandAll()"], [onclick="collapseAll()"]').forEach(function(b){
+    b.style.display = isAll ? 'none' : '';
+  });
+
+  if(!isAll){
+    // Apply grid size classes
+    document.querySelectorAll('.creatives-grid').forEach(function(grid){
+      grid.classList.remove('view-grid','view-large','view-list','view-compact');
+      grid.classList.add('view-'+view);
+    });
+  } else {
+    renderFlatGallery();
+  }
+  try{localStorage.setItem('ww-view',view);}catch(e){}
+}
+
+function renderFlatGallery(){
+  var container = document.getElementById('flat-gallery-grid');
+  if(!container)return;
+  container.innerHTML = '';
+
+  // Get current filters
+  var conceptFilter = document.getElementById('filter-concept') ? document.getElementById('filter-concept').value : '';
+  var funnelF  = document.getElementById('filter-funnel')   ? document.getElementById('filter-funnel').value   : '';
+  var formatF  = document.getElementById('filter-format')   ? document.getElementById('filter-format').value   : '';
+  var userF    = document.getElementById('filter-user')     ? document.getElementById('filter-user').value     : '';
+  var kidF     = document.getElementById('filter-kid')      ? document.getElementById('filter-kid').value      : '';
+  var bookF    = document.getElementById('filter-book')     ? document.getElementById('filter-book').value     : '';
+  var langF    = document.getElementById('filter-language') ? document.getElementById('filter-language').value : '';
+  var productF = document.getElementById('filter-product')  ? document.getElementById('filter-product').value  : '';
+
+  // Get concept sections to determine concept titles
+  var conceptSections = {};
+  document.querySelectorAll('.concept-section').forEach(function(s){
+    var c = s.dataset.concept;
+    var title = s.querySelector('.concept-title');
+    conceptSections[c] = title ? title.textContent : 'Concept '+c;
+  });
+
+  var totalShown = 0;
+
+  VIDS.forEach(function(vid){
+    var concept = vid.charAt(0);
+    if(conceptFilter && concept !== conceptFilter) return;
+
+    var varCard = document.querySelector('[data-vid="'+vid+'"]');
+    var varTitle = varCard ? varCard.querySelector('.var-title-text').textContent : vid;
+
+    var list = state.creatives[vid] || [];
+    var filtered = list.filter(function(cr){
+      return (!funnelF  || cr.funnel === funnelF) &&
+             (!formatF  || cr.format === formatF) &&
+             (!userF    || cr.author === userF) &&
+             (!langF    || cr.language === langF) &&
+             (!kidF     || (cr.kids && cr.kids.indexOf(kidF) > -1)) &&
+             (!bookF    || (cr.books && cr.books.indexOf(bookF) > -1)) &&
+             (!productF || (cr.products && cr.products.indexOf(productF) > -1));
+    });
+
+    if(!filtered.length) return;
+
+    // Concept group label (only show once per concept)
+    var existingConceptLabel = container.querySelector('[data-flat-concept="'+concept+'"]');
+    if(!existingConceptLabel){
+      var cLabel = document.createElement('div');
+      cLabel.className = 'flat-concept-label';
+      cLabel.dataset.flatConcept = concept;
+      cLabel.innerHTML = '<span class="concept-badge">'+concept+'</span>'+
+        '<span class="flat-concept-label-title">'+conceptSections[concept]+'</span>';
+      container.appendChild(cLabel);
+    }
+
+    // Variation label
+    var vLabel = document.createElement('div');
+    vLabel.className = 'flat-vid-label';
+    vLabel.innerHTML = '<span class="flat-vid-chip">'+vid+'</span>'+
+      '<span class="flat-vid-name">'+varTitle+'</span>'+
+      '<span class="flat-concept-label-count" style="margin-left:auto;">'+filtered.length+' creative'+(filtered.length!==1?'s':'')+'</span>';
+    container.appendChild(vLabel);
+
+    // Creative cards
+    filtered.forEach(function(cr){
+      container.appendChild(makeCard(cr, vid));
+    });
+
+    totalShown += filtered.length;
+  });
+
+  if(totalShown === 0){
+    container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-faint);font-size:13px;">No creatives match the current filters.</div>';
+  }
+}
+
+function initView(){
+  try{var v=localStorage.getItem('ww-view');if(v)currentView=v;}catch(e){}
+  var btn=document.getElementById('vbtn-'+currentView);
+  if(btn)setView(currentView,btn);
+  else setView('grid',document.getElementById('vbtn-grid'));
+}
+
 // ─── PAGES ───
 function showPage(id,btn){
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active');});
   document.getElementById('page-'+id).classList.add('active');
   if(btn)btn.classList.add('active');
-  if(id==='settings'){renderTaxonomyLists();renderKidCards();renderTeamList();}
+  if(id==='settings'){
+    renderTaxonomyLists();renderKidCards();renderTeamList();
+    var ta=document.getElementById('review-prompt-editor');
+    if(ta)ta.value=getReviewPrompt();
+  }
 }
 
 // ─── VARIATION TOGGLE ───
@@ -776,22 +1210,93 @@ function saveNotes(vid,val){state.notes[vid]=val;save();}
 function applyNotes(vid){var ta=document.getElementById('notes-'+vid);if(ta&&state.notes[vid])ta.value=state.notes[vid];}
 
 // ─── FILTERS ───
-function filterAll(btn){setAF(btn);document.querySelectorAll('.concept-section,.variation-card').forEach(function(e){e.style.display='';});}
-function filterConcept(btn,c){setAF(btn);document.querySelectorAll('.concept-section').forEach(function(s){s.style.display=s.dataset.concept===c?'':'none';});document.querySelectorAll('.variation-card').forEach(function(c){c.style.display='';});}
-function filterVarStatus(btn,s){setAF(btn);document.querySelectorAll('.concept-section').forEach(function(e){e.style.display='';});document.querySelectorAll('.variation-card').forEach(function(c){c.style.display=c.dataset.status===s?'':'none';});}
-function filterByUser(uid){filterCreatives(function(cr){return !uid||cr.author===uid;});}
-function filterByFunnel(f){filterCreatives(function(cr){return !f||cr.funnel===f;});}
-function filterByFormat(fmt){filterCreatives(function(cr){return !fmt||cr.format===fmt;});}
-function filterCreatives(fn){
+function populateConceptFilter(){
+  var sel=document.getElementById('filter-concept');if(!sel)return;
+  var current=sel.value;
+  sel.innerHTML='<option value="">All concepts</option>';
+  document.querySelectorAll('.concept-section').forEach(function(s){
+    var concept=s.dataset.concept;
+    var title=s.querySelector('.concept-title');
+    var label=title?'Concept '+concept+' — '+title.textContent:'Concept '+concept;
+    sel.innerHTML+='<option value="'+concept+'">'+label+'</option>';
+  });
+  if(current)sel.value=current;
+}
+
+function applyFilters(){
+  var ALL_FILTER_IDS=['filter-concept','filter-var-status','filter-funnel','filter-format','filter-user','filter-kid','filter-book','filter-language','filter-product'];
+  var f={};
+  ALL_FILTER_IDS.forEach(function(id){
+    var el=document.getElementById(id);
+    f[id]=el?el.value:'';
+    if(el)el.classList.toggle('active',el.value!=='');
+  });
+
+  var hasFilter=ALL_FILTER_IDS.some(function(id){return f[id]!=='';});
+  var cb=document.getElementById('filter-clear-btn');
+  if(cb)cb.style.display=hasFilter?'':'none';
+
+  // Concept filter
+  document.querySelectorAll('.concept-section').forEach(function(s){
+    s.style.display=(!f['filter-concept']||s.dataset.concept===f['filter-concept'])?'':'none';
+  });
+
+  // Variation status filter
+  document.querySelectorAll('.variation-card').forEach(function(card){
+    card.style.display=(!f['filter-var-status']||card.dataset.status===f['filter-var-status'])?'':'none';
+  });
+
+  // Creative-level filters
   VIDS.forEach(function(vid){
     var grid=document.getElementById('grid-'+vid);if(!grid)return;
     var list=state.creatives[vid]||[];
     grid.innerHTML='';
-    list.filter(fn).forEach(function(cr){grid.appendChild(makeCard(cr,vid));});
+    list.forEach(function(cr){
+      var match=
+        (!f['filter-funnel']  ||cr.funnel===f['filter-funnel'])||
+        (!f['filter-format']  ||cr.format===f['filter-format'])||
+        (!f['filter-user']    ||cr.author===f['filter-user'])||
+        (!f['filter-language']||cr.language===f['filter-language'])||
+        (!f['filter-kid']     ||(cr.kids&&cr.kids.indexOf(f['filter-kid'])>-1))||
+        (!f['filter-book']    ||(cr.books&&cr.books.indexOf(f['filter-book'])>-1))||
+        (!f['filter-product'] ||(cr.products&&cr.products.indexOf(f['filter-product'])>-1));
+
+      // All active creative-level filters must match (AND logic)
+      var funnelOk   =!f['filter-funnel']  ||cr.funnel===f['filter-funnel'];
+      var formatOk   =!f['filter-format']  ||cr.format===f['filter-format'];
+      var userOk     =!f['filter-user']    ||cr.author===f['filter-user'];
+      var langOk     =!f['filter-language']||cr.language===f['filter-language'];
+      var kidOk      =!f['filter-kid']     ||(cr.kids&&cr.kids.indexOf(f['filter-kid'])>-1);
+      var bookOk     =!f['filter-book']    ||(cr.books&&cr.books.indexOf(f['filter-book'])>-1);
+      var productOk  =!f['filter-product'] ||(cr.products&&cr.products.indexOf(f['filter-product'])>-1);
+
+      if(funnelOk&&formatOk&&userOk&&langOk&&kidOk&&bookOk&&productOk){
+        grid.appendChild(makeCard(cr,vid));
+      }
+    });
     var zone=makeAddZone(vid);grid.appendChild(zone);setupZone(zone,vid);
   });
+
+  renderConceptStats();
+  if(currentView === 'all') renderFlatGallery();
 }
-function setAF(btn){document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}
+  ['filter-concept','filter-var-status','filter-funnel','filter-format','filter-user','filter-kid','filter-book','filter-language','filter-product'].forEach(function(id){
+    var el=document.getElementById(id);if(el){el.value='';el.classList.remove('active');}
+  });
+  var cb=document.getElementById('filter-clear-btn');if(cb)cb.style.display='none';
+  document.querySelectorAll('.concept-section,.variation-card').forEach(function(e){e.style.display='';});
+  VIDS.forEach(function(vid){rerenderGrid(vid);});
+  renderConceptStats();
+}
+
+// Keep old filter functions as aliases for the patches below
+function filterAll(btn){}
+function filterConcept(btn,c){}
+function filterVarStatus(btn,s){}
+function filterByUser(uid){applyFilters();}
+function filterByFunnel(f){applyFilters();}
+function filterByFormat(fmt){applyFilters();}
+function setAF(btn){}
 
 // ─── DRAG & DROP + AI FLOW ───
 var currentVid=null,modalMedia=null,modalIsVideo=false;
@@ -883,6 +1388,7 @@ function saveCreative(){
   var format=document.getElementById('ai-format').value;
   var hook=document.getElementById('ai-hook').value;
   var prodtype=document.getElementById('ai-prodtype').value;
+  var language=document.getElementById('ai-language')?document.getElementById('ai-language').value:'';
   if(!name){showToast('Name cannot be empty');return;}
   var id='cr-'+Date.now();
   if(!state.creatives[currentVid])state.creatives[currentVid]=[];
@@ -890,7 +1396,7 @@ function saveCreative(){
     id:id,name:name,adname:adname,
     img:modalIsVideo?null:modalMedia,video:modalIsVideo?modalMedia:null,
     author:author,status:status,funnel:funnel,format:format,hook:hook,
-    prodtype:prodtype,books:[],kids:[],products:[],audiences:[]
+    prodtype:prodtype,language:language,books:[],kids:[],products:[],audiences:[]
   });
   save();rerenderGrid(currentVid);updateStats();closeAIModal();showToast('Creative added — '+name);
 }
@@ -899,17 +1405,22 @@ function saveCreative(){
 function renderAll(){
   VIDS.forEach(function(vid){rerenderGrid(vid);applyHeroImg(vid);applyNotes(vid);});
   renderUploadHistory();updateStats();renderAnalytics();
+  renderConceptStats();
+  var ta=document.getElementById('review-prompt-editor');
+  if(ta)ta.value=getReviewPrompt();
 }
 
 function rerenderGrid(vid){
   var grid=document.getElementById('grid-'+vid);if(!grid)return;
   var list=state.creatives[vid]||[];
   grid.innerHTML='';
+  grid.className='creatives-grid view-'+currentView;
   list.forEach(function(cr){grid.appendChild(makeCard(cr,vid));});
   var zone=makeAddZone(vid);grid.appendChild(zone);setupZone(zone,vid);
   var cnt=document.getElementById('cnt-'+vid);
   if(cnt)cnt.textContent=list.length+' creative'+(list.length!==1?'s':'');
   renderPerfPills(vid);
+  renderVariationStats(vid);
 }
 
 function makeAddZone(vid){
@@ -945,6 +1456,7 @@ function makeCard(cr,vid){
         '<button class="action-btn" onclick="downloadMedia(\''+cr.id+'\',\''+vid+'\')">Download</button>'+
         '<button class="action-btn" onclick="openEditModal(\''+cr.id+'\',\''+vid+'\')">Edit</button>'+
         '<button class="action-btn" onclick="openPerfModal(\''+cr.id+'\',\''+vid+'\')">Analytics</button>'+
+        '<button class="action-btn" onclick="reviewSingle(\''+cr.id+'\',\''+vid+'\')">AI Review</button>'+
         '<button class="action-btn danger" onclick="removeCreative(\''+vid+'\',\''+cr.id+'\')">Remove</button>'+
       '</div></div>';
   } else if(cr.img){
@@ -957,6 +1469,7 @@ function makeCard(cr,vid){
         '<button class="action-btn" onclick="downloadMedia(\''+cr.id+'\',\''+vid+'\')">Download</button>'+
         '<button class="action-btn" onclick="openEditModal(\''+cr.id+'\',\''+vid+'\')">Edit</button>'+
         '<button class="action-btn" onclick="openPerfModal(\''+cr.id+'\',\''+vid+'\')">Analytics</button>'+
+        '<button class="action-btn" onclick="reviewSingle(\''+cr.id+'\',\''+vid+'\')">AI Review</button>'+
         '<button class="action-btn danger" onclick="removeCreative(\''+vid+'\',\''+cr.id+'\')">Remove</button>'+
       '</div></div>';
   }
@@ -966,6 +1479,7 @@ function makeCard(cr,vid){
   if(cr.format)tags+='<span class="ctag format">'+cr.format+'</span>';
   if(cr.hook)tags+='<span class="ctag">'+cr.hook+'</span>';
   if(cr.prodtype)tags+='<span class="ctag prod">'+cr.prodtype.replace('_',' ')+'</span>';
+  if(cr.language)tags+='<span class="ctag" style="background:#f0fdf4;color:#166534;border-color:transparent;">'+cr.language+'</span>';
 
   var perfHtml='';
   if(perf){
@@ -1029,7 +1543,16 @@ function openEditModal(crid,vid){
   var kidsHtml=makeKidTags(cr.kids||[]);
   var audHtml=makeMSTags('edit-audiences',state.lists.audiences,cr.audiences||[]);
 
-  var html='<div class="modal-section"><div class="modal-section-title">Identity</div>'+
+  // Hero image or video thumbnail at top
+  var heroHtml='';
+  if(cr.img){
+    heroHtml='<div style="margin-bottom:1.25rem;border-radius:var(--r-md);overflow:hidden;max-height:240px;"><img src="'+cr.img+'" style="width:100%;max-height:240px;object-fit:cover;display:block;" /></div>';
+  } else if(cr.video){
+    heroHtml='<div style="margin-bottom:1.25rem;border-radius:var(--r-md);overflow:hidden;background:#000;max-height:240px;display:flex;align-items:center;justify-content:center;"><video src="'+cr.video+'" style="max-width:100%;max-height:240px;" controls></video></div>';
+  }
+
+  var html=heroHtml+
+  '<div class="modal-section"><div class="modal-section-title">Identity</div>'+
     '<div class="field-row">'+
       '<div class="field"><div class="field-label">Funnel stage</div><select class="field-select" id="edit-funnel"><option value="">Select...</option><option value="tofu">Top of Funnel (TOF)</option><option value="mofu">Middle of Funnel (MOF)</option><option value="bofu">Bottom of Funnel (BOF)</option><option value="retargeting">Retargeting</option></select></div>'+
       '<div class="field"><div class="field-label">Format</div><select class="field-select" id="edit-format"></select></div>'+
@@ -1042,8 +1565,11 @@ function openEditModal(crid,vid){
       '<div class="field"><div class="field-label">Status</div><select class="field-select" id="edit-status"><option value="draft">Draft</option><option value="reviewing">Reviewing</option><option value="testing">Testing</option><option value="published">Published</option><option value="paused">Paused</option></select></div>'+
       '<div class="field"><div class="field-label">Suggested by</div><select class="field-select" id="edit-author"></select></div>'+
     '</div>'+
+    '<div class="field-row">'+
+      '<div class="field"><div class="field-label">Language</div><select class="field-select" id="edit-language"><option value="">Select...</option><option value="english">English</option><option value="arabic">Arabic</option><option value="french">French</option><option value="german">German</option><option value="spanish">Spanish</option><option value="portuguese">Portuguese</option><option value="italian">Italian</option><option value="dutch">Dutch</option><option value="turkish">Turkish</option><option value="hebrew">Hebrew</option></select></div>'+
+      '<div class="field"></div>'+
+    '</div>'+
   '</div>'+
-
   '<div class="modal-section"><div class="modal-section-title">Books used in this creative</div>'+booksHtml+'</div>'+
   '<div class="modal-section"><div class="modal-section-title">Kid profiles featured</div>'+kidsHtml+'</div>'+
   '<div class="modal-section"><div class="modal-section-title">Products featured</div>'+prdsHtml+'</div>'+
@@ -1051,19 +1577,22 @@ function openEditModal(crid,vid){
 
   document.getElementById('edit-modal-body').innerHTML=html;
 
-  // Populate selects
   populateSelectFromList('edit-format',state.lists.formats,'format');
-  populateSelectFromList('edit-hook',state.lists.hooks,'hook');
+  // Hook with None option
+  var hookSel=document.getElementById('edit-hook');
+  hookSel.innerHTML='<option value="">None</option>';
+  state.lists.hooks.forEach(function(h){var o=document.createElement('option');o.value=h;o.textContent=h;hookSel.appendChild(o);});
+
   var editAuthorSel=document.getElementById('edit-author');editAuthorSel.innerHTML='';
   TEAM.forEach(function(u){var o=document.createElement('option');o.value=u.id;o.textContent=u.name;editAuthorSel.appendChild(o);});
 
-  // Set current values
   setSelectVal('edit-funnel',cr.funnel||'');
   setSelectVal('edit-format',cr.format||'');
   setSelectVal('edit-prodtype',cr.prodtype||'');
   setSelectVal('edit-hook',cr.hook||'');
   setSelectVal('edit-status',cr.status||'draft');
   setSelectVal('edit-author',cr.author||state.currentUser||'');
+  setSelectVal('edit-language',cr.language||'');
 
   document.getElementById('edit-modal').classList.add('open');
 }
@@ -1081,7 +1610,13 @@ function makeKidTags(selectedIds){
   var html='<div class="field-multiselect" id="edit-kids">';
   state.kids.forEach(function(kid){
     var on=selectedIds.indexOf(kid.id)>-1;
-    html+='<span class="ms-tag '+(on?'on':'off')+'" data-kid-id="'+kid.id+'" onclick="toggleTag(this,\'edit-kids\')">'+kid.name+' <span style="font-size:9px;opacity:0.7">('+kid.desc+')</span></span>';
+    var avatarHtml='';
+    if(kid.photo){
+      avatarHtml='<div class="kid-ms-avatar"><img src="'+kid.photo+'" class="loaded" alt="'+kid.name+'"/></div>';
+    } else {
+      avatarHtml='<div class="kid-ms-avatar">'+kid.name.charAt(0)+'</div>';
+    }
+    html+='<span class="kid-ms-tag '+(on?'on':'off')+'" data-kid-id="'+kid.id+'" onclick="toggleTag(this,\'edit-kids\')">'+avatarHtml+kid.name+'</span>';
   });
   if(!state.kids.length)html+='<span style="font-size:11px;color:var(--text-faint);">No kids added yet — add them in Settings</span>';
   return html+'</div>';
@@ -1112,6 +1647,7 @@ function saveEdit(){
   cr.hook=document.getElementById('edit-hook').value;
   cr.status=document.getElementById('edit-status').value;
   cr.author=document.getElementById('edit-author').value;
+  cr.language=document.getElementById('edit-language')?document.getElementById('edit-language').value:'';
   cr.books=getSelectedTags('edit-books');
   cr.kids=getSelectedTags('edit-kids');
   cr.products=getSelectedTags('edit-products');
@@ -1146,6 +1682,7 @@ function openPerfModal(crid,vid){
 
   // Taxonomy summary
   var taxRows='';
+  if(cr.language)taxRows+='<div class="analytics-detail-item"><div class="analytics-detail-key">Language</div><div class="analytics-detail-val" style="font-size:12px;text-transform:capitalize;">'+cr.language+'</div></div>';
   if(cr.books&&cr.books.length)taxRows+='<div class="analytics-detail-item"><div class="analytics-detail-key">Books</div><div class="analytics-detail-val" style="font-size:12px;">'+cr.books.join(', ')+'</div></div>';
   if(cr.products&&cr.products.length)taxRows+='<div class="analytics-detail-item"><div class="analytics-detail-key">Products</div><div class="analytics-detail-val" style="font-size:12px;">'+cr.products.join(', ')+'</div></div>';
   if(cr.audiences&&cr.audiences.length)taxRows+='<div class="analytics-detail-item"><div class="analytics-detail-key">Audiences</div><div class="analytics-detail-val" style="font-size:12px;">'+cr.audiences.join(', ')+'</div></div>';
@@ -1322,12 +1859,35 @@ function renderKidCards(){
   var el=document.getElementById('kid-cards');if(!el)return;
   el.innerHTML='';
   state.kids.forEach(function(kid,i){
-    el.innerHTML+='<div class="kid-card">'+
+    var avatarHtml='';
+    if(kid.photo){
+      avatarHtml='<div class="kid-avatar-wrap" onclick="triggerKidPhoto('+i+')"><img src="'+kid.photo+'" class="loaded" alt="'+kid.name+'"/></div>';
+    } else {
+      avatarHtml='<div class="kid-avatar-wrap" onclick="triggerKidPhoto('+i+')"><span class="kid-avatar-initials">'+kid.name.charAt(0)+'</span></div>';
+    }
+    el.innerHTML+='<div class="kid-card" id="kid-card-'+i+'">'+
       '<div class="kid-card-remove" onclick="removeKid('+i+')">×</div>'+
+      avatarHtml+
+      '<input type="file" class="file-input" id="kid-photo-'+i+'" accept="image/*" onchange="setKidPhoto(this,'+i+')"/>'+
       '<div class="kid-card-name">'+kid.name+'</div>'+
       '<div class="kid-card-meta">'+kid.desc+'</div>'+
     '</div>';
   });
+}
+
+function triggerKidPhoto(idx){
+  var inp=document.getElementById('kid-photo-'+idx);if(inp)inp.click();
+}
+
+function setKidPhoto(input,idx){
+  var file=input.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    if(!state.kids[idx])return;
+    state.kids[idx].photo=e.target.result;
+    save();renderKidCards();populateSelects();showToast('Photo updated for '+state.kids[idx].name);
+  };
+  reader.readAsDataURL(file);
 }
 
 function addKid(){
@@ -1336,10 +1896,10 @@ function addKid(){
   if(!name)return;
   state.kids.push({id:'kid-'+Date.now(),name:name,desc:desc||'No description'});
   document.getElementById('kid-name').value='';document.getElementById('kid-desc').value='';
-  save();renderKidCards();showToast(name+' added to kid profiles');
+  save();renderKidCards();populateSelects();showToast(name+' added to kid profiles');
 }
 
-function removeKid(idx){state.kids.splice(idx,1);save();renderKidCards();}
+function removeKid(idx){state.kids.splice(idx,1);save();renderKidCards();populateSelects();}
 
 // ─── TEAM ───
 function renderTeamList(){
@@ -1372,9 +1932,208 @@ function closeLight(){
   content.innerHTML='';
   document.getElementById('lightbox').classList.remove('open');
 }
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLight();closeAIModal();closePerfModal();closeEditModal();closeReviewModal();}});
 
-// ─── KEYBOARD ───
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLight();closeAIModal();closePerfModal();closeEditModal();}});
+// ─── CONCEPT STATS BAR ───
+var DEFAULT_REVIEW_PROMPT='You are a Facebook ad creative expert reviewing WonderWraps ad creatives. WonderWraps makes personalized children\'s books where the child is illustrated as a cartoon character.\n\nReview this creative and assess:\n1. Visual quality — is the image sharp, well-composed, scroll-stopping?\n2. Kid likeness — does the cartoon character convincingly match a real child?\n3. Emotional impact — does it trigger an emotional reaction in parents?\n4. Hook strength — is the first impression compelling enough to stop the scroll?\n5. Text/copy — if there is text overlay, is it clear and punchy?\n6. Overall recommendation — keep as is, minor tweak, or needs rework?\n\nBe concise and specific. Flag real issues only.';
+
+function getReviewPrompt(){return state.reviewPrompt||DEFAULT_REVIEW_PROMPT;}
+
+function saveReviewPrompt(){
+  var ta=document.getElementById('review-prompt-editor');
+  if(ta){state.reviewPrompt=ta.value;save();showToast('Prompt saved');}
+}
+function resetReviewPrompt(){
+  state.reviewPrompt=DEFAULT_REVIEW_PROMPT;save();
+  var ta=document.getElementById('review-prompt-editor');
+  if(ta)ta.value=DEFAULT_REVIEW_PROMPT;
+  showToast('Prompt reset to default');
+}
+
+function renderVariationStats(vid){
+  var bar=document.getElementById('vstats-'+vid);if(!bar)return;
+  var list=state.creatives[vid]||[];
+
+  var funnelFilter=document.getElementById('filter-funnel')?document.getElementById('filter-funnel').value:'';
+  var formatFilter=document.getElementById('filter-format')?document.getElementById('filter-format').value:'';
+  var userFilter=document.getElementById('filter-user')?document.getElementById('filter-user').value:'';
+  var filtered=list.slice();
+  if(funnelFilter)filtered=filtered.filter(function(c){return c.funnel===funnelFilter;});
+  if(formatFilter)filtered=filtered.filter(function(c){return c.format===formatFilter;});
+  if(userFilter)filtered=filtered.filter(function(c){return c.author===userFilter;});
+
+  var ti=0,tc=0,ts=0,tp=0,hasData=false;
+  filtered.forEach(function(cr){
+    if(!cr.adname)return;
+    var p=state.performance[cr.adname];if(!p)return;
+    hasData=true;
+    ti+=parseInt(p.impressions)||0;
+    tc+=parseInt(p.clicks)||0;
+    ts+=parseFloat(p.spend)||0;
+    tp+=parseInt(p.purchases)||0;
+  });
+
+  var ctr=hasData&&ti>0?(tc/ti*100):null;
+  var cpo=hasData&&tp>0?(ts/tp):null;
+  var cpc=hasData&&tc>0?(ts/tc):null;
+
+  function kpi(key,val,cls,isEmpty){
+    return '<div class="concept-stat">'+
+      '<div class="concept-stat-key">'+key+'</div>'+
+      '<div class="concept-stat-val'+(isEmpty?' empty':'')+(cls?' '+cls:'')+'">'+val+'</div>'+
+    '</div>';
+  }
+
+  var ctrC=ctr!==null?(ctr>2?'good':ctr>1?'warn':'bad'):'';
+  var cpoC=cpo!==null?(cpo<20?'good':cpo<35?'warn':'bad'):'';
+  var cpcC=cpc!==null?(cpc<0.3?'good':cpc<0.5?'warn':'bad'):'';
+
+  bar.innerHTML='<div class="concept-stats-grid">'+
+    kpi('Spend',         hasData&&ts>0?'€'+ts.toFixed(0):'—','',   !hasData)+
+    kpi('Impressions',   hasData&&ti>0?ti.toLocaleString():'—','', !hasData)+
+    kpi('CTR',           ctr!==null?ctr.toFixed(2)+'%':'—',   ctrC,ctr===null)+
+    kpi('CPC',           cpc!==null?'€'+cpc.toFixed(2):'—',   cpcC,cpc===null)+
+    kpi('Purchases',     hasData&&tp>0?tp.toString():'—','',        !hasData)+
+    kpi('Cost/purchase', cpo!==null?'€'+cpo.toFixed(2):'—',   cpoC,cpo===null)+
+  '</div>';
+}
+
+function renderConceptStats(){
+  VIDS.forEach(function(vid){renderVariationStats(vid);});
+}
+
+// ─── AI REVIEW ───
+function reviewConcept(concept,btn){
+  var cVids=VIDS.filter(function(v){return v.charAt(0)===concept;});
+  var allCreatives=[];
+  cVids.forEach(function(vid){(state.creatives[vid]||[]).forEach(function(cr){allCreatives.push({cr:cr,vid:vid});});});
+  var withImg=allCreatives.filter(function(x){return x.cr.img;});
+  if(!withImg.length){showToast('No image creatives to review in Concept '+concept);return;}
+
+  if(btn)btn.classList.add('running');
+  document.getElementById('review-modal-title').textContent='AI Review — Concept '+concept+' ('+withImg.length+' creatives)';
+  document.getElementById('review-modal-body').innerHTML='<div style="text-align:center;padding:2rem;"><div class="analyzing-spinner" style="margin:0 auto 12px;"></div><div style="font-size:13px;color:var(--text-muted);">Claude is reviewing '+withImg.length+' creatives...</div></div>';
+  document.getElementById('review-modal').classList.add('open');
+
+  var prompt=getReviewPrompt();
+  var reviews=[];var pending=withImg.length;
+
+  withImg.forEach(function(x){
+    var cr=x.cr;
+    var b64=cr.img.split(',')[1];
+    fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:600,
+        messages:[{role:'user',content:[
+          {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
+          {type:'text',text:prompt+'\n\nCreative name: '+cr.name+'\nVariation: '+x.vid+'\nFormat: '+(cr.format||'unknown')+'\nHook: '+(cr.hook||'none')+'\nFunnel: '+(cr.funnel||'unknown')+'\n\nRespond ONLY with JSON: {"rating":"ok|warn|bad","summary":"One sentence summary","issues":"Specific issues found or none","suggestion":"One concrete actionable suggestion"}'}
+        ]}]
+      })
+    }).then(function(r){return r.json();}).then(function(data){
+      var text=data.content&&data.content[0]?data.content[0].text:'';
+      var clean=text.replace(/```json|```/g,'').trim();
+      var res;try{res=JSON.parse(clean);}catch(e){res={rating:'warn',summary:'Could not parse response',issues:'',suggestion:'Try again'};}
+      // Store review on creative
+      cr.aiReview=res;
+      reviews.push({cr:cr,vid:x.vid,res:res});
+      pending--;
+      if(pending===0){save();renderReviewResults(reviews,btn);}
+    }).catch(function(){
+      reviews.push({cr:cr,vid:x.vid,res:{rating:'warn',summary:'Analysis failed',issues:'',suggestion:'Check connection and retry'}});
+      pending--;
+      if(pending===0){save();renderReviewResults(reviews,btn);}
+    });
+  });
+}
+
+function reviewSingle(crid,vid){
+  var cr=(state.creatives[vid]||[]).find(function(c){return c.id===crid;});
+  if(!cr||!cr.img){showToast('This creative has no image to review');return;}
+
+  document.getElementById('review-modal-title').textContent='AI Review — '+cr.name;
+  document.getElementById('review-modal-body').innerHTML='<div style="text-align:center;padding:2rem;"><div class="analyzing-spinner" style="margin:0 auto 12px;"></div><div style="font-size:13px;color:var(--text-muted);">Claude is reviewing this creative...</div></div>';
+  document.getElementById('review-modal').classList.add('open');
+
+  var prompt=getReviewPrompt();
+  var b64=cr.img.split(',')[1];
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:600,
+      messages:[{role:'user',content:[
+        {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},
+        {type:'text',text:prompt+'\n\nCreative name: '+cr.name+'\nVariation: '+vid+'\nFormat: '+(cr.format||'unknown')+'\nHook: '+(cr.hook||'none')+'\nFunnel: '+(cr.funnel||'unknown')+'\n\nRespond ONLY with JSON: {"rating":"ok|warn|bad","summary":"One sentence summary","issues":"Specific issues found or none","suggestion":"One concrete actionable suggestion"}'}
+      ]}]
+    })
+  }).then(function(r){return r.json();}).then(function(data){
+    var text=data.content&&data.content[0]?data.content[0].text:'';
+    var clean=text.replace(/```json|```/g,'').trim();
+    var res;try{res=JSON.parse(clean);}catch(e){res={rating:'warn',summary:'Could not parse response',issues:'',suggestion:'Try again'};}
+    cr.aiReview=res;save();
+    renderReviewResults([{cr:cr,vid:vid,res:res}],null);
+    rerenderGrid(vid);
+  }).catch(function(){
+    renderReviewResults([{cr:cr,vid:vid,res:{rating:'warn',summary:'Analysis failed',issues:'',suggestion:'Check connection and retry'}}],null);
+  });
+}
+
+function renderReviewResults(reviews,btn){
+  if(btn)btn.classList.remove('running');
+  var ok=reviews.filter(function(r){return r.res.rating==='ok';}).length;
+  var warn=reviews.filter(function(r){return r.res.rating==='warn';}).length;
+  var bad=reviews.filter(function(r){return r.res.rating==='bad';}).length;
+
+  var html='<div style="display:flex;gap:10px;margin-bottom:1.25rem;flex-wrap:wrap;">'+
+    '<div style="flex:1;min-width:80px;background:var(--green-light);border-radius:var(--r-md);padding:0.875rem;text-align:center;"><div style="font-family:Syne,sans-serif;font-size:22px;font-weight:700;color:var(--green-dark);">'+ok+'</div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--green-dark);">Looks good</div></div>'+
+    '<div style="flex:1;min-width:80px;background:var(--amber-light);border-radius:var(--r-md);padding:0.875rem;text-align:center;"><div style="font-family:Syne,sans-serif;font-size:22px;font-weight:700;color:var(--amber-dark);">'+warn+'</div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--amber-dark);">Minor issues</div></div>'+
+    '<div style="flex:1;min-width:80px;background:var(--red-light);border-radius:var(--r-md);padding:0.875rem;text-align:center;"><div style="font-family:Syne,sans-serif;font-size:22px;font-weight:700;color:var(--red-dark);">'+bad+'</div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--red-dark);">Needs work</div></div>'+
+  '</div>';
+
+  // Sort: bad first, warn second, ok last
+  reviews.sort(function(a,b){var o={bad:0,warn:1,ok:2};return o[a.res.rating]-o[b.res.rating];});
+
+  reviews.forEach(function(r){
+    var cls=r.res.rating==='ok'?'rsd-ok':r.res.rating==='warn'?'rsd-warn':'rsd-bad';
+    var bg=r.res.rating==='ok'?'var(--green-light)':r.res.rating==='warn'?'var(--amber-light)':'var(--red-light)';
+    var imgHtml=r.cr.img?'<img src="'+r.cr.img+'" style="width:60px;height:60px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid var(--border-med);" />':'';
+    html+='<div class="review-item" style="background:'+bg+'20;">'+
+      '<div style="display:flex;gap:10px;align-items:flex-start;">'+imgHtml+
+      '<div style="flex:1;">'+
+        '<div class="review-item-top"><div class="review-status-dot '+cls+'"></div><div class="review-item-name">'+r.cr.name+'</div><span style="font-size:10px;color:var(--text-faint);margin-left:auto;">'+r.vid+'</span></div>'+
+        '<div class="review-item-text" style="margin-bottom:6px;">'+r.res.summary+'</div>'+
+        (r.res.issues&&r.res.issues!=='none'?'<div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;"><strong>Issues:</strong> '+r.res.issues+'</div>':'')+
+        '<div style="font-size:11px;color:var(--purple);font-weight:500;">→ '+r.res.suggestion+'</div>'+
+      '</div></div></div>';
+  });
+
+  document.getElementById('review-modal-body').innerHTML=html;
+  VIDS.forEach(function(vid){rerenderGrid(vid);});
+}
+
+function closeReviewModal(){document.getElementById('review-modal').classList.remove('open');}
+
+// ─── AI REVIEW BADGE ON CARD ───
+// Wrap makeCard to add AI review badge if review exists
+var _origMakeCard=makeCard;
+makeCard=function(cr,vid){
+  var div=_origMakeCard(cr,vid);
+  if(cr.aiReview){
+    var wrap=div.querySelector('.creative-media-wrap');
+    if(wrap){
+      var r=cr.aiReview;
+      var cls=r.rating==='ok'?'air-ok':r.rating==='warn'?'air-warn':'air-bad';
+      var label=r.rating==='ok'?'✓ OK':r.rating==='warn'?'⚠ Review':'✗ Fix';
+      var badge=document.createElement('div');
+      badge.className='ai-review-badge '+cls;
+      badge.title=r.summary;
+      badge.innerHTML=label;
+      badge.onclick=function(e){e.stopPropagation();reviewSingle(cr.id,vid);};
+      wrap.appendChild(badge);
+    }
+  }
+  return div;
+};
 
 // ─── TOAST ───
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
