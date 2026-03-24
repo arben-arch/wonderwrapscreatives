@@ -379,6 +379,63 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 .btn-ghost:hover{background:var(--surface2);}
 .btn-sm{font-size:11px;padding:5px 12px;}
 
+/* DATE RANGE BAR */
+.date-range-bar{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:0.625rem 1rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.date-range-label{font-size:11px;font-weight:600;color:var(--text-faint);white-space:nowrap;text-transform:uppercase;letter-spacing:0.06em;}
+.date-range-pills{display:flex;gap:4px;flex-wrap:wrap;}
+.dr-pill{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;border:1px solid var(--border-med);background:transparent;cursor:pointer;color:var(--text-muted);transition:all 0.15s;white-space:nowrap;}
+.dr-pill:hover{border-color:var(--purple);color:var(--purple);}
+.dr-pill.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+.date-range-custom{display:flex;align-items:center;gap:6px;}
+.date-input{font-family:'DM Sans',sans-serif;font-size:11px;padding:4px 8px;border:1px solid var(--border-med);border-radius:var(--r-sm);background:var(--surface);color:var(--text);outline:none;cursor:pointer;}
+.date-input:focus{border-color:var(--purple);}
+
+/* INSIGHTS LAYOUT */
+.insights-layout{display:flex;height:calc(100vh - 58px);overflow:hidden;}
+.insights-sidebar{width:240px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 0;overflow-y:auto;}
+.insights-sidebar-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;padding:0 1.25rem;margin-bottom:1.25rem;color:var(--text);}
+.sidebar-group-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-faint);padding:0.75rem 1.25rem 0.375rem;margin-top:0.5rem;}
+.sidebar-item{width:100%;display:flex;align-items:center;gap:9px;padding:0.6rem 1.25rem;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;color:var(--text-muted);background:transparent;border:none;cursor:pointer;text-align:left;transition:all 0.12s;border-left:3px solid transparent;}
+.sidebar-item:hover{background:var(--surface2);color:var(--text);}
+.sidebar-item.active{background:var(--purple-light);color:var(--purple);border-left-color:var(--purple);font-weight:500;}
+.sidebar-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0;}
+.insights-main{flex:1;overflow-y:auto;padding:1.5rem 2rem;}
+
+/* INSIGHT PANEL COMPONENTS */
+.insight-header{margin-bottom:1.5rem;}
+.insight-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:4px;}
+.insight-desc{font-size:13px;color:var(--text-muted);}
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:1.5rem;}
+.insight-rank-list{display:flex;flex-direction:column;gap:8px;}
+.insight-rank-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;transition:box-shadow 0.15s;}
+.insight-rank-item:hover{box-shadow:var(--shadow-md);}
+.rank-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--purple-mid);min-width:32px;text-align:center;}
+.rank-num.gold{color:#f59e0b;}
+.rank-num.silver{color:#94a3b8;}
+.rank-num.bronze{color:#b45309;}
+.rank-thumb{width:60px;height:60px;object-fit:cover;border-radius:var(--r-sm);flex-shrink:0;background:var(--purple-light);}
+.rank-thumb-placeholder{width:60px;height:60px;border-radius:var(--r-sm);flex-shrink:0;background:var(--purple-light);display:flex;align-items:center;justify-content:center;font-size:22px;}
+.rank-info{flex:1;min-width:0;}
+.rank-name{font-size:13px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rank-sub{font-size:11px;color:var(--text-faint);}
+.rank-stats{display:flex;gap:12px;margin-top:6px;}
+.rank-stat{display:flex;flex-direction:column;}
+.rank-stat-key{font-size:9px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);}
+.rank-stat-val{font-size:13px;font-weight:700;color:var(--text);}
+.rank-stat-val.green{color:var(--green-dark);}
+.rank-stat-val.amber{color:var(--amber-dark);}
+.rank-stat-val.red{color:var(--red-dark);}
+.rank-stat-val.purple{color:var(--purple);}
+.rank-roas-badge{min-width:52px;height:52px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.insight-group-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.25rem;margin-bottom:1rem;}
+.insight-group-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.insight-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem;}
+.insight-kpi{background:var(--surface2);border-radius:var(--r-sm);padding:0.75rem;text-align:center;}
+.insight-kpi-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;line-height:1;}
+.insight-kpi-key{font-size:9px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-faint);margin-top:2px;}
+.insight-empty{text-align:center;padding:4rem;color:var(--text-faint);}
+.insight-empty-icon{font-size:40px;margin-bottom:1rem;}
+
 /* META ADS PAGE */
 .meta-ad-card{background:var(--surface);border:1px solid var(--border-med);border-radius:var(--r-md);overflow:hidden;transition:box-shadow 0.2s;}
 .meta-ad-card:hover{box-shadow:var(--shadow-md);}
@@ -545,8 +602,9 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
   </div>
   <div class="nav-right">
     <button class="nav-tab active" onclick="showPage('library',this)">Library</button>
+    <button class="nav-tab" onclick="showPage('insights',this)">Insights</button>
     <button class="nav-tab" onclick="showPage('meta',this)">Meta Ads <span id="meta-unseen-badge" style="display:none;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:20px;margin-left:4px;"></span></button>
-    <button class="nav-tab" onclick="showPage('settings',this)">Settings & Analytics</button>
+    <button class="nav-tab" onclick="showPage('settings',this)">Settings</button>
     <div class="nav-user" id="nav-user-display"></div>
   </div>
 </nav>
@@ -554,6 +612,24 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 <!-- LIBRARY PAGE -->
 <div class="page active" id="page-library">
 <div class="main">
+  <!-- DATE RANGE BAR -->
+  <div class="date-range-bar">
+    <div class="date-range-label">📅 Date range</div>
+    <div class="date-range-pills">
+      <button class="dr-pill active" onclick="setDateRange('last_7d',this)">Last 7 days</button>
+      <button class="dr-pill" onclick="setDateRange('last_30d',this)">Last 30 days</button>
+      <button class="dr-pill" onclick="setDateRange('this_month',this)">This month</button>
+      <button class="dr-pill" onclick="setDateRange('last_month',this)">Last month</button>
+      <button class="dr-pill" onclick="setDateRange('last_90d',this)">Last 90 days</button>
+      <button class="dr-pill" onclick="setDateRange('lifetime',this)">All time</button>
+    </div>
+    <div class="date-range-custom">
+      <input type="date" class="date-input" id="dr-from" onchange="setDateRange('custom',null)"/>
+      <span style="color:var(--text-faint);font-size:12px;">→</span>
+      <input type="date" class="date-input" id="dr-to" onchange="setDateRange('custom',null)"/>
+    </div>
+    <div id="dr-status" style="font-size:11px;color:var(--text-faint);margin-left:auto;"></div>
+  </div>
   <div class="stats-row">
     <div class="stat-card"><div class="stat-label">Concepts</div><div class="stat-value purple">3</div></div>
     <div class="stat-card"><div class="stat-label">Variations</div><div class="stat-value">6</div></div>
@@ -707,6 +783,79 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 </div>
 </div>
 
+<!-- INSIGHTS PAGE -->
+<div class="page" id="page-insights">
+  <div class="insights-layout">
+
+    <!-- SIDEBAR -->
+    <div class="insights-sidebar">
+      <div class="insights-sidebar-title">Insights</div>
+
+      <div class="sidebar-group-label">Performance</div>
+      <button class="sidebar-item active" onclick="showInsight('top-creatives',this)">
+        <span class="sidebar-icon">🏆</span>Best performing creatives
+      </button>
+      <button class="sidebar-item" onclick="showInsight('by-funnel',this)">
+        <span class="sidebar-icon">🎯</span>Performance by funnel
+      </button>
+      <button class="sidebar-item" onclick="showInsight('by-format',this)">
+        <span class="sidebar-icon">📐</span>Performance by format
+      </button>
+      <button class="sidebar-item" onclick="showInsight('roas-ranking',this)">
+        <span class="sidebar-icon">💰</span>ROAS ranking
+      </button>
+
+      <div class="sidebar-group-label">Creative Analysis</div>
+      <button class="sidebar-item" onclick="showInsight('by-hook',this)">
+        <span class="sidebar-icon">🪝</span>Best hooks
+      </button>
+      <button class="sidebar-item" onclick="showInsight('by-book',this)">
+        <span class="sidebar-icon">📚</span>Best performing books
+      </button>
+      <button class="sidebar-item" onclick="showInsight('by-kid',this)">
+        <span class="sidebar-icon">👧</span>Best performing kids
+      </button>
+      <button class="sidebar-item" onclick="showInsight('by-language',this)">
+        <span class="sidebar-icon">🌍</span>Performance by language
+      </button>
+
+      <div class="sidebar-group-label">Trends</div>
+      <button class="sidebar-item" onclick="showInsight('by-concept',this)">
+        <span class="sidebar-icon">💡</span>Performance by concept
+      </button>
+      <button class="sidebar-item" onclick="showInsight('by-prodtype',this)">
+        <span class="sidebar-icon">🎬</span>AI vs UGC vs Professional
+      </button>
+      <button class="sidebar-item" onclick="showInsight('spend-distribution',this)">
+        <span class="sidebar-icon">📊</span>Spend distribution
+      </button>
+      <button class="sidebar-item" onclick="showInsight('winners-losers',this)">
+        <span class="sidebar-icon">⚡</span>Winners vs Losers
+      </button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="insights-main">
+      <!-- Date range bar (shared) -->
+      <div class="date-range-bar" style="margin-bottom:1.5rem;">
+        <div class="date-range-label">📅 Date range</div>
+        <div class="date-range-pills">
+          <button class="dr-pill active" id="idr-last_7d" onclick="setDateRange('last_7d',this)">Last 7 days</button>
+          <button class="dr-pill" id="idr-last_30d" onclick="setDateRange('last_30d',this)">Last 30 days</button>
+          <button class="dr-pill" id="idr-this_month" onclick="setDateRange('this_month',this)">This month</button>
+          <button class="dr-pill" id="idr-last_month" onclick="setDateRange('last_month',this)">Last month</button>
+          <button class="dr-pill" id="idr-last_90d" onclick="setDateRange('last_90d',this)">Last 90 days</button>
+          <button class="dr-pill" id="idr-lifetime" onclick="setDateRange('lifetime',this)">All time</button>
+        </div>
+      </div>
+
+      <!-- Insight panels -->
+      <div id="insight-panel"></div>
+    </div>
+
+  </div>
+</div>
+
 <!-- META ADS PAGE -->
 <div class="page" id="page-meta">
 <div class="main">
@@ -810,7 +959,17 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 
   <div class="settings-section" id="meta-api-section">
     <div class="settings-title">Meta Ads API</div>
-    <div class="settings-desc">Connect your Meta ad account to sync performance data automatically — no more CSV exports. You'll need a long-lived access token from Meta Business Manager.</div>
+    <div class="settings-desc">Connect your Meta ad account to sync performance data automatically — no more CSV exports.</div>
+
+    <div style="background:var(--blue-light);border:1px solid #bfdbfe;border-radius:var(--r-md);padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:12px;line-height:1.8;color:var(--blue-dark);">
+      <strong>How to get your credentials:</strong><br>
+      1. Go to <a href="https://developers.facebook.com/apps/" target="_blank" style="color:var(--blue-dark);font-weight:600;">developers.facebook.com/apps</a> → Create App → Business type<br>
+      2. Note your <strong>App ID</strong> from the app dashboard<br>
+      3. Go to <a href="https://developers.facebook.com/tools/explorer/" target="_blank" style="color:var(--blue-dark);font-weight:600;">Graph API Explorer</a> → select your app → Add permissions: <code style="background:#dbeafe;padding:1px 5px;border-radius:3px;">ads_read</code> <code style="background:#dbeafe;padding:1px 5px;border-radius:3px;">read_insights</code> <code style="background:#dbeafe;padding:1px 5px;border-radius:3px;">ads_management</code><br>
+      4. Click <strong>Generate Access Token</strong> → copy the token<br>
+      5. Exchange for a 60-day token at: <code style="background:#dbeafe;padding:1px 5px;border-radius:3px;">graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=APP_ID&client_secret=APP_SECRET&fb_exchange_token=SHORT_TOKEN</code><br>
+      6. Your <strong>Ad Account ID</strong> is in Meta Business Manager → Ad Accounts — format: <code style="background:#dbeafe;padding:1px 5px;border-radius:3px;">act_123456789</code>
+    </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;">
       <div>
@@ -1471,6 +1630,9 @@ function showPage(id,btn){
   if(id==='meta'){
     renderMetaAds();
     if(isMetaConnected()&&(!state.metaAds||!Object.keys(state.metaAds).length))syncMetaAds();
+  }
+  if(id==='insights'){
+    showInsight('top-creatives',document.querySelector('.sidebar-item.active')||document.querySelector('.sidebar-item'));
   }
 }
 
@@ -2576,7 +2738,8 @@ makeCard=function(cr,vid){
 };
 
 // ─── META API ───
-var META_API = 'https://graph.facebook.com/v19.0';
+// Meta API goes through /api/meta proxy to avoid CORS
+var META_PROXY = '/api/meta';
 var metaAddTarget = null; // currently selected meta ad for add-to-library
 
 function saveMetaConfig(){
@@ -2599,13 +2762,20 @@ function isMetaConnected(){
   return !!(cfg.accessToken&&cfg.accountId);
 }
 
+function metaFetch(path, params){
+  var cfg=state.metaConfig||{};
+  var qp=Object.assign({path:path, access_token:cfg.accessToken}, params||{});
+  var qs=Object.keys(qp).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(qp[k]);}).join('&');
+  return fetch('/api/meta?'+qs);
+}
+
 function testMetaConnection(){
   var cfg=state.metaConfig||{};
   if(!cfg.accessToken){showMetaStatus('⚠ No access token set','var(--amber-dark)');return;}
   var el=document.getElementById('meta-connection-status');
   if(el){el.textContent='Testing...';el.style.color='var(--text-muted)';}
   var accId=cfg.accountId||'me';
-  fetch(META_API+'/'+accId+'?fields=name,account_status&access_token='+cfg.accessToken)
+  metaFetch('/'+accId,{fields:'name,account_status'})
   .then(function(r){return r.json();})
   .then(function(data){
     if(data.error){showMetaStatus('✗ '+data.error.message,'var(--red-dark)');}
@@ -2631,27 +2801,28 @@ function syncMetaAds(){
   var syncEl=document.getElementById('meta-sync-status');
   if(syncEl)syncEl.textContent='Fetching ads...';
 
-  // Fields we need from Meta
-  var fields='name,status,adset_id,campaign_id,creative{thumbnail_url,body,title,image_url,video_id},insights{spend,impressions,clicks,ctr,cpc,actions,action_values}';
-  var url=META_API+'/'+cfg.accountId+'/ads?fields='+encodeURIComponent(fields)+'&limit=200&access_token='+cfg.accessToken;
+  var fields='name,status,adset_id,campaign_id,creative{thumbnail_url,image_url,video_id},insights.date_preset(last_30d){spend,impressions,clicks,ctr,cpc,actions}';
 
-  fetch(url).then(function(r){return r.json();}).then(function(data){
+  metaFetch('/'+cfg.accountId+'/ads',{
+    fields:fields,
+    limit:'200'
+  }).then(function(r){return r.json();}).then(function(data){
     if(data.error){
       showToast('Meta error: '+data.error.message);
       if(btn){btn.textContent='⟳ Sync now';btn.disabled=false;}
+      if(syncEl)syncEl.textContent='Sync failed — '+data.error.message;
       return;
     }
     var ads=data.data||[];
-    // Also fetch campaign names for grouping
-    var campIds=[...new Set(ads.map(function(a){return a.campaign_id;}).filter(Boolean))];
-
-    // Process and store ads
     if(!state.metaAds) state.metaAds={};
     var now=new Date().toISOString();
     ads.forEach(function(ad){
       var insights=ad.insights&&ad.insights.data&&ad.insights.data[0]?ad.insights.data[0]:{};
       var purchases=0;
-      if(insights.actions) insights.actions.forEach(function(a){if(a.action_type==='purchase'||a.action_type==='offsite_conversion.fb_pixel_purchase')purchases+=parseInt(a.value)||0;});
+      if(insights.actions) insights.actions.forEach(function(a){
+        if(a.action_type==='purchase'||a.action_type==='offsite_conversion.fb_pixel_purchase')
+          purchases+=parseInt(a.value)||0;
+      });
       state.metaAds[ad.id]={
         id:ad.id, name:ad.name, status:ad.status,
         campaignId:ad.campaign_id||'', adsetId:ad.adset_id||'',
@@ -2665,7 +2836,6 @@ function syncMetaAds(){
         purchases:purchases,
         synced:now
       };
-      // Auto-update performance data for library creatives matching by name
       if(ad.name&&ad.name.startsWith('WW_')){
         state.performance[ad.name]={
           impressions:parseInt(insights.impressions)||0,
@@ -2839,6 +3009,330 @@ function confirmAddMetaAd(){
 function closeMetaAddModal(){
   document.getElementById('meta-add-modal').classList.remove('open');
   metaAddTarget=null;
+}
+
+// ─── DATE RANGE ───
+var currentDateRange = 'last_30d';
+
+function setDateRange(preset, btn){
+  currentDateRange = preset;
+  // Sync all date range pill buttons across pages
+  document.querySelectorAll('.dr-pill').forEach(function(b){b.classList.remove('active');});
+  if(btn) btn.classList.add('active');
+  // Update status label
+  var label = {last_7d:'Last 7 days',last_30d:'Last 30 days',this_month:'This month',last_month:'Last month',last_90d:'Last 90 days',lifetime:'All time',custom:'Custom range'}[preset]||preset;
+  document.querySelectorAll('#dr-status').forEach(function(el){el.textContent=label;});
+  // Re-render insight if on insights page
+  var active = document.querySelector('.sidebar-item.active');
+  if(active && document.getElementById('page-insights').classList.contains('active')){
+    var currentInsight = active.getAttribute('onclick').match(/'([^']+)'/)[1];
+    showInsight(currentInsight, active);
+  }
+  // Refresh library stats
+  renderConceptStats();
+}
+
+function getDateFilter(){
+  var now = new Date();
+  var from, to;
+  if(currentDateRange === 'last_7d'){
+    from = new Date(now); from.setDate(from.getDate()-7);
+    to = now;
+  } else if(currentDateRange === 'last_30d'){
+    from = new Date(now); from.setDate(from.getDate()-30);
+    to = now;
+  } else if(currentDateRange === 'this_month'){
+    from = new Date(now.getFullYear(), now.getMonth(), 1);
+    to = now;
+  } else if(currentDateRange === 'last_month'){
+    from = new Date(now.getFullYear(), now.getMonth()-1, 1);
+    to = new Date(now.getFullYear(), now.getMonth(), 0);
+  } else if(currentDateRange === 'last_90d'){
+    from = new Date(now); from.setDate(from.getDate()-90);
+    to = now;
+  } else if(currentDateRange === 'custom'){
+    var f = document.getElementById('dr-from'); var t = document.getElementById('dr-to');
+    from = f&&f.value ? new Date(f.value) : null;
+    to = t&&t.value ? new Date(t.value) : null;
+  } else { // lifetime
+    return null;
+  }
+  return {from:from, to:to};
+}
+
+// Get perf data for a creative, filtered by date range
+// (If synced via Meta API we use stored data; date filter is applied at sync time)
+function getCreativePerf(cr){
+  if(!cr.adname) return null;
+  return state.performance[cr.adname]||null;
+}
+
+function getAllCreativesWithPerf(){
+  var results = [];
+  var aov = parseFloat(state.aov)||32;
+  VIDS.forEach(function(vid){
+    (state.creatives[vid]||[]).forEach(function(cr){
+      var perf = getCreativePerf(cr);
+      var spend = perf ? parseFloat(perf.spend)||0 : 0;
+      var purch = perf ? parseInt(perf.purchases)||0 : 0;
+      var impr  = perf ? parseInt(perf.impressions)||0 : 0;
+      var clicks= perf ? parseInt(perf.clicks)||0 : 0;
+      var ctr   = perf ? parseFloat(perf.ctr)||0 : 0;
+      var cpc   = perf ? parseFloat(perf.cpc)||0 : 0;
+      var roas  = spend>0 ? (purch*aov)/spend : null;
+      results.push({cr:cr, vid:vid, perf:perf, spend:spend, purch:purch, impr:impr, clicks:clicks, ctr:ctr, cpc:cpc, roas:roas, aov:aov});
+    });
+  });
+  return results;
+}
+
+// ─── INSIGHTS ───
+function showInsight(type, btn){
+  document.querySelectorAll('.sidebar-item').forEach(function(b){b.classList.remove('active');});
+  if(btn) btn.classList.add('active');
+  var panel = document.getElementById('insight-panel');
+  if(!panel) return;
+
+  var all = getAllCreativesWithPerf();
+  var withPerf = all.filter(function(x){return x.perf && x.spend>0;});
+
+  if(type === 'top-creatives') renderInsightTopCreatives(panel, withPerf, all);
+  else if(type === 'by-funnel') renderInsightByGroup(panel, withPerf, all, 'funnel', 'Performance by Funnel Stage', '🎯', {tofu:'Top of Funnel',mofu:'Middle of Funnel',bofu:'Bottom of Funnel',retargeting:'Retargeting'});
+  else if(type === 'by-format') renderInsightByGroup(panel, withPerf, all, 'format', 'Performance by Format', '📐', null);
+  else if(type === 'roas-ranking') renderInsightRoasRanking(panel, withPerf, all);
+  else if(type === 'by-hook') renderInsightByGroup(panel, withPerf, all, 'hook', 'Best Performing Hooks', '🪝', null);
+  else if(type === 'by-book') renderInsightByArrayField(panel, withPerf, all, 'books', 'Best Performing Books', '📚');
+  else if(type === 'by-kid') renderInsightByKid(panel, withPerf, all);
+  else if(type === 'by-language') renderInsightByGroup(panel, withPerf, all, 'language', 'Performance by Language', '🌍', null);
+  else if(type === 'by-concept') renderInsightByConcept(panel, withPerf, all);
+  else if(type === 'by-prodtype') renderInsightByGroup(panel, withPerf, all, 'prodtype', 'AI vs UGC vs Professional', '🎬', {ai_generated:'AI Generated',professional:'Professional',ugc:'UGC',mixed:'Mixed'});
+  else if(type === 'spend-distribution') renderInsightSpendDistribution(panel, withPerf, all);
+  else if(type === 'winners-losers') renderInsightWinnersLosers(panel, withPerf, all);
+}
+
+function rankItemHtml(i, cr, vid, stats){
+  var numCls = i===0?'gold':i===1?'silver':i===2?'bronze':'';
+  var roasInfo = getRoasInfo(stats.roas);
+  var roasColor = roasInfo.cls==='roas-excellent'?'#6B3FA0':roasInfo.cls==='roas-good'?'#16a34a':roasInfo.cls==='roas-mid'?'#d97706':roasInfo.cls==='roas-low'?'#dc2626':'#a0a0a0';
+  var thumb = cr.img ? '<img class="rank-thumb" src="'+cr.img+'" />' : '<div class="rank-thumb-placeholder">'+(cr.video?'🎬':'🖼️')+'</div>';
+  return '<div class="insight-rank-item">'+
+    '<div class="rank-num '+numCls+'">'+(i+1)+'</div>'+
+    thumb+
+    '<div class="rank-info">'+
+      '<div class="rank-name" title="'+cr.name+'">'+cr.name+'</div>'+
+      '<div class="rank-sub">'+vid+' · '+(cr.format||'—')+' · '+(cr.funnel||'—')+'</div>'+
+      '<div class="rank-stats">'+
+        '<div class="rank-stat"><div class="rank-stat-key">Spend</div><div class="rank-stat-val">€'+stats.spend.toFixed(0)+'</div></div>'+
+        '<div class="rank-stat"><div class="rank-stat-key">CTR</div><div class="rank-stat-val '+(stats.ctr>2?'green':stats.ctr>1?'amber':'red')+'">'+stats.ctr.toFixed(2)+'%</div></div>'+
+        '<div class="rank-stat"><div class="rank-stat-key">Purchases</div><div class="rank-stat-val">'+stats.purch+'</div></div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="rank-roas-badge '+roasInfo.cls+'" style="background:'+roasColor+';">'+
+      '<span style="font-family:Syne,sans-serif;font-size:16px;font-weight:700;color:#fff;line-height:1;">'+(stats.roas!==null?stats.roas.toFixed(1):'—')+'</span>'+
+      '<span style="font-size:8px;color:rgba(255,255,255,0.75);font-weight:600;letter-spacing:0.04em;">ROAS</span>'+
+    '</div>'+
+  '</div>';
+}
+
+function noDataHtml(msg){
+  return '<div class="insight-empty"><div class="insight-empty-icon">📭</div><div style="font-size:14px;font-weight:500;margin-bottom:6px;">'+msg+'</div><div style="font-size:12px;color:var(--text-faint);">Connect Meta API or upload a CSV to see performance data here.</div></div>';
+}
+
+function renderInsightTopCreatives(panel, withPerf, all){
+  var sorted = withPerf.slice().sort(function(a,b){return (b.roas||0)-(a.roas||0);});
+  var html = '<div class="insight-header"><div class="insight-title">🏆 Best Performing Creatives</div><div class="insight-desc">Ranked by ROAS (Return on Ad Spend). AOV set to €'+(parseFloat(state.aov)||32)+'.</div></div>';
+  if(!sorted.length){ panel.innerHTML = html + noDataHtml('No performance data yet'); return; }
+  html += '<div style="margin-bottom:1rem;font-size:12px;color:var(--text-faint);">'+sorted.length+' creatives with data · '+all.length+' total creatives</div>';
+  html += '<div class="insight-rank-list">';
+  sorted.slice(0,20).forEach(function(x,i){ html += rankItemHtml(i, x.cr, x.vid, x); });
+  html += '</div>';
+  panel.innerHTML = html;
+}
+
+function renderInsightRoasRanking(panel, withPerf, all){
+  var tiers = {excellent:[],good:[],mid:[],low:[]};
+  withPerf.forEach(function(x){
+    var t = getRoasInfo(x.roas).tier;
+    if(tiers[t]) tiers[t].push(x);
+  });
+  var html = '<div class="insight-header"><div class="insight-title">💰 ROAS Ranking</div><div class="insight-desc">All creatives grouped by performance tier.</div></div>';
+  if(!withPerf.length){ panel.innerHTML = html + noDataHtml('No performance data yet'); return; }
+  var tDefs = [
+    {key:'excellent',label:'Excellent (3.5x+)',color:'#6B3FA0',bg:'#f0ebf8'},
+    {key:'good',label:'Good (2.5–3.5x)',color:'#16a34a',bg:'#dcfce7'},
+    {key:'mid',label:'Below Target (1.5–2.5x)',color:'#d97706',bg:'#fef3c7'},
+    {key:'low',label:'Poor (<1.5x)',color:'#dc2626',bg:'#fee2e2'}
+  ];
+  tDefs.forEach(function(td){
+    var items = tiers[td.key].sort(function(a,b){return (b.roas||0)-(a.roas||0);});
+    if(!items.length) return;
+    html += '<div style="margin-bottom:1.5rem;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><div style="width:10px;height:10px;border-radius:50%;background:'+td.color+';"></div><span style="font-family:Syne,sans-serif;font-size:13px;font-weight:600;color:'+td.color+';">'+td.label+'</span><span style="font-size:11px;color:var(--text-faint);">'+items.length+' creative'+(items.length!==1?'s':'')+'</span></div>';
+    html += '<div class="insight-rank-list">';
+    items.forEach(function(x,i){ html += rankItemHtml(i, x.cr, x.vid, x); });
+    html += '</div></div>';
+  });
+  panel.innerHTML = html;
+}
+
+function renderInsightByGroup(panel, withPerf, all, field, title, icon, labelMap){
+  var groups = {};
+  withPerf.forEach(function(x){
+    var key = x.cr[field]||'(none)';
+    if(!groups[key]) groups[key] = {key:key,items:[],spend:0,purch:0,impr:0,clicks:0};
+    groups[key].items.push(x);
+    groups[key].spend += x.spend;
+    groups[key].purch += x.purch;
+    groups[key].impr  += x.impr;
+    groups[key].clicks+= x.clicks;
+  });
+  var aov = parseFloat(state.aov)||32;
+  var sorted = Object.values(groups).sort(function(a,b){
+    var ra = a.spend>0?(a.purch*aov)/a.spend:0;
+    var rb = b.spend>0?(b.purch*aov)/b.spend:0;
+    return rb-ra;
+  });
+  var html = '<div class="insight-header"><div class="insight-title">'+icon+' '+title+'</div><div class="insight-desc">Aggregated performance across all creatives, grouped by '+field+'.</div></div>';
+  if(!sorted.length){ panel.innerHTML = html + noDataHtml('No data for this breakdown'); return; }
+  sorted.forEach(function(g){
+    var roas = g.spend>0?(g.purch*aov)/g.spend:null;
+    var ctr  = g.impr>0?(g.clicks/g.impr*100):0;
+    var roasInfo = getRoasInfo(roas);
+    var roasColor = roasInfo.cls==='roas-excellent'?'#6B3FA0':roasInfo.cls==='roas-good'?'#16a34a':roasInfo.cls==='roas-mid'?'#d97706':'#dc2626';
+    var label = (labelMap&&labelMap[g.key]) ? labelMap[g.key] : g.key;
+    html += '<div class="insight-group-card">'+
+      '<div class="insight-group-title"><span>'+icon+'</span>'+label+'<span style="font-size:11px;color:var(--text-faint);font-weight:400;margin-left:4px;">'+g.items.length+' creative'+(g.items.length!==1?'s':'')+'</span>'+
+        '<div style="margin-left:auto;min-width:44px;height:44px;border-radius:50%;background:'+roasColor+';display:flex;flex-direction:column;align-items:center;justify-content:center;">'+
+          '<span style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1;">'+(roas!==null?roas.toFixed(1):'—')+'</span>'+
+          '<span style="font-size:8px;color:rgba(255,255,255,0.75);font-weight:600;">ROAS</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="insight-kpi-row">'+
+        '<div class="insight-kpi"><div class="insight-kpi-val">€'+g.spend.toFixed(0)+'</div><div class="insight-kpi-key">Spend</div></div>'+
+        '<div class="insight-kpi"><div class="insight-kpi-val">'+ctr.toFixed(2)+'%</div><div class="insight-kpi-key">CTR</div></div>'+
+        '<div class="insight-kpi"><div class="insight-kpi-val">'+g.purch+'</div><div class="insight-kpi-key">Purchases</div></div>'+
+        '<div class="insight-kpi"><div class="insight-kpi-val">'+(g.purch>0?'€'+(g.spend/g.purch).toFixed(2):'—')+'</div><div class="insight-kpi-key">Cost/purchase</div></div>'+
+      '</div>'+
+      '<div style="font-size:11px;color:var(--text-faint);margin-bottom:6px;">Top creative in this group:</div>'+
+      (function(){
+        var top = g.items.sort(function(a,b){return (b.roas||0)-(a.roas||0);})[0];
+        return rankItemHtml(0, top.cr, top.vid, top);
+      })()+
+    '</div>';
+  });
+  panel.innerHTML = html;
+}
+
+function renderInsightByArrayField(panel, withPerf, all, field, title, icon){
+  var groups = {};
+  withPerf.forEach(function(x){
+    var vals = x.cr[field]||[];
+    if(!vals.length) vals = ['(none)'];
+    vals.forEach(function(v){
+      if(!groups[v]) groups[v]={key:v,items:[],spend:0,purch:0,impr:0,clicks:0};
+      groups[v].items.push(x);
+      groups[v].spend+=x.spend; groups[v].purch+=x.purch;
+      groups[v].impr+=x.impr;  groups[v].clicks+=x.clicks;
+    });
+  });
+  renderInsightByGroup(panel, withPerf, all, field, title, icon, null);
+  // Override with multi-value grouping
+  var aov = parseFloat(state.aov)||32;
+  var sorted = Object.values(groups).filter(function(g){return g.key!=='(none)';}).sort(function(a,b){
+    var ra=a.spend>0?(a.purch*aov)/a.spend:0, rb=b.spend>0?(b.purch*aov)/b.spend:0; return rb-ra;
+  });
+  var html = '<div class="insight-header"><div class="insight-title">'+icon+' '+title+'</div><div class="insight-desc">Creatives grouped by which books appear. A creative can count in multiple groups.</div></div>';
+  if(!sorted.length){ panel.innerHTML = html + noDataHtml('No book data — tag books on your creatives via Edit'); return; }
+  sorted.forEach(function(g){
+    var roas=g.spend>0?(g.purch*aov)/g.spend:null, ctr=g.impr>0?(g.clicks/g.impr*100):0;
+    var roasInfo=getRoasInfo(roas);
+    var rc=roasInfo.cls==='roas-excellent'?'#6B3FA0':roasInfo.cls==='roas-good'?'#16a34a':roasInfo.cls==='roas-mid'?'#d97706':'#dc2626';
+    html+='<div class="insight-group-card"><div class="insight-group-title"><span>'+icon+'</span>'+g.key+'<span style="font-size:11px;color:var(--text-faint);font-weight:400;margin-left:4px;">'+g.items.length+' creatives</span><div style="margin-left:auto;min-width:44px;height:44px;border-radius:50%;background:'+rc+';display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1;">'+(roas!==null?roas.toFixed(1):'—')+'</span><span style="font-size:8px;color:rgba(255,255,255,0.75);font-weight:600;">ROAS</span></div></div>'+
+    '<div class="insight-kpi-row"><div class="insight-kpi"><div class="insight-kpi-val">€'+g.spend.toFixed(0)+'</div><div class="insight-kpi-key">Spend</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+ctr.toFixed(2)+'%</div><div class="insight-kpi-key">CTR</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+g.purch+'</div><div class="insight-kpi-key">Purchases</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+(g.purch>0?'€'+(g.spend/g.purch).toFixed(2):'—')+'</div><div class="insight-kpi-key">Cost/purchase</div></div></div></div>';
+  });
+  panel.innerHTML = html;
+}
+
+function renderInsightByKid(panel, withPerf, all){
+  var groups = {};
+  withPerf.forEach(function(x){
+    var kidIds = x.cr.kids||[];
+    if(!kidIds.length) return;
+    kidIds.forEach(function(kid_id){
+      var kid = state.kids.find(function(k){return k.id===kid_id;})||{name:kid_id,desc:''};
+      var key = kid.name;
+      if(!groups[key]) groups[key]={key:key,desc:kid.desc,items:[],spend:0,purch:0,impr:0,clicks:0};
+      groups[key].items.push(x);
+      groups[key].spend+=x.spend; groups[key].purch+=x.purch;
+      groups[key].impr+=x.impr;  groups[key].clicks+=x.clicks;
+    });
+  });
+  var aov=parseFloat(state.aov)||32;
+  var sorted=Object.values(groups).sort(function(a,b){var ra=a.spend>0?(a.purch*aov)/a.spend:0,rb=b.spend>0?(b.purch*aov)/b.spend:0;return rb-ra;});
+  var html='<div class="insight-header"><div class="insight-title">👧 Best Performing Kids</div><div class="insight-desc">Which kid profiles drive the most conversions.</div></div>';
+  if(!sorted.length){panel.innerHTML=html+noDataHtml('No kid profile data — tag kids on your creatives via Edit');return;}
+  sorted.forEach(function(g){
+    var roas=g.spend>0?(g.purch*aov)/g.spend:null,ctr=g.impr>0?(g.clicks/g.impr*100):0;
+    var rc=getRoasInfo(roas).cls==='roas-excellent'?'#6B3FA0':getRoasInfo(roas).cls==='roas-good'?'#16a34a':getRoasInfo(roas).cls==='roas-mid'?'#d97706':'#dc2626';
+    html+='<div class="insight-group-card"><div class="insight-group-title">👧 '+g.key+'<span style="font-size:11px;color:var(--text-faint);font-weight:400;margin-left:6px;">'+g.desc+'</span><div style="margin-left:auto;min-width:44px;height:44px;border-radius:50%;background:'+rc+';display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1;">'+(roas!==null?roas.toFixed(1):'—')+'</span><span style="font-size:8px;color:rgba(255,255,255,0.75);">ROAS</span></div></div>'+
+    '<div class="insight-kpi-row"><div class="insight-kpi"><div class="insight-kpi-val">€'+g.spend.toFixed(0)+'</div><div class="insight-kpi-key">Spend</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+ctr.toFixed(2)+'%</div><div class="insight-kpi-key">CTR</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+g.purch+'</div><div class="insight-kpi-key">Purchases</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+g.items.length+'</div><div class="insight-kpi-key">Creatives</div></div></div></div>';
+  });
+  panel.innerHTML=html;
+}
+
+function renderInsightByConcept(panel, withPerf, all){
+  var groups={A:{items:[],spend:0,purch:0,impr:0,clicks:0,label:'Concept A — Real kid + book'},B:{items:[],spend:0,purch:0,impr:0,clicks:0,label:'Concept B — Flat lay'},C:{items:[],spend:0,purch:0,impr:0,clicks:0,label:'Concept C — Parent perspective'}};
+  withPerf.forEach(function(x){var c=x.vid.charAt(0);if(groups[c]){groups[c].items.push(x);groups[c].spend+=x.spend;groups[c].purch+=x.purch;groups[c].impr+=x.impr;groups[c].clicks+=x.clicks;}});
+  renderInsightByGroup(panel, withPerf, all, '_concept_', 'Performance by Concept', '💡', null);
+  var aov=parseFloat(state.aov)||32;
+  var html='<div class="insight-header"><div class="insight-title">💡 Performance by Concept</div><div class="insight-desc">How each creative concept compares on key metrics.</div></div>';
+  var sorted=Object.keys(groups).map(function(k){return Object.assign({key:k},groups[k]);}).filter(function(g){return g.items.length>0;}).sort(function(a,b){var ra=a.spend>0?(a.purch*aov)/a.spend:0,rb=b.spend>0?(b.purch*aov)/b.spend:0;return rb-ra;});
+  if(!sorted.length){panel.innerHTML=html+noDataHtml('No performance data yet');return;}
+  sorted.forEach(function(g){
+    var roas=g.spend>0?(g.purch*aov)/g.spend:null,ctr=g.impr>0?(g.clicks/g.impr*100):0;
+    var rc=getRoasInfo(roas).cls==='roas-excellent'?'#6B3FA0':getRoasInfo(roas).cls==='roas-good'?'#16a34a':getRoasInfo(roas).cls==='roas-mid'?'#d97706':'#dc2626';
+    var top=g.items.sort(function(a,b){return (b.roas||0)-(a.roas||0);})[0];
+    html+='<div class="insight-group-card"><div class="insight-group-title"><span class="concept-badge">'+g.key+'</span>'+g.label+'<span style="font-size:11px;color:var(--text-faint);font-weight:400;margin-left:6px;">'+g.items.length+' creatives</span><div style="margin-left:auto;min-width:44px;height:44px;border-radius:50%;background:'+rc+';display:flex;flex-direction:column;align-items:center;justify-content:center;"><span style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1;">'+(roas!==null?roas.toFixed(1):'—')+'</span><span style="font-size:8px;color:rgba(255,255,255,0.75);">ROAS</span></div></div>'+
+    '<div class="insight-kpi-row"><div class="insight-kpi"><div class="insight-kpi-val">€'+g.spend.toFixed(0)+'</div><div class="insight-kpi-key">Spend</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+ctr.toFixed(2)+'%</div><div class="insight-kpi-key">CTR</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+g.purch+'</div><div class="insight-kpi-key">Purchases</div></div><div class="insight-kpi"><div class="insight-kpi-val">'+(g.purch>0?'€'+(g.spend/g.purch).toFixed(2):'—')+'</div><div class="insight-kpi-key">Cost/purchase</div></div></div>'+
+    (top?'<div style="font-size:11px;color:var(--text-faint);margin-bottom:6px;">Best creative:</div>'+rankItemHtml(0,top.cr,top.vid,top):'')+
+    '</div>';
+  });
+  panel.innerHTML=html;
+}
+
+function renderInsightSpendDistribution(panel, withPerf, all){
+  var html='<div class="insight-header"><div class="insight-title">📊 Spend Distribution</div><div class="insight-desc">Where your budget is actually going across all creatives.</div></div>';
+  if(!withPerf.length){panel.innerHTML=html+noDataHtml('No spend data yet');return;}
+  var total=withPerf.reduce(function(s,x){return s+x.spend;},0);
+  var sorted=withPerf.slice().sort(function(a,b){return b.spend-a.spend;});
+  html+='<div style="margin-bottom:1rem;font-size:13px;color:var(--text-muted);">Total spend: <strong style="color:var(--text);">€'+total.toFixed(0)+'</strong> across '+withPerf.length+' creatives</div>';
+  html+='<div class="insight-rank-list">';
+  sorted.slice(0,20).forEach(function(x,i){
+    var pct=total>0?(x.spend/total*100):0;
+    var extra='<div style="flex:1;"><div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:11px;color:var(--text-faint);">'+pct.toFixed(1)+'% of budget</span></div><div style="height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;"><div style="height:100%;width:'+pct.toFixed(1)+'%;background:var(--purple);border-radius:3px;"></div></div></div>';
+    html+=rankItemHtml(i,x.cr,x.vid,x);
+  });
+  html+='</div>';
+  panel.innerHTML=html;
+}
+
+function renderInsightWinnersLosers(panel, withPerf, all){
+  var html='<div class="insight-header"><div class="insight-title">⚡ Winners vs Losers</div><div class="insight-desc">Creatives with significant spend — sorted by ROAS to reveal what to scale and what to kill.</div></div>';
+  var meaningful=withPerf.filter(function(x){return x.spend>10;});
+  if(!meaningful.length){panel.innerHTML=html+noDataHtml('Need at least €10 spend per creative for this analysis');return;}
+  var sorted=meaningful.slice().sort(function(a,b){return (b.roas||0)-(a.roas||0);});
+  var winners=sorted.filter(function(x){return (x.roas||0)>=2.5;});
+  var losers=sorted.filter(function(x){return (x.roas||0)<1.5;}).reverse();
+  var middle=sorted.filter(function(x){return (x.roas||0)>=1.5&&(x.roas||0)<2.5;});
+  function section(items,title,color,advice){
+    if(!items.length)return'';
+    var h='<div style="margin-bottom:1.5rem;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px 12px;border-radius:var(--r-sm);background:'+color+'20;"><span style="font-size:14px;font-weight:700;color:'+color+';">'+title+'</span><span style="font-size:11px;color:'+color+';">'+advice+'</span></div><div class="insight-rank-list">';
+    items.slice(0,10).forEach(function(x,i){h+=rankItemHtml(i,x.cr,x.vid,x);});
+    return h+'</div></div>';
+  }
+  html+=section(winners,'🟢 Scale these','#16a34a','→ Increase budget, duplicate, expand audiences');
+  html+=section(middle,'🟡 Optimize these','#d97706','→ Test new hooks, refine targeting');
+  html+=section(losers,'🔴 Kill these','#dc2626','→ Pause immediately, rework or retire');
+  panel.innerHTML=html;
 }
 
 // ─── TOAST ───
