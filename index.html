@@ -2072,24 +2072,25 @@ function makeCard(cr,vid){
   if(perf){
     var spend=parseFloat(perf.spend)||0;
     var purch=parseInt(perf.purchases)||0;
-    var ctrC=parseFloat(perf.ctr)>2?'good':parseFloat(perf.ctr)>1?'warn':'bad';
-    var cpcC=parseFloat(perf.cpc)<0.3?'good':parseFloat(perf.cpc)<0.5?'warn':'bad';
-    // ROAS: real pixel revenue only — no fixed multiplier
+    var cpo = purch>0 ? spend/purch : null;
     var roas=calcRoas(perf);
-    var roasInfo=getRoasInfo(roas);
+    // Fallback to CSV ROAS if no pixel revenue
+    var displayRoas = roas!==null ? roas : (cr.roasFromCSV&&cr.roasFromCSV>0 ? cr.roasFromCSV : null);
+    var roasInfo=getRoasInfo(displayRoas);
+    var roasColor=roasInfo.cls==='roas-excellent'?'var(--purple)':roasInfo.cls==='roas-good'?'var(--green)':roasInfo.cls==='roas-mid'?'var(--amber)':roasInfo.cls==='roas-low'?'var(--red)':'var(--text-faint)';
     perfHtml='<div class="creative-perf">'+
-      '<div class="perf-item"><div class="perf-key">CTR</div><div class="perf-val '+ctrC+'">'+parseFloat(perf.ctr).toFixed(2)+'%</div></div>'+
-      '<div class="perf-item"><div class="perf-key">CPC</div><div class="perf-val '+cpcC+'">€'+parseFloat(perf.cpc).toFixed(2)+'</div></div>'+
-      '<div class="perf-item"><div class="perf-key">Spend</div><div class="perf-val">€'+spend.toFixed(0)+'</div></div>'+
-      '<div class="perf-item"><div class="perf-key">Purch.</div><div class="perf-val">'+purch+'</div></div>'+
+      '<div class="perf-item"><div class="perf-key">Spent</div><div class="perf-val">€'+spend.toFixed(0)+'</div></div>'+
+      '<div class="perf-item"><div class="perf-key">Purchases</div><div class="perf-val">'+purch+'</div></div>'+
+      '<div class="perf-item"><div class="perf-key">Cost/purch.</div><div class="perf-val">'+(cpo?'€'+cpo.toFixed(2):'—')+'</div></div>'+
+      '<div class="perf-item"><div class="perf-key">ROAS</div><div class="perf-val" style="color:'+roasColor+';font-weight:700;">'+(displayRoas!==null?displayRoas.toFixed(2)+'x':'—')+'</div></div>'+
     '</div>';
     // Inject ROAS badge into media wrap
-    var roasBadge='<div class="roas-score '+roasInfo.cls+'" title="ROAS: '+(roas!==null?roas.toFixed(2):'N/A')+'">'+
-      (roas!==null?roas.toFixed(1):'?')+
+    var roasBadge='<div class="roas-score '+roasInfo.cls+'" title="ROAS: '+(displayRoas!==null?displayRoas.toFixed(2):'N/A')+'">'+
+      (displayRoas!==null?displayRoas.toFixed(1):'—')+
       '<span class="roas-label">ROAS</span>'+
     '</div>';
     mediaHtml=mediaHtml.replace('</div>',roasBadge+'</div>');
-  } else if(cr.adname){perfHtml='<div class="no-data">No data — upload Meta CSV</div>';}
+  } else if(cr.adname){perfHtml='<div class="no-data">No data yet</div>';}
 
   div.innerHTML=mediaHtml+
     '<div class="creative-body">'+
@@ -3944,30 +3945,30 @@ function calcHealthScore(cr){
   var perf = cr.adname ? state.performance[cr.adname] : null;
   var scores = [];
 
-  // ROAS component (40% weight)
-  if(perf && parseFloat(perf.spend)>0){
-    var revenue = perf.revenue&&perf.revenue>0 ? perf.revenue : (parseInt(perf.purchases)||0)*aov;
-    var roas = revenue / parseFloat(perf.spend);
-    var roasScore = roas>=3.5?10 : roas>=2.5?8 : roas>=1.5?5 : roas>=0.5?3 : 1;
-    scores.push({s:roasScore, w:0.4});
+  // ROAS component (50% weight) — only if we have real revenue or roasFromCSV
+  var roas = calcRoas(perf);
+  if(roas===null && cr.roasFromCSV && cr.roasFromCSV>0) roas = cr.roasFromCSV;
+  if(roas!==null){
+    var roasScore = roas>=3.5?10 : roas>=2.5?8 : roas>=1.5?5 : roas>=0.8?3 : 1;
+    scores.push({s:roasScore, w:0.5});
   }
 
-  // CTR component (20% weight)
-  if(perf && parseFloat(perf.ctr)>0){
+  // CTR component (20% weight) — only if CTR is actually meaningful (>0 and spend>0)
+  if(perf && parseFloat(perf.ctr)>0.01 && parseFloat(perf.spend)>5){
     var ctr = parseFloat(perf.ctr);
-    var ctrScore = ctr>=4?10 : ctr>=2?8 : ctr>=1?6 : ctr>=0.5?4 : 2;
+    var ctrScore = ctr>=3?10 : ctr>=2?8 : ctr>=1?6 : ctr>=0.5?4 : 2;
     scores.push({s:ctrScore, w:0.2});
   }
 
-  // Quality score from AI (20% weight)
-  if(cr.qualityScore){ scores.push({s:cr.qualityScore, w:0.2}); }
+  // Quality score from AI (15% weight)
+  if(cr.qualityScore && cr.qualityScore>0){ scores.push({s:cr.qualityScore, w:0.15}); }
 
-  // Emotional score from AI (20% weight)
-  if(cr.emotionalScore){ scores.push({s:cr.emotionalScore, w:0.2}); }
+  // Emotional score from AI (15% weight)
+  if(cr.emotionalScore && cr.emotionalScore>0){ scores.push({s:cr.emotionalScore, w:0.15}); }
 
-  if(!scores.length) return null;
+  // Need at least ROAS to produce a meaningful score
+  if(!scores.length || !scores.find(function(s){return s.w>=0.4;})) return null;
 
-  // Normalize weights and calculate
   var totalWeight = scores.reduce(function(s,x){return s+x.w;},0);
   var weighted = scores.reduce(function(s,x){return s+(x.s*x.w);},0);
   return Math.round((weighted/totalWeight)*10)/10;
