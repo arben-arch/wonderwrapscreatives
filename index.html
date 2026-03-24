@@ -222,6 +222,15 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
 .perf-val.good{color:var(--green-dark);}.perf-val.warn{color:var(--amber-dark);}.perf-val.bad{color:var(--red-dark);}
 .no-data{font-size:10px;color:var(--text-faint);padding:0.5rem 0.75rem;}
 
+/* ROAS Score badge */
+.roas-score{position:absolute;bottom:8px;right:8px;min-width:44px;height:44px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,0.18);cursor:default;z-index:2;}
+.roas-score .roas-label{font-size:7px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;opacity:0.75;margin-top:1px;}
+.roas-excellent{background:#6B3FA0;color:#fff;}
+.roas-good{background:#16a34a;color:#fff;}
+.roas-mid{background:#d97706;color:#fff;}
+.roas-low{background:#dc2626;color:#fff;}
+.roas-none{background:rgba(0,0,0,0.35);color:rgba(255,255,255,0.6);}
+
 /* ADD ZONE */
 .add-creative-zone{height:100%;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:transparent;border:2px dashed var(--border-strong);border-radius:var(--r-md);cursor:pointer;color:var(--text-faint);font-size:12px;font-weight:500;transition:all 0.2s;padding:1rem;}
 .add-creative-zone:hover,.add-creative-zone.dragover{border-color:var(--purple);color:var(--purple);background:var(--purple-light);}
@@ -564,6 +573,14 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
         <option value="hebrew">Hebrew</option>
       </select>
       <select class="filter-select" id="filter-product" onchange="applyFilters()"><option value="">All products</option></select>
+      <select class="filter-select" id="filter-roas" onchange="applyFilters()">
+        <option value="">All performance</option>
+        <option value="excellent">💜 Excellent (ROAS 3.5+)</option>
+        <option value="good">🟢 Good (ROAS 2.5–3.5)</option>
+        <option value="mid">🟡 Below target (ROAS 1.5–2.5)</option>
+        <option value="low">🔴 Poor (ROAS &lt;1.5)</option>
+        <option value="no-data">No data yet</option>
+      </select>
       <button class="filter-clear-btn" id="filter-clear-btn" onclick="clearFilters()" style="display:none">&#10005; Clear filters</button>
     </div>
     <div style="display:flex;gap:8px;align-items:center;">
@@ -707,6 +724,19 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2r
         <tr><td>Description</td><td>CamelCase</td><td><span class="code">BlondeGirlBedtime</span></td><td>No spaces</td></tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-title">Average Order Value (AOV)</div>
+    <div class="settings-desc">Used to calculate ROAS on each creative. ROAS = (Purchases × AOV) ÷ Spend. Set this to your actual average order value in euros.</div>
+    <div style="display:flex;align-items:center;gap:10px;max-width:280px;">
+      <span style="font-size:13px;color:var(--text-muted);">€</span>
+      <input type="number" id="aov-input" class="settings-add-input" placeholder="e.g. 32" min="1" max="9999" step="0.01" style="flex:1;" oninput="saveAOV()" />
+      <span style="font-size:12px;color:var(--text-faint);">per order</span>
+    </div>
+    <div style="margin-top:8px;font-size:11px;color:var(--text-faint);">
+      ROAS thresholds: <span style="color:#6B3FA0;font-weight:600;">3.5+ Excellent</span> · <span style="color:#16a34a;font-weight:600;">2.5–3.5 Good</span> · <span style="color:#d97706;font-weight:600;">1.5–2.5 Below target</span> · <span style="color:#dc2626;font-weight:600;">&lt;1.5 Poor</span>
+    </div>
   </div>
 
   <div class="settings-section">
@@ -1063,8 +1093,23 @@ function populateUserFilter(){
 function expandAll(){document.querySelectorAll('.variation-card').forEach(function(c){c.classList.add('expanded');});}
 function collapseAll(){document.querySelectorAll('.variation-card').forEach(function(c){c.classList.remove('expanded');});}
 
-
-// ─── VIEW TOGGLE ───
+// ─── ROAS & AOV ───
+function getRoasInfo(roas){
+  if(roas===null||roas===undefined)return{cls:'roas-none',tier:'no-data'};
+  if(roas>=3.5)return{cls:'roas-excellent',tier:'excellent'};
+  if(roas>=2.5)return{cls:'roas-good',tier:'good'};
+  if(roas>=1.5)return{cls:'roas-mid',tier:'mid'};
+  return{cls:'roas-low',tier:'low'};
+}
+function saveAOV(){
+  var inp=document.getElementById('aov-input');if(!inp)return;
+  var v=parseFloat(inp.value);
+  if(!isNaN(v)&&v>0){state.aov=v;save();VIDS.forEach(function(vid){rerenderGrid(vid);});showToast('AOV updated to €'+v.toFixed(2));}
+}
+function loadAOV(){
+  var inp=document.getElementById('aov-input');
+  if(inp)inp.value=state.aov||32;
+}
 var currentView = 'grid';
 function setView(view, btn){
   currentView = view;
@@ -1106,6 +1151,7 @@ function renderFlatGallery(){
   var bookF    = document.getElementById('filter-book')     ? document.getElementById('filter-book').value     : '';
   var langF    = document.getElementById('filter-language') ? document.getElementById('filter-language').value : '';
   var productF = document.getElementById('filter-product')  ? document.getElementById('filter-product').value  : '';
+  var roasF    = document.getElementById('filter-roas')     ? document.getElementById('filter-roas').value     : '';
 
   // Get concept sections to determine concept titles
   var conceptSections = {};
@@ -1126,13 +1172,19 @@ function renderFlatGallery(){
 
     var list = state.creatives[vid] || [];
     var filtered = list.filter(function(cr){
-      return (!funnelF  || cr.funnel === funnelF) &&
+      var basicMatch = (!funnelF  || cr.funnel === funnelF) &&
              (!formatF  || cr.format === formatF) &&
              (!userF    || cr.author === userF) &&
              (!langF    || cr.language === langF) &&
              (!kidF     || (cr.kids && cr.kids.indexOf(kidF) > -1)) &&
              (!bookF    || (cr.books && cr.books.indexOf(bookF) > -1)) &&
              (!productF || (cr.products && cr.products.indexOf(productF) > -1));
+      if(!basicMatch) return false;
+      if(!roasF) return true;
+      var rp=cr.adname?state.performance[cr.adname]:null;
+      var aov=parseFloat(state.aov)||32;
+      var roas=rp&&parseFloat(rp.spend)>0?((parseInt(rp.purchases)||0)*aov)/parseFloat(rp.spend):null;
+      return getRoasInfo(roas).tier===roasF;
     });
 
     if(!filtered.length) return;
@@ -1183,7 +1235,7 @@ function showPage(id,btn){
   document.getElementById('page-'+id).classList.add('active');
   if(btn)btn.classList.add('active');
   if(id==='settings'){
-    renderTaxonomyLists();renderKidCards();renderTeamList();
+    renderTaxonomyLists();renderKidCards();renderTeamList();loadAOV();
     var ta=document.getElementById('review-prompt-editor');
     if(ta)ta.value=getReviewPrompt();
   }
@@ -1224,7 +1276,7 @@ function populateConceptFilter(){
 }
 
 function applyFilters(){
-  var ALL_FILTER_IDS=['filter-concept','filter-var-status','filter-funnel','filter-format','filter-user','filter-kid','filter-book','filter-language','filter-product'];
+  var ALL_FILTER_IDS=['filter-concept','filter-var-status','filter-funnel','filter-format','filter-user','filter-kid','filter-book','filter-language','filter-product','filter-roas'];
   var f={};
   ALL_FILTER_IDS.forEach(function(id){
     var el=document.getElementById(id);
@@ -1269,8 +1321,16 @@ function applyFilters(){
       var kidOk      =!f['filter-kid']     ||(cr.kids&&cr.kids.indexOf(f['filter-kid'])>-1);
       var bookOk     =!f['filter-book']    ||(cr.books&&cr.books.indexOf(f['filter-book'])>-1);
       var productOk  =!f['filter-product'] ||(cr.products&&cr.products.indexOf(f['filter-product'])>-1);
+      var roasOk=true;
+      if(f['filter-roas']){
+        var rp=cr.adname?state.performance[cr.adname]:null;
+        var aov=parseFloat(state.aov)||32;
+        var roas=rp&&parseFloat(rp.spend)>0?((parseInt(rp.purchases)||0)*aov)/parseFloat(rp.spend):null;
+        var tier=getRoasInfo(roas).tier;
+        roasOk=tier===f['filter-roas'];
+      }
 
-      if(funnelOk&&formatOk&&userOk&&langOk&&kidOk&&bookOk&&productOk){
+      if(funnelOk&&formatOk&&userOk&&langOk&&kidOk&&bookOk&&productOk&&roasOk){
         grid.appendChild(makeCard(cr,vid));
       }
     });
@@ -1282,7 +1342,7 @@ function applyFilters(){
 }
 
 function clearFilters(){
-  ['filter-concept','filter-var-status','filter-funnel','filter-format','filter-user','filter-kid','filter-book','filter-language','filter-product'].forEach(function(id){
+  ['filter-concept','filter-var-status','filter-funnel','filter-format','filter-user','filter-kid','filter-book','filter-language','filter-product','filter-roas'].forEach(function(id){
     var el=document.getElementById(id);if(el){el.value='';el.classList.remove('active');}
   });
   var cb=document.getElementById('filter-clear-btn');if(cb)cb.style.display='none';
@@ -1485,14 +1545,26 @@ function makeCard(cr,vid){
 
   var perfHtml='';
   if(perf){
+    var spend=parseFloat(perf.spend)||0;
+    var purch=parseInt(perf.purchases)||0;
     var ctrC=parseFloat(perf.ctr)>2?'good':parseFloat(perf.ctr)>1?'warn':'bad';
     var cpcC=parseFloat(perf.cpc)<0.3?'good':parseFloat(perf.cpc)<0.5?'warn':'bad';
+    // ROAS score
+    var aov=parseFloat(state.aov)||32;
+    var roas=spend>0?((purch*aov)/spend):null;
+    var roasInfo=getRoasInfo(roas);
     perfHtml='<div class="creative-perf">'+
       '<div class="perf-item"><div class="perf-key">CTR</div><div class="perf-val '+ctrC+'">'+parseFloat(perf.ctr).toFixed(2)+'%</div></div>'+
       '<div class="perf-item"><div class="perf-key">CPC</div><div class="perf-val '+cpcC+'">€'+parseFloat(perf.cpc).toFixed(2)+'</div></div>'+
-      '<div class="perf-item"><div class="perf-key">Spend</div><div class="perf-val">€'+parseFloat(perf.spend).toFixed(0)+'</div></div>'+
-      '<div class="perf-item"><div class="perf-key">Purch.</div><div class="perf-val">'+(perf.purchases||0)+'</div></div>'+
+      '<div class="perf-item"><div class="perf-key">Spend</div><div class="perf-val">€'+spend.toFixed(0)+'</div></div>'+
+      '<div class="perf-item"><div class="perf-key">Purch.</div><div class="perf-val">'+purch+'</div></div>'+
     '</div>';
+    // Inject ROAS badge into media wrap
+    var roasBadge='<div class="roas-score '+roasInfo.cls+'" title="ROAS: '+(roas!==null?roas.toFixed(2):'N/A')+'">'+
+      (roas!==null?roas.toFixed(1):'?')+
+      '<span class="roas-label">ROAS</span>'+
+    '</div>';
+    mediaHtml=mediaHtml.replace('</div>',roasBadge+'</div>');
   } else if(cr.adname){perfHtml='<div class="no-data">No data — upload Meta CSV</div>';}
 
   div.innerHTML=mediaHtml+
@@ -1699,7 +1771,26 @@ function openPerfModal(crid,vid){
     var purch=parseInt(perf.purchases)||0,impr=parseInt(perf.impressions)||0,clicks=parseInt(perf.clicks)||0;
     var cpo=purch>0?(spend/purch).toFixed(2):'—';
     var ctrC=ctr>2?'good':ctr>1?'warn':'bad';
-    html+='<div class="analytics-big-grid">'+
+    // ROAS
+    var aov=parseFloat(state.aov)||32;
+    var roas=spend>0?((purch*aov)/spend):null;
+    var roasInfo=getRoasInfo(roas);
+    var roasColor=roasInfo.cls==='roas-excellent'?'#6B3FA0':roasInfo.cls==='roas-good'?'#16a34a':roasInfo.cls==='roas-mid'?'#d97706':roasInfo.cls==='roas-low'?'#dc2626':'var(--text-faint)';
+    html+='<div style="display:flex;align-items:center;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:1.25rem;">'+
+      '<div style="width:56px;height:56px;border-radius:50%;background:'+roasColor+';display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;">'+
+        '<span style="font-family:Syne,sans-serif;font-size:18px;font-weight:700;color:#fff;line-height:1;">'+(roas!==null?roas.toFixed(1):'—')+'</span>'+
+        '<span style="font-size:8px;color:rgba(255,255,255,0.75);font-weight:600;letter-spacing:0.05em;">ROAS</span>'+
+      '</div>'+
+      '<div>'+
+        '<div style="font-family:Syne,sans-serif;font-size:14px;font-weight:600;color:'+roasColor+';">'+
+          (roasInfo.tier==='excellent'?'Excellent performance':roasInfo.tier==='good'?'Good performance':roasInfo.tier==='mid'?'Below target':roasInfo.tier==='low'?'Poor performance':'No data')+
+        '</div>'+
+        '<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">'+
+          (roas!==null?'Every €1 spent generates €'+roas.toFixed(2)+' in revenue (AOV €'+(aov.toFixed(0))+')':'Upload Meta CSV to calculate ROAS')+
+        '</div>'+
+      '</div>'+
+    '</div>';
+    html+='<div class="analytics-big-grid" style="grid-template-columns:repeat(3,1fr);">'+
       '<div class="analytics-big-card"><div class="analytics-big-val perf-val '+ctrC+'">'+ctr.toFixed(2)+'%</div><div class="analytics-big-key">CTR</div></div>'+
       '<div class="analytics-big-card"><div class="analytics-big-val">€'+spend.toFixed(0)+'</div><div class="analytics-big-key">Spend</div></div>'+
       '<div class="analytics-big-card"><div class="analytics-big-val">'+purch+'</div><div class="analytics-big-key">Purchases</div></div>'+
@@ -1712,11 +1803,13 @@ function openPerfModal(crid,vid){
     '</div>';
     html+='<div class="analytics-section-title">Signal</div>';
     var sigs=[];
-    if(ctr>3)sigs.push({c:'good',t:'CTR is strong ('+ctr.toFixed(2)+'%) — this creative stops the scroll'});
-    else if(ctr<1)sigs.push({c:'bad',t:'CTR is low ('+ctr.toFixed(2)+'%) — consider a new hook or thumbnail'});
-    if(purch>10)sigs.push({c:'good',t:'Strong purchase volume — this creative converts'});
-    else if(purch===0&&spend>20)sigs.push({c:'bad',t:'No purchases despite spend — check landing page alignment'});
-    if(cpc<0.2)sigs.push({c:'good',t:'Very efficient CPC (€'+cpc.toFixed(2)+') — audience is well matched'});
+    if(roas!==null&&roas>=3.5)sigs.push({c:'good',t:'ROAS of '+roas.toFixed(2)+'x exceeds the 3.5x target — scale this creative'});
+    else if(roas!==null&&roas<1.5)sigs.push({c:'bad',t:'ROAS of '+roas.toFixed(2)+'x is below breakeven — pause or rework'});
+    else if(roas!==null)sigs.push({c:'warn',t:'ROAS of '+roas.toFixed(2)+'x — improving hook or audience could push this above 3.5x'});
+    if(ctr>3)sigs.push({c:'good',t:'CTR of '+ctr.toFixed(2)+'% — creative is stopping the scroll'});
+    else if(ctr<1)sigs.push({c:'bad',t:'CTR of '+ctr.toFixed(2)+'% — weak hook or thumbnail, needs rework'});
+    if(purch===0&&spend>20)sigs.push({c:'bad',t:'No purchases after €'+spend.toFixed(0)+' spend — check landing page or audience match'});
+    if(cpc<0.2)sigs.push({c:'good',t:'CPC of €'+cpc.toFixed(2)+' — very efficient, audience is well matched'});
     if(!sigs.length)sigs.push({c:'warn',t:'Not enough data yet to draw conclusions'});
     sigs.forEach(function(s){html+='<div style="padding:8px 12px;border-radius:8px;font-size:12px;margin-bottom:6px;background:'+(s.c==='good'?'var(--green-light)':s.c==='bad'?'var(--red-light)':'var(--amber-light)')+';">'+s.t+'</div>';});
   } else {
