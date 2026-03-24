@@ -1280,6 +1280,8 @@ function applyFilters(){
   renderConceptStats();
   if(currentView === 'all') renderFlatGallery();
 }
+
+function clearFilters(){
   ['filter-concept','filter-var-status','filter-funnel','filter-format','filter-user','filter-kid','filter-book','filter-language','filter-product'].forEach(function(id){
     var el=document.getElementById(id);if(el){el.value='';el.classList.remove('active');}
   });
