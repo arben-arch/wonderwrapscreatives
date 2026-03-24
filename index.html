@@ -838,19 +838,32 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
       <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;">Meta Ads</div>
       <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Live creatives from your Meta ad account — add any to the library</div>
     </div>
-    <div style="display:flex;gap:8px;align-items:center;">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <div id="meta-sync-status" style="font-size:11px;color:var(--text-faint);"></div>
       <button class="btn btn-ghost btn-sm" onclick="bulkImportToLibrary()" id="meta-bulk-btn">⬇ Import all to library</button>
+      <!-- CSV upload for Meta tab -->
+      <label class="btn btn-ghost btn-sm" style="cursor:pointer;display:flex;align-items:center;gap:5px;" title="Upload Meta CSV export">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+        Upload CSV
+        <input type="file" accept=".csv" style="display:none;" onchange="handleMetaTabCSV(this)" />
+      </label>
       <button class="btn btn-primary btn-sm" onclick="syncMetaAds()" id="meta-sync-btn">⟳ Sync now</button>
     </div>
   </div>
 
   <!-- Not connected state -->
-  <div id="meta-not-connected" style="text-align:center;padding:4rem 2rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);">
-    <div style="font-size:40px;margin-bottom:1rem;">🔌</div>
-    <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:600;margin-bottom:8px;">Meta API not connected</div>
-    <div style="font-size:13px;color:var(--text-muted);margin-bottom:1.5rem;max-width:400px;margin-left:auto;margin-right:auto;">Go to Settings → Meta API to connect your ad account. Once connected, all your running ads will appear here.</div>
-    <button class="btn btn-primary" onclick="showPage('settings',document.querySelector('.nav-tab:last-child'));setTimeout(function(){document.getElementById('meta-api-section').scrollIntoView({behavior:'smooth'});},200)">Go to Settings →</button>
+  <div id="meta-not-connected" style="text-align:center;padding:3rem 2rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);">
+    <div style="font-size:36px;margin-bottom:1rem;">🔌</div>
+    <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;">Meta API not connected</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:1.5rem;max-width:420px;margin-left:auto;margin-right:auto;">Connect your ad account via API for live sync, or upload a Meta CSV export to see your ads here.</div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="showPage('settings',document.querySelector('.nav-tab:last-child'));setTimeout(function(){document.getElementById('meta-api-section').scrollIntoView({behavior:'smooth'});},200)">Connect Meta API →</button>
+      <label class="btn btn-ghost" style="cursor:pointer;display:flex;align-items:center;gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+        Upload CSV instead
+        <input type="file" accept=".csv" style="display:none;" onchange="handleMetaTabCSV(this)" />
+      </label>
+    </div>
   </div>
 
   <!-- Filters for meta ads page -->
@@ -2419,6 +2432,73 @@ function parseCSV(text){
   }
   return rows;
 }
+// ─── META TAB CSV SYNC ───
+function handleMetaTabCSV(inp){
+  if(!inp.files[0]) return;
+  var file = inp.files[0];
+  var syncEl = document.getElementById('meta-sync-status');
+  if(syncEl) syncEl.textContent = 'Reading CSV...';
+
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var rows = parseCSV(e.target.result);
+    if(!rows.length){ showToast('CSV is empty or unreadable'); return; }
+
+    if(!state.metaAds) state.metaAds = {};
+    var now = new Date().toISOString();
+    var imported = 0, skipped = 0;
+
+    rows.forEach(function(row){
+      var name = row['Ad name'] || row['Ad Name'] || row['ad_name'] || '';
+      if(!name){ skipped++; return; }
+
+      var id = row['Ad ID'] || row['Ad id'] || row['ad_id'] || ('csv-'+name.replace(/\s+/g,'').slice(0,20)+'-'+Date.now());
+      var spend     = parseFloat(row['Amount spent (EUR)'] || row['Amount spent (USD)'] || row['Amount spent'] || row['spend'] || 0);
+      var impr      = parseInt(row['Impressions'] || row['impressions'] || 0);
+      var clicks    = parseInt(row['Link clicks'] || row['Clicks'] || row['clicks'] || 0);
+      var ctr       = parseFloat(row['CTR (link click-through rate)'] || row['CTR (all)'] || row['CTR'] || row['ctr'] || 0);
+      var cpc       = parseFloat(row['CPC (cost per link click)'] || row['CPC (all)'] || row['CPC'] || row['cpc'] || 0);
+      var purchases = parseInt(row['Purchases'] || row['purchases'] || row['Results'] || 0);
+      var revenue   = parseFloat(row['Purchase conversion value'] || row['Purchases conversion value'] || row['revenue'] || 0);
+      var status    = row['Delivery'] || row['Status'] || row['delivery'] || '';
+      var campaign  = row['Campaign name'] || row['Campaign Name'] || row['campaign_name'] || '';
+      var thumb     = row['Thumbnail URL'] || row['thumbnail_url'] || '';
+
+      var normStatus = /active|delivering/i.test(status) ? 'ACTIVE' : /archived/i.test(status) ? 'ARCHIVED' : 'PAUSED';
+
+      state.metaAds[id] = {
+        id:id, name:name, status:normStatus,
+        campaignId:'', adsetId:'', campaignName:campaign,
+        thumb:thumb, videoId:'',
+        spend:spend, impressions:impr, clicks:clicks,
+        ctr:ctr, cpc:cpc, purchases:purchases, revenue:revenue,
+        fromCSV:true, synced:now
+      };
+
+      if(name.startsWith('WW_')){
+        state.performance[name] = {
+          impressions:impr, clicks:clicks, ctr:ctr, cpc:cpc,
+          spend:spend, purchases:purchases, revenue:revenue
+        };
+      }
+      imported++;
+    });
+
+    state.metaLastSync = now;
+    state.uploads.unshift({filename:file.name, date:new Date().toLocaleDateString('en-GB'), rows:imported});
+    save();
+    updateRevenuePanel();
+    renderMetaAds();
+    updateMetaBadge();
+    VIDS.forEach(function(v){ rerenderGrid(v); });
+
+    if(syncEl) syncEl.textContent = '📄 CSV · '+imported+' ads · '+new Date().toLocaleTimeString();
+    showToast('Loaded '+imported+' ads from '+file.name);
+    inp.value = '';
+  };
+  reader.readAsText(file);
+}
+
 function renderUploadHistory(){
   var el=document.getElementById('upload-history');if(!el)return;
   el.innerHTML='';
@@ -3008,8 +3088,9 @@ function renderMetaAds(){
   var notConn=document.getElementById('meta-not-connected');
   var grid=document.getElementById('meta-ads-grid');
   var filters=document.getElementById('meta-filters');
+  var hasData = state.metaAds && Object.keys(state.metaAds).length > 0;
 
-  if(!isMetaConnected()||!state.metaAds||!Object.keys(state.metaAds).length){
+  if(!isMetaConnected() && !hasData){
     if(notConn)notConn.style.display='';
     if(grid)grid.style.display='none';
     if(filters)filters.style.display='none';
@@ -3019,6 +3100,13 @@ function renderMetaAds(){
   if(notConn)notConn.style.display='none';
   if(grid)grid.style.display='';
   if(filters)filters.style.display='';
+
+  // Show CSV source label in sync status if data came from CSV
+  var syncEl=document.getElementById('meta-sync-status');
+  var hasCSV=hasData&&Object.values(state.metaAds).some(function(a){return a.fromCSV;});
+  if(syncEl&&!syncEl.textContent&&state.metaLastSync){
+    syncEl.textContent=(hasCSV&&!isMetaConnected()?'📄 CSV · ':'')+Object.keys(state.metaAds).length+' ads';
+  }
 
   var ads=Object.values(state.metaAds);
   var statusF=document.getElementById('meta-filter-status')?document.getElementById('meta-filter-status').value:'';
