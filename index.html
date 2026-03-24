@@ -2074,7 +2074,6 @@ function makeCard(cr,vid){
     var purch=parseInt(perf.purchases)||0;
     var cpo = purch>0 ? spend/purch : null;
     var roas=calcRoas(perf);
-    // Fallback to CSV ROAS if no pixel revenue
     var displayRoas = roas!==null ? roas : (cr.roasFromCSV&&cr.roasFromCSV>0 ? cr.roasFromCSV : null);
     var roasInfo=getRoasInfo(displayRoas);
     var roasColor=roasInfo.cls==='roas-excellent'?'var(--purple)':roasInfo.cls==='roas-good'?'var(--green)':roasInfo.cls==='roas-mid'?'var(--amber)':roasInfo.cls==='roas-low'?'var(--red)':'var(--text-faint)';
@@ -2084,12 +2083,9 @@ function makeCard(cr,vid){
       '<div class="perf-item"><div class="perf-key">Cost/purch.</div><div class="perf-val">'+(cpo?'€'+cpo.toFixed(2):'—')+'</div></div>'+
       '<div class="perf-item"><div class="perf-key">ROAS</div><div class="perf-val" style="color:'+roasColor+';font-weight:700;">'+(displayRoas!==null?displayRoas.toFixed(2)+'x':'—')+'</div></div>'+
     '</div>';
-    // Inject ROAS badge into media wrap
-    var roasBadge='<div class="roas-score '+roasInfo.cls+'" title="ROAS: '+(displayRoas!==null?displayRoas.toFixed(2):'N/A')+'">'+
-      (displayRoas!==null?displayRoas.toFixed(1):'—')+
-      '<span class="roas-label">ROAS</span>'+
-    '</div>';
-    mediaHtml=mediaHtml.replace('</div>',roasBadge+'</div>');
+    // Store roas on element for badge — injected via DOM after innerHTML set
+    div.dataset.roas = displayRoas!==null?displayRoas.toFixed(1):'';
+    div.dataset.roasCls = roasInfo.cls;
   } else if(cr.adname){perfHtml='<div class="no-data">No data yet</div>';}
 
   div.innerHTML=mediaHtml+
@@ -2103,6 +2099,19 @@ function makeCard(cr,vid){
     '</div>'+
     (tags?'<div class="creative-tags">'+tags+'</div>':'')+
     perfHtml;
+
+  // Inject ROAS badge via DOM after innerHTML is set — avoids corrupting HTML structure
+  if(div.dataset.roas!==undefined && div.dataset.roas!==''){
+    var wrap=div.querySelector('.creative-media-wrap');
+    if(wrap){
+      var badge=document.createElement('div');
+      badge.className='roas-score '+(div.dataset.roasCls||'roas-none');
+      badge.title='ROAS: '+div.dataset.roas+'x';
+      badge.innerHTML=div.dataset.roas+'<span class="roas-label">ROAS</span>';
+      wrap.appendChild(badge);
+    }
+  }
+
   return div;
 }
 
