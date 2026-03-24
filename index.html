@@ -194,6 +194,11 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
 .creative-media-wrap img{width:100%;height:100%;object-fit:cover;cursor:zoom-in;transition:transform 0.35s;display:block;}
 .creative-media-wrap img:hover{transform:scale(1.06);}
 .creative-media-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
+/* No-media placeholder */
+.cr-no-media-placeholder{width:100%;height:100%;background:linear-gradient(135deg,#1a0533 0%,#3b1d7a 50%,#1a0533 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;position:relative;overflow:hidden;}
+.cr-no-media-placeholder::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 35% 40%,rgba(107,63,160,0.45) 0%,transparent 65%);}
+.cr-placeholder-initials{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:rgba(255,255,255,0.88);letter-spacing:-0.5px;position:relative;z-index:1;text-shadow:0 2px 12px rgba(0,0,0,0.5);}
+.cr-placeholder-hint{font-size:9.5px;font-weight:600;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;position:relative;z-index:1;}
 .video-play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.22);transition:background 0.2s;cursor:pointer;}
 .video-play-overlay:hover{background:rgba(0,0,0,0.38);}
 .play-icon{width:38px;height:38px;background:rgba(255,255,255,0.92);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
@@ -2004,37 +2009,44 @@ function makeCard(cr,vid){
   var author=TEAM.find(function(u){return u.id===cr.author;});
   var statusInfo=STATUSES[cr.status||'draft']||STATUSES.draft;
   var mediaHtml='';
+  var funnelBadge=cr.funnel?'<span class="funnel-badge '+FUNNEL_CLS[cr.funnel]+'">'+FUNNEL_LABELS[cr.funnel]+'</span>':'';
+  var actionsBase=
+    '<button class="action-btn" onclick="openEditModal(\''+cr.id+'\'\,\''+vid+'\')">Edit</button>'+
+    '<button class="action-btn" onclick="openPerfModal(\''+cr.id+'\'\,\''+vid+'\')">Analytics</button>'+
+    '<button class="action-btn" onclick="reviewSingle(\''+cr.id+'\'\,\''+vid+'\')">AI Review</button>'+
+    '<button class="action-btn danger" onclick="removeCreative(\''+vid+'\'\,\''+cr.id+'\')">Remove</button>';
 
   if(cr.video){
     var sid='v'+cr.id.replace(/[^a-z0-9]/gi,'');
-    mediaHtml='<div class="creative-media-wrap">'+
-      (cr.funnel?'<span class="funnel-badge '+FUNNEL_CLS[cr.funnel]+'">'+FUNNEL_LABELS[cr.funnel]+'</span>':'')+
+    mediaHtml='<div class="creative-media-wrap">'+funnelBadge+
       '<div class="video-play-overlay" id="vpo-'+sid+'" onclick="playVideo(\''+sid+'\')"><div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>'+
       '<video id="vid-'+sid+'" src="'+cr.video+'" preload="none"></video>'+
       '<span class="media-type-badge">Video</span>'+
       '<div class="creative-actions">'+
-        '<button class="action-btn" onclick="openLight(\'vid\',\''+sid+'\',\''+cr.name.replace(/'/g,"\\'")+'\')" >Zoom</button>'+
-        '<button class="action-btn" onclick="downloadMedia(\''+cr.id+'\',\''+vid+'\')">Download</button>'+
-        '<button class="action-btn" onclick="openEditModal(\''+cr.id+'\',\''+vid+'\')">Edit</button>'+
-        '<button class="action-btn" onclick="openPerfModal(\''+cr.id+'\',\''+vid+'\')">Analytics</button>'+
-        '<button class="action-btn" onclick="reviewSingle(\''+cr.id+'\',\''+vid+'\')">AI Review</button>'+
-        '<button class="action-btn danger" onclick="removeCreative(\''+vid+'\',\''+cr.id+'\')">Remove</button>'+
+        '<button class="action-btn" onclick="openLight(\'vid\',\''+sid+'\'\,\''+cr.name.replace(/'/g,"\\'")+'\')">Zoom</button>'+
+        '<button class="action-btn" onclick="downloadMedia(\''+cr.id+'\'\,\''+vid+'\')">Download</button>'+
+        actionsBase+
       '</div></div>';
   } else if(cr.img){
-    var si=cr.img.replace(/'/g,"\\'"),sn=cr.name.replace(/'/g,"\\'");
-    mediaHtml='<div class="creative-media-wrap">'+
-      (cr.funnel?'<span class="funnel-badge '+FUNNEL_CLS[cr.funnel]+'">'+FUNNEL_LABELS[cr.funnel]+'</span>':'')+
-      '<img src="'+cr.img+'" onclick="openLight(\'img\',\''+si+'\',\''+sn+'\')"/>'+
+    var si=cr.img.replace(/'/g,"\'"),sn=cr.name.replace(/'/g,"\'");
+    mediaHtml='<div class="creative-media-wrap">'+funnelBadge+
+      '<img src="'+cr.img+'" onclick="openLight(\'img\',\''+si+'\'\,\''+sn+'\')"/>'+
       '<div class="creative-actions">'+
-        '<button class="action-btn" onclick="openLight(\'img\',\''+si+'\',\''+sn+'\')">Zoom</button>'+
-        '<button class="action-btn" onclick="downloadMedia(\''+cr.id+'\',\''+vid+'\')">Download</button>'+
-        '<button class="action-btn" onclick="openEditModal(\''+cr.id+'\',\''+vid+'\')">Edit</button>'+
-        '<button class="action-btn" onclick="openPerfModal(\''+cr.id+'\',\''+vid+'\')">Analytics</button>'+
-        '<button class="action-btn" onclick="reviewSingle(\''+cr.id+'\',\''+vid+'\')">AI Review</button>'+
-        '<button class="action-btn danger" onclick="removeCreative(\''+vid+'\',\''+cr.id+'\')">Remove</button>'+
+        '<button class="action-btn" onclick="openLight(\'img\',\''+si+'\'\,\''+sn+'\')">Zoom</button>'+
+        '<button class="action-btn" onclick="downloadMedia(\''+cr.id+'\'\,\''+vid+'\')">Download</button>'+
+        actionsBase+
       '</div></div>';
+  } else {
+    // No image/video — designed placeholder with initials
+    var initials=(cr.name||'?').split(/\s+/).slice(0,2).map(function(w){return w.charAt(0).toUpperCase();}).join('');
+    mediaHtml='<div class="creative-media-wrap">'+funnelBadge+
+      '<div class="cr-no-media-placeholder">'+
+        '<div class="cr-placeholder-initials">'+initials+'</div>'+
+        '<div class="cr-placeholder-hint">No image</div>'+
+      '</div>'+
+      '<div class="creative-actions">'+actionsBase+'</div>'+
+    '</div>';
   }
-
   // Quick tags row
   var tags='';
   if(cr.format)tags+='<span class="ctag format">'+cr.format+'</span>';
