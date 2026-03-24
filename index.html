@@ -862,6 +862,7 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
       <div id="meta-sync-status" style="font-size:11px;color:var(--text-faint);"></div>
+      <button class="btn btn-ghost btn-sm" onclick="clearMetaCSV()" id="meta-clear-btn" style="display:none;color:var(--red-dark);border-color:var(--red-light);">✕ Clear CSV</button>
       <button class="btn btn-ghost btn-sm" onclick="bulkImportToLibrary()" id="meta-bulk-btn">⬇ Import all to library</button>
       <!-- CSV upload for Meta tab -->
       <label class="btn btn-ghost btn-sm" style="cursor:pointer;display:flex;align-items:center;gap:5px;" title="Upload Meta CSV export">
@@ -2065,8 +2066,7 @@ function makeCard(cr,vid){
   var tags='';
   if(cr.format)tags+='<span class="ctag format">'+cr.format+'</span>';
   if(cr.hook)tags+='<span class="ctag">'+cr.hook+'</span>';
-  if(cr.prodtype)tags+='<span class="ctag prod">'+cr.prodtype.replace('_',' ')+'</span>';
-  if(cr.language)tags+='<span class="ctag" style="background:#f0fdf4;color:#166534;border-color:transparent;">'+cr.language+'</span>';
+  if(cr.language)tags+='<span class="ctag">'+cr.language+'</span>';
 
   var perfHtml='';
   if(perf){
@@ -2111,6 +2111,48 @@ function makeCard(cr,vid){
       wrap.appendChild(badge);
     }
   }
+
+  // ── DOM additions (after innerHTML set) ──
+  var mwrap=div.querySelector('.creative-media-wrap');
+  if(mwrap){
+    // ROAS badge
+    if(div.dataset.roas){
+      var rb=document.createElement('div');
+      rb.className='roas-score '+(div.dataset.roasCls||'roas-none');
+      rb.title='ROAS: '+div.dataset.roas+'x';
+      rb.innerHTML=div.dataset.roas+'<span class="roas-label">ROAS</span>';
+      mwrap.appendChild(rb);
+    }
+    // Health score badge
+    var hs=calcHealthScore(cr);
+    var hi=getHealthInfo(hs);
+    if(hs!==null){
+      var hb=document.createElement('div');
+      hb.className='health-score '+hi.cls;
+      hb.title=hi.tip;
+      hb.innerHTML='<div class="health-score-dot"></div>'+hi.label;
+      mwrap.appendChild(hb);
+    }
+    // AI review badge
+    if(cr.aiReview){
+      var rv=cr.aiReview;
+      var rc=rv.rating==='ok'?'air-ok':rv.rating==='warn'?'air-warn':'air-bad';
+      var rl=rv.rating==='ok'?'✓ OK':rv.rating==='warn'?'⚠ Review':'✗ Fix';
+      var ab=document.createElement('div');
+      ab.className='ai-review-badge '+rc;
+      ab.title=rv.summary||'';
+      ab.innerHTML=rl;
+      ab.onclick=function(e){e.stopPropagation();reviewSingle(cr.id,vid);};
+      mwrap.appendChild(ab);
+    }
+  }
+  // Suggested action strip
+  var act=getSuggestedAction(cr);
+  var ad2=document.createElement('div');
+  ad2.className='suggested-action';
+  ad2.innerHTML='<button class="action-pill '+act.cls+'" onclick="event.stopPropagation()" title="'+act.reason+'">'+act.label+'</button>'+
+    '<span class="action-reason">'+act.reason+'</span>';
+  div.appendChild(ad2);
 
   return div;
 }
@@ -2488,13 +2530,25 @@ function renderVariationStats(vid){
   var cpoC=cpo!==null?(cpo<20?'good':cpo<35?'warn':'bad'):'';
   var cpcC=cpc!==null?(cpc<0.3?'good':cpc<0.5?'warn':'bad'):'';
 
+  // Aggregate ROAS across creatives
+  var tr=0;
+  filtered.forEach(function(cr){
+    if(!cr.adname)return;
+    var p=state.performance[cr.adname];if(!p)return;
+    var rev=parseFloat(p.revenue)||0;
+    if(!rev&&cr.roasFromCSV&&p.spend) rev=(parseFloat(cr.roasFromCSV)||0)*(parseFloat(p.spend)||0);
+    tr+=rev;
+  });
+  var avgRoas=ts>0&&tr>0?tr/ts:null;
+  var roasC=avgRoas!==null?(avgRoas>=3.5?'good':avgRoas>=1.5?'warn':'bad'):'';
+
   bar.innerHTML='<div class="concept-stats-grid">'+
-    kpi('Spend',         hasData&&ts>0?'€'+ts.toFixed(0):'—','',   !hasData)+
-    kpi('Impressions',   hasData&&ti>0?ti.toLocaleString():'—','', !hasData)+
-    kpi('CTR',           ctr!==null?ctr.toFixed(2)+'%':'—',   ctrC, ctr===null)+
-    kpi('CPC',           cpc!==null?'€'+cpc.toFixed(2):'—',   cpcC, cpc===null)+
-    kpi('Purchases',     hasData&&tp>0?tp.toString():'—','',        !hasData)+
-    kpi('Cost/purchase', cpo!==null?'€'+cpo.toFixed(2):'—',   cpoC, cpo===null)+
+    kpi('Spend',         hasData&&ts>0?'€'+ts.toFixed(0):'—','',      !hasData)+
+    kpi('Impressions',   hasData&&ti>0?ti.toLocaleString():'—','',     !hasData)+
+    kpi('Purchases',     hasData&&tp>0?tp.toString():'—','',           !hasData)+
+    kpi('Cost/purchase', cpo!==null?'€'+cpo.toFixed(2):'—', cpoC,     cpo===null)+
+    kpi('CPC',           cpc!==null?'€'+cpc.toFixed(2):'—', cpcC,     cpc===null)+
+    kpi('ROAS',          avgRoas!==null?avgRoas.toFixed(2)+'x':'—', roasC, avgRoas===null)+
   '</div>';
 }
 
@@ -2547,6 +2601,20 @@ function parseCSV(text){
   return rows;
 }
 // ─── META TAB CSV SYNC ───
+function clearMetaCSV(){
+  var csvCount=Object.values(state.metaAds||{}).filter(function(a){return a.fromCSV;}).length;
+  if(!csvCount){showToast('No CSV data to clear');return;}
+  if(!confirm('Remove '+csvCount+' ads loaded from CSV? Library cards are not affected.')){return;}
+  var cleaned={};
+  Object.values(state.metaAds||{}).forEach(function(a){if(!a.fromCSV)cleaned[a.id]=a;});
+  state.metaAds=cleaned;
+  state.metaLastSync=null;
+  save();renderMetaAds();updateMetaBadge();
+  var syncEl=document.getElementById('meta-sync-status');if(syncEl)syncEl.textContent='';
+  var cb=document.getElementById('meta-clear-btn');if(cb)cb.style.display='none';
+  showToast('CSV cleared — upload a new file');
+}
+
 function handleMetaTabCSV(inp){
   if(!inp.files[0]) return;
   var file = inp.files[0];
@@ -2658,6 +2726,7 @@ function handleMetaTabCSV(inp){
     VIDS.forEach(function(v){ rerenderGrid(v); });
 
     if(syncEl) syncEl.textContent = '📄 CSV · '+imported+' ads · '+new Date().toLocaleTimeString();
+    var cb=document.getElementById('meta-clear-btn');if(cb)cb.style.display='';
     showToast('Loaded '+imported+' ads from '+file.name);
     inp.value = '';
   };
@@ -3066,25 +3135,7 @@ function closeReviewModal(){document.getElementById('review-modal').classList.re
 
 // ─── AI REVIEW BADGE ON CARD ───
 // Wrap makeCard to add AI review badge if review exists
-var _origMakeCard=makeCard;
-makeCard=function(cr,vid){
-  var div=_origMakeCard(cr,vid);
-  if(cr.aiReview){
-    var wrap=div.querySelector('.creative-media-wrap');
-    if(wrap){
-      var r=cr.aiReview;
-      var cls=r.rating==='ok'?'air-ok':r.rating==='warn'?'air-warn':'air-bad';
-      var label=r.rating==='ok'?'✓ OK':r.rating==='warn'?'⚠ Review':'✗ Fix';
-      var badge=document.createElement('div');
-      badge.className='ai-review-badge '+cls;
-      badge.title=r.summary;
-      badge.innerHTML=label;
-      badge.onclick=function(e){e.stopPropagation();reviewSingle(cr.id,vid);};
-      wrap.appendChild(badge);
-    }
-  }
-  return div;
-};
+
 
 // ─── META API ───
 // Meta API goes through /api/meta proxy to avoid CORS
@@ -3266,6 +3317,8 @@ function renderMetaAds(){
   if(grid)grid.style.display='';
   if(filters)filters.style.display='';
 
+  // Show/hide clear button
+  var clrBtn=document.getElementById('meta-clear-btn');if(clrBtn)clrBtn.style.display=(hasCSV?'':'none');
   // Show CSV source label in sync status if data came from CSV
   var syncEl=document.getElementById('meta-sync-status');
   var hasCSV=hasData&&Object.values(state.metaAds).some(function(a){return a.fromCSV;});
@@ -4228,30 +4281,6 @@ saveCreative = function(){
   save();rerenderGrid(currentVid);updateStats();closeAIModal();showToast('Creative added — '+name);
 };
 
-// ─── UPDATED makeCard WITH HEALTH SCORE + ACTION ─────
-var _prevMakeCard = makeCard;
-makeCard = function(cr, vid){
-  var div = _prevMakeCard(cr, vid);
-  var wrap = div.querySelector('.creative-media-wrap');
-  if(wrap){
-    // Health score badge
-    var score = calcHealthScore(cr);
-    var hi = getHealthInfo(score);
-    var hBadge = document.createElement('div');
-    hBadge.className='health-score '+hi.cls;
-    hBadge.title=hi.tip;
-    hBadge.innerHTML='<div class="health-score-dot"></div>'+hi.label;
-    wrap.appendChild(hBadge);
-  }
-  // Suggested action strip
-  var action = getSuggestedAction(cr);
-  var actionDiv = document.createElement('div');
-  actionDiv.className='suggested-action';
-  actionDiv.innerHTML='<button class="action-pill '+action.cls+'" onclick="event.stopPropagation()" title="'+action.reason+'">'+action.label+'</button>'+
-    '<span class="action-reason">'+action.reason+'</span>';
-  div.appendChild(actionDiv);
-  return div;
-};
 
 // ─── BULK IMPORT FROM META ADS ───────────────────────
 function bulkImportToLibrary(){
