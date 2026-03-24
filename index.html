@@ -1942,18 +1942,7 @@ function analyzeMedia(mediaData,vid,isVideo){
   else if(ai==='chatgpt') handleResp(fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'gpt-4o',max_tokens:1000,messages:[{role:'user',content:[{type:'image_url',image_url:{url:'data:image/jpeg;base64,'+b64}},{type:'text',text:addPrompt}]}]})}));
 }
 
-function openAIModal(res){
-  var thumb=document.getElementById('ai-thumb');
-  if(modalIsVideo){thumb.style.display='none';}else{thumb.style.display='';thumb.src=modalMedia;}
-  document.getElementById('ai-name').textContent=res.creative_name||'';
-  document.getElementById('ai-adname').textContent=res.meta_ad_name||'';
-  document.getElementById('ai-analysis').textContent=res.analysis||'';
-  setSelectVal('ai-funnel',res.funnel_stage||'');
-  setSelectVal('ai-format',res.format||'');
-  setSelectVal('ai-hook',res.hook||'');
-  setSelectVal('ai-prodtype',res.production_type||'');
-  document.getElementById('ai-modal').classList.add('open');
-}
+// openAIModal defined later with full auto-tag support
 
 function closeAIModal(){document.getElementById('ai-modal').classList.remove('open');currentVid=null;modalMedia=null;modalIsVideo=false;}
 
@@ -4265,36 +4254,36 @@ async function checkDuplicate(b64){
 
 // ─── EXTENDED AI ANALYSIS (auto-tagging) ────────────
 function buildAddPrompt(vid, varTitle, num, pn, conceptLetter){
-  var booksList = state.lists.books.length ? state.lists.books.join(', ') : 'unknown';
-  var productsList = state.lists.products.length ? state.lists.products.join(', ') : 'unknown';
-  return 'You are analyzing a Facebook ad creative for WonderWraps — personalized children\'s books where kids are illustrated as cartoon characters.\n\n'+
-    'Variation: '+vid+' "'+varTitle+'"\nCreative number: '+num+'\n'+
-    'Available hooks: '+state.lists.hooks.join(', ')+'\n'+
-    'Available formats: '+state.lists.formats.join(', ')+'\n'+
-    'Known books: '+booksList+'\n'+
-    'Known products: '+productsList+'\n\n'+
-    'Analyze this creative and respond ONLY with valid JSON (no markdown, no explanation):\n'+
-    '{'+
-      '"creative_name":"Short name max 6 words",'+
-      '"meta_ad_name":"WW_'+conceptLetter+'_'+vid+'_'+pn+'_[CamelCaseDesc]",'+
-      '"funnel_stage":"tofu or mofu or bofu or retargeting",'+
-      '"format":"one of the available formats",'+
-      '"hook":"one of the available hooks or none",'+
-      '"production_type":"ai_generated or professional or ugc or mixed",'+
-      '"language":"english or arabic or french or german or spanish or portuguese or other — detect from any text visible",'+
-      '"has_kid":true or false,'+
-      '"kid_description":"brief description of child visible e.g. blonde girl age 4-6 or null",'+
-      '"emotional_score":number 1-10 (how emotionally triggering for parents — 10 = tears),'+
-      '"quality_score":number 1-10 (visual production quality — 10 = magazine level),'+
-      '"book_detected":"exact book name from Known books list if visible else null",'+
-      '"product_visible":"book or box or both or none",'+
-      '"analysis":"2-3 sentences: emotional angle, Facebook strength/weakness, one improvement suggestion"'+
-    '}';
+  var booksList = state.lists.books.length ? state.lists.books.join(', ') : 'none';
+  var hooksStr = state.lists.hooks.length ? state.lists.hooks.join(', ') : 'emotional, direct, problem-solution, transformation';
+  var formatsStr = state.lists.formats.length ? state.lists.formats.join(', ') : 'video, static image, carousel';
+  return 'Analyze this WonderWraps Facebook ad creative. WonderWraps makes personalized children books where kids appear as cartoon characters.\n\n'+
+    'Context: Variation '+vid+' "'+varTitle+'", creative #'+num+'\n'+
+    'Available hooks: '+hooksStr+'\n'+
+    'Available formats: '+formatsStr+'\n'+
+    'Known books in library: '+booksList+'\n\n'+
+    'Respond with ONLY a raw JSON object. No markdown, no explanation, just JSON.\n\n'+
+    '{\n'+
+    '  "creative_name": "max 6 words",\n'+
+    '  "meta_ad_name": "WW_'+conceptLetter+'_'+vid+'_'+pn+'_CamelCaseDesc",\n'+
+    '  "funnel_stage": "tofu or mofu or bofu or retargeting",\n'+
+    '  "format": "one from available formats",\n'+
+    '  "hook": "one from available hooks or null",\n'+
+    '  "production_type": "ai_generated or professional or ugc or mixed",\n'+
+    '  "language": "english or arabic or french or german or spanish or other",\n'+
+    '  "has_kid": true,\n'+
+    '  "kid_description": "blonde girl age 3-5 or null",\n'+
+    '  "emotional_score": 7,\n'+
+    '  "quality_score": 8,\n'+
+    '  "book_detected": "exact book name from Known books or null",\n'+
+    '  "product_visible": "book or box or both or none",\n'+
+    '  "analysis": "2 sentences on emotional strength and one improvement"\n'+
+    '}\n\n'+
+    'IMPORTANT: emotional_score and quality_score MUST be plain integers (1-10). has_kid MUST be true or false (no quotes).';
 }
 
-// ─── UPDATED analyzeMedia WITH AUTO-TAGGING ──────────
-var _origAnalyzeMedia = analyzeMedia;
-analyzeMedia = function(mediaData, vid, isVideo){
+// ─── analyzeMedia (full version with auto-tagging) ───
+function analyzeMedia(mediaData, vid, isVideo){
   var grid=document.getElementById('grid-'+vid);
   var addZone=grid?grid.querySelector('.add-creative-zone'):null;
   var ai=getDefaultAI(isVideo?'video':'image');
@@ -4345,12 +4334,22 @@ analyzeMedia = function(mediaData, vid, isVideo){
   if(ai==='claude') handleResp(fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:addPrompt}]}]})}));
   else if(ai==='gemini') handleResp(fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key='+key,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{inline_data:{mime_type:isVideo?'video/mp4':'image/jpeg',data:b64}},{text:addPrompt}]}]})}));
   else if(ai==='chatgpt') handleResp(fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'gpt-4o',max_tokens:1200,messages:[{role:'user',content:[{type:'image_url',image_url:{url:'data:image/jpeg;base64,'+b64}},{type:'text',text:addPrompt}]}]})}));
-};
+}
 
 // ─── UPDATED openAIModal WITH AUTO-TAG DISPLAY ────────
-var _origOpenAIModal = openAIModal;
-openAIModal = function(res){
-  _origOpenAIModal(res);
+function openAIModal(res){
+  // Base setup: thumbnail + form fields
+  var thumb=document.getElementById('ai-thumb');
+  if(thumb){if(modalIsVideo){thumb.style.display='none';}else{thumb.style.display='';thumb.src=modalMedia||'';}}
+  var nameEl=document.getElementById('ai-name');if(nameEl)nameEl.textContent=res.creative_name||'';
+  var adnameEl=document.getElementById('ai-adname');if(adnameEl)adnameEl.textContent=res.meta_ad_name||'';
+  var analysisEl=document.getElementById('ai-analysis');if(analysisEl)analysisEl.textContent=res.analysis||'';
+  setSelectVal('ai-funnel',res.funnel_stage||'');
+  setSelectVal('ai-format',res.format||'');
+  setSelectVal('ai-hook',res.hook||'');
+  setSelectVal('ai-prodtype',res.production_type||'');
+  if(res.language) setSelectVal('ai-language',res.language);
+  document.getElementById('ai-modal').classList.add('open');
   // Populate auto-detect section
   var section=document.getElementById('ai-autodetect-section');
   if(!section) return;
