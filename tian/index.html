@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="Fjalori i udhëzimeve të testit MAP Growth K–2 me zë — anglisht / shqip.">
+<title>Fjalët e testit — me zë</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   FJALËT E TESTIT — audio trainer
+   MAP Growth K–2 · anglisht me zë për Tianin
+   ═══════════════════════════════════════════ */
+:root{
+  --purple:#5B35A0;--purple-dark:#43276f;--purple-light:#f2ecff;--purple-mid:#c9b2ef;
+  --green:#15803d;--green-light:#dcfce7;--green-border:#86efac;
+  --red:#b91c1c;--red-light:#fee2e2;--red-border:#fca5a5;
+  --amber:#b45309;--amber-light:#fef3c7;
+  --bg:#f5f3ef;--surface:#fff;--surface2:#faf9f7;
+  --border:rgba(0,0,0,.09);--border-strong:rgba(0,0,0,.16);
+  --text:#141414;--muted:#6b6b6b;--faint:#9a9a9a;
+  --r:14px;--r-lg:22px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 4px 14px rgba(0,0,0,.05);
+  --shadow-lg:0 10px 34px rgba(0,0,0,.13);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:3rem;}
+button{font-family:inherit;font-size:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+h1,h2,h3{font-family:'Syne',sans-serif;letter-spacing:-.02em;line-height:1.15;}
+
+/* ─── Shell ─────────────────────────── */
+.wrap{max-width:760px;margin:0 auto;padding:0 1rem;}
+header{background:var(--purple);color:#fff;padding:1.4rem 0 1.1rem;box-shadow:0 2px 18px rgba(91,53,160,.25);}
+.head-row{display:flex;align-items:center;gap:.85rem;}
+.mark{width:46px;height:46px;flex:0 0 46px;border-radius:13px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:24px;}
+header h1{font-size:22px;font-weight:800;}
+header p{font-size:13px;opacity:.82;margin-top:2px;}
+
+/* ─── Tabs ──────────────────────────── */
+nav{position:sticky;top:0;z-index:40;background:rgba(245,243,239,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);}
+.tabs{display:flex;gap:.4rem;overflow-x:auto;padding:.6rem 1rem;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{white-space:nowrap;padding:.55rem .95rem;border-radius:999px;background:var(--surface);border:1.5px solid var(--border);font-weight:500;font-size:14px;color:var(--muted);transition:.15s;}
+.tab:hover{border-color:var(--purple-mid);}
+.tab.on{background:var(--purple);border-color:var(--purple);color:#fff;font-weight:700;}
+
+/* ─── Panels & cards ────────────────── */
+.panel{display:none;padding-top:1.25rem;}
+.panel.on{display:block;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:1.4rem;margin-bottom:1rem;}
+.hint{background:var(--purple-light);border:1px solid var(--purple-mid);border-radius:var(--r);padding:.85rem 1rem;font-size:14px;color:var(--purple-dark);margin-bottom:1rem;}
+.hint b{font-weight:700;}
+
+/* ─── Filter chips ──────────────────── */
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem;}
+.chip{padding:.4rem .8rem;border-radius:999px;border:1.5px solid var(--border);background:var(--surface);font-size:13px;font-weight:500;color:var(--muted);}
+.chip.on{background:var(--text);border-color:var(--text);color:#fff;}
+
+/* ─── Learn list ────────────────────── */
+.sec-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);margin:1.6rem 0 .7rem;}
+.word{display:flex;align-items:center;gap:.9rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.8rem .9rem;margin-bottom:.55rem;transition:.15s;}
+.word:hover{border-color:var(--purple-mid);box-shadow:var(--shadow);}
+.word.speaking{border-color:var(--purple);background:var(--purple-light);}
+.spk{flex:0 0 46px;height:46px;border-radius:50%;background:var(--purple);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(91,53,160,.3);transition:transform .12s;}
+.spk:active{transform:scale(.9);}
+.spk.ghost{background:var(--surface2);color:var(--purple);border:1.5px solid var(--purple-mid);box-shadow:none;font-size:16px;flex:0 0 40px;height:40px;}
+.word-body{flex:1;min-width:0;}
+.en{font-weight:700;font-size:17px;}
+.sq{color:var(--muted);font-size:15px;}
+.ex{font-size:13px;color:var(--faint);font-style:italic;margin-top:2px;}
+.stars{font-size:12px;letter-spacing:1px;color:var(--amber);}
+
+/* ─── Quiz ──────────────────────────── */
+.quiz-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;font-size:14px;color:var(--muted);font-weight:500;}
+.score{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:.3rem .85rem;font-weight:700;color:var(--text);}
+.big-play{width:100%;padding:1.7rem 1rem;border-radius:var(--r-lg);background:var(--purple);color:#fff;font-family:'Syne',sans-serif;font-size:21px;font-weight:800;box-shadow:0 8px 24px rgba(91,53,160,.32);display:flex;align-items:center;justify-content:center;gap:.7rem;transition:transform .12s;}
+.big-play:active{transform:scale(.98);}
+.big-play .ic{font-size:30px;}
+.prompt-sq{text-align:center;font-family:'Syne',sans-serif;font-size:26px;font-weight:800;padding:1.5rem 1rem;}
+.reveal{text-align:center;font-size:15px;color:var(--muted);margin-top:.9rem;min-height:24px;}
+.reveal b{color:var(--text);font-size:18px;}
+.opts{display:grid;gap:.6rem;margin-top:1.1rem;}
+.opt{display:flex;align-items:center;gap:.8rem;text-align:left;padding:1rem 1.1rem;border-radius:var(--r);border:2px solid var(--border);background:var(--surface);font-size:17px;font-weight:500;transition:.12s;}
+.opt:hover:not(:disabled){border-color:var(--purple-mid);background:var(--purple-light);}
+.opt:disabled{cursor:default;}
+.opt.right{border-color:var(--green-border);background:var(--green-light);color:var(--green);font-weight:700;}
+.opt.wrong{border-color:var(--red-border);background:var(--red-light);color:var(--red);}
+.opt .n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--muted);}
+.feedback{text-align:center;font-family:'Syne',sans-serif;font-size:19px;font-weight:700;margin-top:1.1rem;min-height:30px;}
+.feedback.ok{color:var(--green);}
+.feedback.no{color:var(--red);}
+.next{width:100%;margin-top:.9rem;padding:1.05rem;border-radius:var(--r);background:var(--text);color:#fff;font-family:'Syne',sans-serif;font-size:17px;font-weight:700;}
+.next:disabled{opacity:.28;}
+.row{display:flex;gap:.6rem;margin-top:.8rem;}
+.row .mini{flex:1;padding:.7rem;border-radius:var(--r);background:var(--surface2);border:1.5px solid var(--border);font-size:14px;font-weight:500;color:var(--muted);}
+.row .mini:hover{border-color:var(--purple-mid);color:var(--purple);}
+
+/* ─── Settings ──────────────────────── */
+.set-row{display:flex;align-items:center;gap:.8rem;padding:.6rem 0;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.set-row:last-child{border-bottom:none;}
+.set-row label{font-size:14px;font-weight:500;min-width:130px;}
+select,input[type=range]{flex:1;min-width:150px;}
+select{padding:.5rem;border-radius:var(--r);border:1.5px solid var(--border);background:var(--surface);font-family:inherit;font-size:14px;}
+.toggle{padding:.45rem .9rem;border-radius:999px;border:1.5px solid var(--border);background:var(--surface);font-size:13px;font-weight:600;color:var(--muted);}
+.toggle.on{background:var(--green-light);border-color:var(--green-border);color:var(--green);}
+
+/* ─── Plan ──────────────────────────── */
+.plan-day{border-left:3px solid var(--purple-mid);padding-left:1rem;margin-bottom:1.2rem;}
+.plan-day h3{font-size:16px;font-weight:700;margin-bottom:.25rem;}
+.plan-day p{font-size:15px;color:var(--muted);}
+.say{background:var(--amber-light);border:1px solid #fcd34d;border-radius:var(--r);padding:.8rem 1rem;margin-bottom:.6rem;font-size:15px;}
+.say b{display:block;font-weight:700;color:var(--amber);margin-bottom:2px;}
+
+/* ─── Progress ──────────────────────── */
+.bar{height:10px;border-radius:999px;background:var(--surface2);border:1px solid var(--border);overflow:hidden;margin:.6rem 0 .3rem;}
+.bar>i{display:block;height:100%;background:var(--green);transition:width .4s;}
+.warn{background:var(--red-light);border:1px solid var(--red-border);color:var(--red);border-radius:var(--r);padding:.8rem 1rem;font-size:14px;margin:1rem 0;}
+.tiny{font-size:13px;color:var(--faint);}
+.center{text-align:center;}
+@media(max-width:520px){
+  body{font-size:15px;}
+  header h1{font-size:19px;}
+  .prompt-sq{font-size:22px;}
+  .opt{font-size:16px;padding:.9rem;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap head-row">
+    <div class="mark">🔊</div>
+    <div>
+      <h1>Fjalët e testit — me zë</h1>
+      <p>MAP Growth K–2 · Klasa 1 · përgatitur për Tianin</p>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap tabs" id="tabs">
+    <button class="tab on" data-p="learn">📚 Mëso</button>
+    <button class="tab" data-p="quizWord">🎧 Dëgjo fjalën</button>
+    <button class="tab" data-p="quizSent">🗣️ Dëgjo fjalinë</button>
+    <button class="tab" data-p="quizFind">🔎 Gjej fjalën</button>
+    <button class="tab" data-p="plan">📅 Plani</button>
+    <button class="tab" data-p="settings">⚙️ Zëri</button>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div id="no-tts" class="warn" hidden>Ky shfletues nuk e mbështet zërin. Hape faqen me <b>Chrome</b>, <b>Safari</b> ose <b>Edge</b>.</div>
+
+  <!-- ══ MËSO ══ -->
+  <section class="panel on" id="p-learn">
+    <div class="hint">Kliko <b>🔊</b> për të dëgjuar fjalën në anglisht, dhe <b>💬</b> për fjalinë shembull. Shqipja është aty vetëm për prindin.</div>
+    <div class="chips" id="chips-learn"></div>
+    <div class="card" style="padding:1rem 1.2rem">
+      <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500">
+        <span>Fjalë të mësuara</span><span id="prog-txt">0 / 66</span>
+      </div>
+      <div class="bar"><i id="prog-bar" style="width:0%"></i></div>
+      <div class="tiny">Një fjalë quhet e mësuar pas 3 përgjigjeve të sakta.</div>
+    </div>
+    <div id="learn-list"></div>
+  </section>
+
+  <!-- ══ DËGJO FJALËN ══ -->
+  <section class="panel" id="p-quizWord">
+    <div class="hint">Kompjuteri thotë <b>vetëm një fjalë në anglisht</b>. Tiani zgjedh se çfarë do të thotë. Fjala nuk shfaqet — kjo është prova me vesh.</div>
+    <div class="chips" id="chips-quizWord"></div>
+    <div class="card">
+      <div class="quiz-head"><span>Dëgjo dhe zgjidh kuptimin</span><span class="score" id="score-quizWord">0 / 0</span></div>
+      <button class="big-play" id="play-quizWord"><span class="ic">🔊</span><span>Dëgjo fjalën</span></button>
+      <div class="reveal" id="reveal-quizWord"></div>
+      <div class="opts" id="opts-quizWord"></div>
+      <div class="feedback" id="fb-quizWord"></div>
+      <button class="next" id="next-quizWord" disabled>Pyetja tjetër →</button>
+    </div>
+  </section>
+
+  <!-- ══ DËGJO FJALINË ══ -->
+  <section class="panel" id="p-quizSent">
+    <div class="hint">Si në test: kompjuteri lexon <b>një udhëzim të plotë</b>. Tiani zgjedh çfarë po i kërkohet të bëjë.</div>
+    <div class="chips" id="chips-quizSent"></div>
+    <div class="card">
+      <div class="quiz-head"><span>Dëgjo udhëzimin</span><span class="score" id="score-quizSent">0 / 0</span></div>
+      <button class="big-play" id="play-quizSent"><span class="ic">🗣️</span><span>Dëgjo fjalinë</span></button>
+      <div class="reveal" id="reveal-quizSent"></div>
+      <div class="opts" id="opts-quizSent"></div>
+      <div class="feedback" id="fb-quizSent"></div>
+      <button class="next" id="next-quizSent" disabled>Pyetja tjetër →</button>
+    </div>
+  </section>
+
+  <!-- ══ GJEJ FJALËN ══ -->
+  <section class="panel" id="p-quizFind">
+    <div class="hint">E kundërta: shqipja shfaqet, Tiani dëgjon <b>4 fjalë</b>. Prekja e parë e dëgjon fjalën, <b>prekja e dytë e zgjedh</b>.</div>
+    <div class="chips" id="chips-quizFind"></div>
+    <div class="card">
+      <div class="quiz-head"><span>Cila fjalë është?</span><span class="score" id="score-quizFind">0 / 0</span></div>
+      <div class="prompt-sq" id="prompt-quizFind">—</div>
+      <div class="opts" id="opts-quizFind"></div>
+      <div class="reveal" id="reveal-quizFind"></div>
+      <div class="feedback" id="fb-quizFind"></div>
+      <button class="next" id="next-quizFind" disabled>Pyetja tjetër →</button>
+    </div>
+  </section>
+
+  <!-- ══ PLANI ══ -->
+  <section class="panel" id="p-plan">
+    <div class="card">
+      <h2 style="font-size:19px;margin-bottom:.3rem">Pse këto fjalë</h2>
+      <p style="color:var(--muted);font-size:15px">Tiani nuk ka nevojë të dijë anglisht për të bërë matematikën — ka nevojë të kuptojë <b>çfarë po e pyet testi</b>. Këto 66 fjalë përsëriten në pothuajse çdo pyetje. Nëse i njeh, e kupton detyrën edhe me anglishte fillestare.</p>
+    </div>
+    <div class="card">
+      <h2 style="font-size:19px;margin-bottom:1rem">Plani për 3 ditët e fundit</h2>
+      <div class="plan-day"><h3>Dita 1 (15 min)</h3><p>Vetëm Seksioni 1: fjalët e pyetjes dhe komandat. Përdor <b>🎧 Dëgjo fjalën</b> — ai përgjigjet shqip. Pastaj <b>🔎 Gjej fjalën</b> për anasjelltas.</p></div>
+      <div class="plan-day"><h3>Dita 2 (15 min)</h3><p>Seksioni 2 (matematikë). Mos bëj llogaritje të reja — vetëm fjalët. Përdor objekte: <i>"How many?"</i> me lugë në tavolinë.</p></div>
+      <div class="plan-day"><h3>Dita 3 (10 min)</h3><p>Seksioni 3 (lexim) + modaliteti <b>🗣️ Dëgjo fjalinë</b>, sa për ndjesinë e formatit.</p></div>
+      <div class="plan-day"><h3>Mbrëmjen para testit</h3><p>Asgjë. Gjumë i mirë.</p></div>
+    </div>
+    <div class="card">
+      <h2 style="font-size:19px;margin-bottom:1rem">Çfarë t'i thuash Tianit para testit</h2>
+      <div class="say"><b>Pyetjet bëhen më të vështira kur përgjigjesh saktë</b>Kjo do të thotë që po ecën mirë, jo që po gabon.</div>
+      <div class="say"><b>Mos lër asnjë pyetje pa përgjigje</b>Nëse s'e di, zgjidh diçka dhe vazhdo.</div>
+      <div class="say"><b>Kompjuteri ta lexon pyetjen me zë</b>Dëgjoje me kujdes dhe mund ta rikthesh me butonin e zërit.</div>
+      <div class="say"><b>Nuk ka kohë të kufizuar</b>Mos u nxito.</div>
+      <div class="say"><b>Ky nuk është provim me notë</b>Është vetëm për të parë ku je tani.</div>
+    </div>
+  </section>
+
+  <!-- ══ ZËRI ══ -->
+  <section class="panel" id="p-settings">
+    <div class="hint">Zëri vjen nga vetë shfletuesi — pa internet, pa çelës, falas. Zgjidh një zë amerikan ose britanik dhe uljen e shpejtësisë.</div>
+    <div class="card">
+      <div class="set-row">
+        <label for="voice">Zëri anglisht</label>
+        <select id="voice"></select>
+      </div>
+      <div class="set-row">
+        <label for="rate">Shpejtësia <span id="rate-val" class="tiny"></span></label>
+        <input type="range" id="rate" min="0.5" max="1.1" step="0.05">
+      </div>
+      <div class="set-row">
+        <label>Përsërit dy herë</label>
+        <button class="toggle" id="tg-twice">Jo</button>
+      </div>
+      <div class="set-row">
+        <label>Shfaq fjalën në kuiz</label>
+        <button class="toggle" id="tg-show">Jo</button>
+      </div>
+      <div class="set-row">
+        <button class="mini" style="padding:.7rem 1rem;border-radius:var(--r);border:1.5px solid var(--border);background:var(--surface2);font-weight:600" id="test-voice">🔊 Provo zërin</button>
+      </div>
+    </div>
+    <div class="card center">
+      <p class="tiny" style="margin-bottom:.7rem">Progresi ruhet vetëm në këtë pajisje.</p>
+      <button class="mini" style="padding:.6rem 1rem;border-radius:var(--r);border:1.5px solid var(--red-border);color:var(--red);background:var(--red-light);font-weight:600" id="reset">Fshi progresin</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   TË DHËNAT — 66 fjalë nga fjalori i testit
+   ═══════════════════════════════════════════ */
+const SECTIONS = {
+  1:'1 · Pyetjet & komandat',
+  2:'2 · Matematikë',
+  3:'3 · Lexim'
+};
+const WORDS = [
+  // 1 — Fjalët e pyetjes & komandat
+  {s:1, en:"How many?",           sq:"Sa (numër)?",              ex:"How many dots?"},
+  {s:1, en:"Which one?",          sq:"Cili / Cila?",             ex:"Which one is bigger?"},
+  {s:1, en:"What is…?",           sq:"Çfarë është…?",            ex:"What is this shape?", say:"What is"},
+  {s:1, en:"Point to…",           sq:"Trego / Kliko mbi…",       ex:"Point to the number twelve.", say:"Point to"},
+  {s:1, en:"Choose / Click on",   sq:"Zgjidh / Kliko",           ex:"Choose the correct answer."},
+  {s:1, en:"Show me",             sq:"Më trego",                 ex:"Show me the title."},
+  {s:1, en:"Find",                sq:"Gjej",                     ex:"Find the missing number."},
+  {s:1, en:"Look at",             sq:"Shiko",                    ex:"Look at the picture."},
+  {s:1, en:"Listen",              sq:"Dëgjo",                    ex:"Listen to the word."},
+  {s:1, en:"Count",               sq:"Numëro",                   ex:"Count the apples."},
+  {s:1, en:"Match",               sq:"Përputh / Çifto",          ex:"Match the letter to the sound."},
+  {s:1, en:"Put in order",        sq:"Vendos në rend",           ex:"Put in order from smallest."},
+  {s:1, en:"Fill in / Complete",  sq:"Plotëso",                  ex:"Fill in the missing number."},
+  {s:1, en:"Drag",                sq:"Tërhiq (me maus)",         ex:"Drag the shape to the box."},
+  // 2 — Matematikë
+  {s:2, en:"more",                sq:"më shumë",                 ex:"Which group has more?"},
+  {s:2, en:"less / fewer",        sq:"më pak",                   ex:"Which one has fewer apples?"},
+  {s:2, en:"greater / bigger",    sq:"më i madh",                ex:"Which number is greater?"},
+  {s:2, en:"smaller",             sq:"më i vogël",               ex:"Click on the smaller shape."},
+  {s:2, en:"the most / biggest",  sq:"më i madhi",               ex:"Which box has the most?"},
+  {s:2, en:"the least / smallest",sq:"më i vogli",               ex:"Which box has the least?"},
+  {s:2, en:"altogether / in all", sq:"gjithsej",                 ex:"How many are there altogether?"},
+  {s:2, en:"total",               sq:"totali",                   ex:"What is the total?"},
+  {s:2, en:"add / plus",          sq:"mbledh / plus",            ex:"Add two and three."},
+  {s:2, en:"take away / minus",   sq:"hiq / minus",              ex:"Take away one."},
+  {s:2, en:"How many are left?",  sq:"Sa mbeten?",               ex:"How many are left?"},
+  {s:2, en:"missing",             sq:"që mungon",                ex:"Find the missing number."},
+  {s:2, en:"equal / the same",    sq:"i barabartë / njësoj",     ex:"Which two are equal?"},
+  {s:2, en:"different",           sq:"i ndryshëm",               ex:"Which one is different?"},
+  {s:2, en:"before",              sq:"para",                     ex:"What number comes before five?"},
+  {s:2, en:"after",               sq:"pas",                      ex:"What number comes after seven?"},
+  {s:2, en:"between",             sq:"ndërmjet",                 ex:"Which number is between three and five?"},
+  {s:2, en:"next",                sq:"tjetri / pasardhësi",      ex:"What comes next?"},
+  {s:2, en:"first / last",        sq:"i pari / i fundit",        ex:"Point to the first one."},
+  {s:2, en:"half",                sq:"gjysma",                   ex:"Which shape shows one half?"},
+  {s:2, en:"longer / shorter",    sq:"më i gjatë / më i shkurtër",ex:"Which line is longer?"},
+  {s:2, en:"taller",              sq:"më i lartë",               ex:"Which tree is taller?"},
+  {s:2, en:"heavier / lighter",   sq:"më i rëndë / më i lehtë",  ex:"Which one is heavier?"},
+  {s:2, en:"tens / ones",         sq:"dhjetëshe / njëshe",       ex:"How many tens are in twenty?"},
+  {s:2, en:"shape",               sq:"figurë",                   ex:"What is this shape?"},
+  {s:2, en:"side / corner",       sq:"brinjë / kënd",            ex:"How many sides does it have?"},
+  {s:2, en:"circle / square",     sq:"rreth / katror",           ex:"Point to the circle."},
+  {s:2, en:"triangle / rectangle",sq:"trekëndësh / drejtkëndësh",ex:"Click on the triangle."},
+  {s:2, en:"o'clock / half past", sq:"ora fiks / e gjysmë",      ex:"What time is it? Three o'clock."},
+  {s:2, en:"day / week / month",  sq:"ditë / javë / muaj",       ex:"How many days are in a week?"},
+  // 3 — Lexim
+  {s:3, en:"letter",              sq:"shkronjë",                 ex:"Which letter is this?"},
+  {s:3, en:"word",                sq:"fjalë",                    ex:"Click on the word cat."},
+  {s:3, en:"sentence",            sq:"fjali",                    ex:"Read the sentence."},
+  {s:3, en:"sound",               sq:"tingull",                  ex:"What sound do you hear?"},
+  {s:3, en:"first sound",         sq:"tingulli i parë",          ex:"What is the first sound in sun?"},
+  {s:3, en:"last sound",          sq:"tingulli i fundit",        ex:"What is the last sound in dog?"},
+  {s:3, en:"middle sound",        sq:"tingulli i mesit",         ex:"What is the middle sound in cat?"},
+  {s:3, en:"begins with",         sq:"fillon me",                ex:"Which word begins with the letter B?"},
+  {s:3, en:"ends with",           sq:"mbaron me",                ex:"Which word ends with T?"},
+  {s:3, en:"rhymes with",         sq:"rimon me",                 ex:"Which word rhymes with hat?"},
+  {s:3, en:"syllables",           sq:"rrokje",                   ex:"How many syllables are in apple?"},
+  {s:3, en:"clap",                sq:"duartrokit",               ex:"Clap the syllables."},
+  {s:3, en:"story",               sq:"tregim",                   ex:"Listen to the story."},
+  {s:3, en:"title",               sq:"titull",                   ex:"Show me the title."},
+  {s:3, en:"author",              sq:"autor",                    ex:"Who is the author?"},
+  {s:3, en:"cover",               sq:"kopertinë",                ex:"Look at the cover."},
+  {s:3, en:"page",                sq:"faqe",                     ex:"Turn to the next page."},
+  {s:3, en:"picture",             sq:"figurë / foto",            ex:"Look at the picture."},
+  {s:3, en:"opposite",            sq:"e kundërta",               ex:"What is the opposite of big?"},
+  {s:3, en:"means the same",      sq:"do të thotë njësoj",       ex:"Which word means the same as happy?"},
+  {s:3, en:"Who? / Where?",       sq:"Kush? / Ku?",              ex:"Who is in the story? Where are they?"},
+  {s:3, en:"What happens next?",  sq:"Çfarë ndodh pastaj?",      ex:"What happens next in the story?"}
+];
+/* Teksti që lexohet me zë: "less / fewer" → "less or fewer" */
+WORDS.forEach((w,i)=>{
+  w.id = 'w' + i;
+  w.spoken = w.say || w.en.replace(/\s*\/\s*/g, ' or ').replace(/…/g, '').trim();
+});
+
+/* ═══════════════════════════════════════════
+   ZËRI — Web Speech API e shfletuesit
+   ═══════════════════════════════════════════ */
+const TTS = window.speechSynthesis;
+const S = {
+  voiceURI: localStorage.getItem('tian.voice') || '',
+  rate: parseFloat(localStorage.getItem('tian.rate') || '0.8'),
+  twice: localStorage.getItem('tian.twice') === '1',
+  show: localStorage.getItem('tian.show') === '1'
+};
+let voices = [], unlocked = false;
+
+function loadVoices(){
+  if(!TTS) return;
+  voices = TTS.getVoices().filter(v => /^en/i.test(v.lang));
+  const sel = document.getElementById('voice');
+  if(!voices.length){ sel.innerHTML = '<option>Zëri po ngarkohet…</option>'; return; }
+  // Preferoj një zë amerikan cilësor si fillim
+  if(!S.voiceURI || !voices.some(v=>v.voiceURI===S.voiceURI)){
+    const pref = voices.find(v=>/Samantha|Google US English|Aria|Jenny|Zira/i.test(v.name))
+              || voices.find(v=>/en[-_]US/i.test(v.lang)) || voices[0];
+    S.voiceURI = pref.voiceURI;
+  }
+  sel.innerHTML = voices.map(v =>
+    `<option value="${v.voiceURI}" ${v.voiceURI===S.voiceURI?'selected':''}>${v.name} · ${v.lang}</option>`
+  ).join('');
+}
+if(TTS){ loadVoices(); TTS.addEventListener('voiceschanged', loadVoices); }
+else document.getElementById('no-tts').hidden = false;
+
+/* iOS/Safari e kërkojnë një prekje para zërit të parë */
+function unlock(){
+  if(unlocked || !TTS) return;
+  unlocked = true;
+  try{ const u = new SpeechSynthesisUtterance(' '); u.volume = 0; TTS.speak(u); }catch(e){}
+}
+document.addEventListener('pointerdown', unlock, {once:true});
+
+function speak(text, opts){
+  if(!TTS || !text) return;
+  opts = opts || {};
+  unlock();
+  TTS.cancel();                       // Safari ngec pa këtë
+  const say = () => {
+    const u = new SpeechSynthesisUtterance(text);
+    const v = voices.find(x => x.voiceURI === S.voiceURI);
+    if(v){ u.voice = v; u.lang = v.lang; } else u.lang = 'en-US';
+    u.rate = opts.rate || S.rate;
+    u.pitch = 1;
+    if(opts.onend) u.onend = opts.onend;
+    TTS.speak(u);
+  };
+  say();
+  if(S.twice && !opts.once){
+    const u2 = new SpeechSynthesisUtterance(' ');   // pauzë e shkurtër
+    u2.volume = 0; u2.rate = 0.5;
+    TTS.speak(u2);
+    const u3 = new SpeechSynthesisUtterance(text);
+    const v = voices.find(x => x.voiceURI === S.voiceURI);
+    if(v){ u3.voice = v; u3.lang = v.lang; } else u3.lang = 'en-US';
+    u3.rate = opts.rate || S.rate;
+    TTS.speak(u3);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESI
+   ═══════════════════════════════════════════ */
+let stats = {};
+try{ stats = JSON.parse(localStorage.getItem('tian.stats') || '{}'); }catch(e){ stats = {}; }
+const stat = id => stats[id] || (stats[id] = {ok:0, no:0});
+const mastered = id => stat(id).ok >= 3;
+function saveStats(){
+  try{ localStorage.setItem('tian.stats', JSON.stringify(stats)); }catch(e){}
+  renderProgress();
+}
+function renderProgress(){
+  const done = WORDS.filter(w => mastered(w.id)).length;
+  document.getElementById('prog-txt').textContent = done + ' / ' + WORDS.length;
+  document.getElementById('prog-bar').style.width = (done / WORDS.length * 100) + '%';
+  document.querySelectorAll('[data-stars]').forEach(el => {
+    const n = Math.min(3, stat(el.dataset.stars).ok);
+    el.textContent = '★'.repeat(n) + '☆'.repeat(3 - n);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   FILTRAT E SEKSIONEVE
+   ═══════════════════════════════════════════ */
+const filters = {learn:0, quizWord:0, quizSent:0, quizFind:0};   // 0 = të gjitha
+function buildChips(mode, onChange){
+  const box = document.getElementById('chips-' + mode);
+  const mk = (val, label) => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (filters[mode] === val ? ' on' : '');
+    b.textContent = label;
+    b.onclick = () => {
+      filters[mode] = val;
+      box.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+      b.classList.add('on');
+      onChange();
+    };
+    box.appendChild(b);
+  };
+  mk(0, 'Të gjitha');
+  Object.keys(SECTIONS).forEach(k => mk(+k, SECTIONS[k]));
+}
+const pool = mode => filters[mode] ? WORDS.filter(w => w.s === filters[mode]) : WORDS;
+
+/* ═══════════════════════════════════════════
+   MËSO
+   ═══════════════════════════════════════════ */
+function renderLearn(){
+  const list = document.getElementById('learn-list');
+  list.innerHTML = '';
+  let sec = null;
+  pool('learn').forEach(w => {
+    if(w.s !== sec){
+      sec = w.s;
+      const h = document.createElement('div');
+      h.className = 'sec-title';
+      h.textContent = SECTIONS[sec];
+      list.appendChild(h);
+    }
+    const row = document.createElement('div');
+    row.className = 'word';
+    row.innerHTML =
+      `<button class="spk" title="Dëgjo fjalën">🔊</button>
+       <div class="word-body">
+         <div class="en">${w.en}</div>
+         <div class="sq">${w.sq}</div>
+         <div class="ex">${w.ex}</div>
+         <div class="stars" data-stars="${w.id}"></div>
+       </div>
+       <button class="spk ghost" title="Dëgjo fjalinë">💬</button>`;
+    const [b1, b2] = row.querySelectorAll('button');
+    b1.onclick = () => { speak(w.spoken); flash(row); };
+    b2.onclick = () => { speak(w.ex); flash(row); };
+    list.appendChild(row);
+  });
+  renderProgress();
+}
+function flash(el){
+  el.classList.add('speaking');
+  setTimeout(() => el.classList.remove('speaking'), 900);
+}
+
+/* ═══════════════════════════════════════════
+   KUIZET
+   ═══════════════════════════════════════════ */
+const shuffle = a => a.map(x => [Math.random(), x]).sort((p,q) => p[0]-q[0]).map(p => p[1]);
+
+function pickWord(mode){
+  const p = pool(mode);
+  // fjalët e pamësuara kanë 3x më shumë gjasa të dalin
+  const weighted = [];
+  p.forEach(w => { const n = mastered(w.id) ? 1 : 3; for(let i=0;i<n;i++) weighted.push(w); });
+  return weighted[Math.floor(Math.random() * weighted.length)];
+}
+function distractors(word, mode, n){
+  let same = pool(mode).filter(w => w.id !== word.id && w.s === word.s);
+  if(same.length < n) same = WORDS.filter(w => w.id !== word.id);
+  return shuffle(same).slice(0, n);
+}
+
+function makeQuiz(mode, cfg){
+  const el = k => document.getElementById(k + '-' + mode);
+  const state = {word:null, done:false, score:0, asked:0};
+
+  function ask(){
+    state.word = pickWord(mode);
+    state.done = false;
+    const opts = shuffle([state.word, ...distractors(state.word, mode, 3)]);
+    el('fb').textContent = '';
+    el('fb').className = 'feedback';
+    el('next').disabled = true;
+    el('reveal').innerHTML = '';
+    cfg.render(state.word, opts, el, state, ask);
+  }
+  function answer(chosen, buttons){
+    if(state.done) return;
+    state.done = true;
+    state.asked++;
+    const right = chosen.id === state.word.id;
+    const s = stat(state.word.id);
+    right ? s.ok++ : (s.no++, s.ok = Math.max(0, s.ok - 1));
+    if(right) state.score++;
+    saveStats();
+    buttons.forEach(b => {
+      b.disabled = true;
+      if(b.dataset.id === state.word.id) b.classList.add('right');
+      else if(b.dataset.id === chosen.id) b.classList.add('wrong');
+    });
+    el('fb').textContent = right ? 'Saktë! 🎉' : 'Jo — provo përsëri herës tjetër.';
+    el('fb').className = 'feedback ' + (right ? 'ok' : 'no');
+    el('reveal').innerHTML = `<b>${state.word.en}</b> = ${state.word.sq}`;
+    el('score').textContent = state.score + ' / ' + state.asked;
+    el('next').disabled = false;
+  }
+  cfg.answer = answer;
+  el('next').onclick = ask;
+  return {ask, state, el};
+}
+
+function optionButtons(container, opts, label, onPick){
+  container.innerHTML = '';
+  const btns = opts.map((o, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.dataset.id = o.id;
+    b.innerHTML = `<span class="n">${i+1}</span><span>${label(o, i)}</span>`;
+    b.onclick = () => onPick(o, btns);
+    container.appendChild(b);
+    return b;
+  });
+  return btns;
+}
+
+/* — Modaliteti 1: dëgjo fjalën → zgjidh shqipen — */
+const qWord = makeQuiz('quizWord', {
+  render(w, opts, el){
+    const btns = optionButtons(el('opts'), opts, o => o.sq, (o) => this.answer(o, btns));
+    if(S.show) el('reveal').innerHTML = `<b>${w.en}</b>`;
+    speak(w.spoken);
+  }
+});
+document.getElementById('play-quizWord').onclick = () => qWord.state.word && speak(qWord.state.word.spoken);
+
+/* — Modaliteti 2: dëgjo fjalinë → zgjidh kuptimin — */
+const qSent = makeQuiz('quizSent', {
+  render(w, opts, el){
+    const btns = optionButtons(el('opts'), opts, o => o.sq, (o) => this.answer(o, btns));
+    if(S.show) el('reveal').innerHTML = `<b>${w.ex}</b>`;
+    speak(w.ex);
+  }
+});
+document.getElementById('play-quizSent').onclick = () => qSent.state.word && speak(qSent.state.word.ex);
+
+/* — Modaliteti 3: shqipja shfaqet → dëgjo 4 fjalë dhe zgjidh — */
+const qFind = makeQuiz('quizFind', {
+  render(w, opts, el){
+    document.getElementById('prompt-quizFind').textContent = w.sq;
+    const heard = new Set();
+    optionButtons(el('opts'), opts, (o, i) => '🔊 Fjala ' + (i + 1), (o, btns) => {
+      const b = btns.find(x => x.dataset.id === o.id);
+      if(!heard.has(o.id)){                       // prekja e parë — vetëm dëgjo
+        heard.add(o.id);
+        speak(o.spoken, {once:true});
+        b.lastElementChild.textContent = 'Prek përsëri për ta zgjedhur ✓';
+        return;
+      }
+      speak(o.spoken, {once:true});
+      this.answer(o, btns);                       // prekja e dytë — zgjedhje
+    });
+  }
+});
+
+/* ═══════════════════════════════════════════
+   TABS + CILËSIMET
+   ═══════════════════════════════════════════ */
+const started = {};
+document.getElementById('tabs').onclick = e => {
+  const t = e.target.closest('.tab');
+  if(!t) return;
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === t));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id === 'p' + '-' + t.dataset.p));
+  TTS && TTS.cancel();
+  const p = t.dataset.p;
+  if(!started[p]){
+    started[p] = true;
+    if(p === 'quizWord') qWord.ask();
+    if(p === 'quizSent') qSent.ask();
+    if(p === 'quizFind') qFind.ask();
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+};
+
+const rate = document.getElementById('rate');
+rate.value = S.rate;
+const showRate = () => document.getElementById('rate-val').textContent =
+  S.rate <= 0.65 ? '(shumë ngadalë)' : S.rate <= 0.85 ? '(ngadalë)' : '(normale)';
+showRate();
+rate.oninput = () => { S.rate = parseFloat(rate.value); localStorage.setItem('tian.rate', S.rate); showRate(); };
+
+document.getElementById('voice').onchange = e => {
+  S.voiceURI = e.target.value;
+  localStorage.setItem('tian.voice', S.voiceURI);
+  speak('Hello Tian. Listen to the word.');
+};
+document.getElementById('test-voice').onclick = () => speak('Point to the number twelve. How many dots?');
+
+function toggle(btnId, key, storeKey){
+  const b = document.getElementById(btnId);
+  const paint = () => { b.textContent = S[key] ? 'Po' : 'Jo'; b.classList.toggle('on', S[key]); };
+  b.onclick = () => { S[key] = !S[key]; localStorage.setItem(storeKey, S[key] ? '1' : '0'); paint(); };
+  paint();
+}
+toggle('tg-twice', 'twice', 'tian.twice');
+toggle('tg-show', 'show', 'tian.show');
+
+document.getElementById('reset').onclick = () => {
+  if(!confirm('Të fshihet progresi i të gjitha fjalëve?')) return;
+  stats = {};
+  try{ localStorage.removeItem('tian.stats'); }catch(e){}
+  renderProgress();
+};
+
+/* Nis */
+['learn','quizWord','quizSent','quizFind'].forEach(m => buildChips(m, () => {
+  if(m === 'learn') renderLearn();
+  else if(m === 'quizWord') qWord.ask();
+  else if(m === 'quizSent') qSent.ask();
+  else qFind.ask();
+}));
+renderLearn();
+</script>
+</body>
+</html>
