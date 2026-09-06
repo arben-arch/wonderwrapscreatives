@@ -14,6 +14,7 @@
    MAP Growth K–2 · anglisht me zë për Tianin
    ═══════════════════════════════════════════ */
 :root{
+  color-scheme:light;            /* faqe për fëmijë — pamje e ndritshme gjithmonë */
   --purple:#5B35A0;--purple-dark:#43276f;--purple-light:#f2ecff;--purple-mid:#c9b2ef;
   --green:#15803d;--green-light:#dcfce7;--green-border:#86efac;
   --red:#b91c1c;--red-light:#fee2e2;--red-border:#fca5a5;
@@ -26,6 +27,8 @@
   --shadow-lg:0 10px 34px rgba(0,0,0,.13);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:focus-visible{outline:3px solid var(--purple);outline-offset:3px;border-radius:8px;}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;}html{scroll-behavior:auto;}}
 body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:3rem;}
 button{font-family:inherit;font-size:inherit;cursor:pointer;border:none;background:none;color:inherit;}
 h1,h2,h3{font-family:'Syne',sans-serif;letter-spacing:-.02em;line-height:1.15;}
@@ -352,12 +355,19 @@ WORDS.forEach((w,i)=>{
 /* ═══════════════════════════════════════════
    ZËRI — Web Speech API e shfletuesit
    ═══════════════════════════════════════════ */
+/* Ruajtja lokale — nuk hidhet asnjëherë gabim (dritare private, parapamje) */
+const LS = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v === null ? d : v; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+
 const TTS = window.speechSynthesis;
 const S = {
-  voiceURI: localStorage.getItem('tian.voice') || '',
-  rate: parseFloat(localStorage.getItem('tian.rate') || '0.8'),
-  twice: localStorage.getItem('tian.twice') === '1',
-  show: localStorage.getItem('tian.show') === '1'
+  voiceURI: LS.get('tian.voice', ''),
+  rate: parseFloat(LS.get('tian.rate', '0.8')),
+  twice: LS.get('tian.twice') === '1',
+  show: LS.get('tian.show') === '1'
 };
 let voices = [], unlocked = false;
 
@@ -418,11 +428,11 @@ function speak(text, opts){
    PROGRESI
    ═══════════════════════════════════════════ */
 let stats = {};
-try{ stats = JSON.parse(localStorage.getItem('tian.stats') || '{}'); }catch(e){ stats = {}; }
+try{ stats = JSON.parse(LS.get('tian.stats', '{}')); }catch(e){ stats = {}; }
 const stat = id => stats[id] || (stats[id] = {ok:0, no:0});
 const mastered = id => stat(id).ok >= 3;
 function saveStats(){
-  try{ localStorage.setItem('tian.stats', JSON.stringify(stats)); }catch(e){}
+  LS.set('tian.stats', JSON.stringify(stats));
   renderProgress();
 }
 function renderProgress(){
@@ -631,11 +641,11 @@ rate.value = S.rate;
 const showRate = () => document.getElementById('rate-val').textContent =
   S.rate <= 0.65 ? '(shumë ngadalë)' : S.rate <= 0.85 ? '(ngadalë)' : '(normale)';
 showRate();
-rate.oninput = () => { S.rate = parseFloat(rate.value); localStorage.setItem('tian.rate', S.rate); showRate(); };
+rate.oninput = () => { S.rate = parseFloat(rate.value); LS.set('tian.rate', S.rate); showRate(); };
 
 document.getElementById('voice').onchange = e => {
   S.voiceURI = e.target.value;
-  localStorage.setItem('tian.voice', S.voiceURI);
+  LS.set('tian.voice', S.voiceURI);
   speak('Hello Tian. Listen to the word.');
 };
 document.getElementById('test-voice').onclick = () => speak('Point to the number twelve. How many dots?');
@@ -643,17 +653,27 @@ document.getElementById('test-voice').onclick = () => speak('Point to the number
 function toggle(btnId, key, storeKey){
   const b = document.getElementById(btnId);
   const paint = () => { b.textContent = S[key] ? 'Po' : 'Jo'; b.classList.toggle('on', S[key]); };
-  b.onclick = () => { S[key] = !S[key]; localStorage.setItem(storeKey, S[key] ? '1' : '0'); paint(); };
+  b.onclick = () => { S[key] = !S[key]; LS.set(storeKey, S[key] ? '1' : '0'); paint(); };
   paint();
 }
 toggle('tg-twice', 'twice', 'tian.twice');
 toggle('tg-show', 'show', 'tian.show');
 
-document.getElementById('reset').onclick = () => {
-  if(!confirm('Të fshihet progresi i të gjitha fjalëve?')) return;
+const resetBtn = document.getElementById('reset');
+let armed = 0;
+resetBtn.onclick = () => {
+  if(Date.now() > armed){                       // kliku i parë — kërkon konfirmim
+    armed = Date.now() + 5000;
+    resetBtn.textContent = 'Kliko përsëri për ta fshirë';
+    setTimeout(() => { if(Date.now() > armed) resetBtn.textContent = 'Fshi progresin'; }, 5100);
+    return;
+  }
+  armed = 0;
   stats = {};
-  try{ localStorage.removeItem('tian.stats'); }catch(e){}
+  LS.del('tian.stats');
   renderProgress();
+  resetBtn.textContent = 'U fshi ✓';
+  setTimeout(() => resetBtn.textContent = 'Fshi progresin', 1800);
 };
 
 /* Nis */
